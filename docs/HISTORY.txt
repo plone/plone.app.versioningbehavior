@@ -4,6 +4,9 @@ Changelog
 0.1a1 -
 ------------------
 
+* Added some more tests
+  [30.10.2009, jbaumann]
+
 * Renamed package to plone.versioningbehavior (see dexterity mailing list)
   [23.10.2009, jbaumann]
 

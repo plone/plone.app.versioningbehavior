@@ -99,6 +99,7 @@ A freshly created object should have a initial version::
     >>> browser.url
     'http://nohost/plone/testingtype-1/view'
 
+
 Now we should have one - and only one - version::
 
     >>> obj = self.portal.get('testingtype-1')
@@ -107,9 +108,62 @@ Now we should have one - and only one - version::
     >>> history.getLength(countPurged=False)
     1
 
-And we should see our comment on the versions listing later...
-### browser.open('http://nohost/plone/testingtype-1/versions_history_form')
-### 'initial change note' in browser.contents
-True
 
+And we should see our comment on the versions listing later...
+    >>> browser.open('http://nohost/plone/testingtype-1/versions_history_form')
+    >>> 'initial change note' in browser.contents
+    True
+
+
+
+
+Dexterity Containers
+====================
+We should also be able to use versionig for dexterity contents in dexterity containers.
+
+
+Create a container FTI::
+
+    >>> container_fti = DexterityFTI('DemoContainer',
+    ...                              klass='plone.dexterity.content.Container',
+    ...                              filter_content_types=False)
+    >>> self.portal.portal_types._setObject('DemoContainer', container_fti)
+    'DemoContainer'
+    >>> container_schema = fti.lookupSchema()
+
+
+Create a container object::
+
+    >>> browser.open('http://nohost/plone/++add++DemoContainer')
+    >>> browser.getControl(name='form.widgets.title').value = 'MyFolder'
+    >>> browser.getControl(name='form.widgets.description').value = 'MyFolder'
+    >>> browser.getControl(name='form.buttons.save').click()
+    >>> browser.url
+    'http://nohost/plone/democontainer/view'
+
+
+Now we add a versioned object to the container::
+
+    >>> browser.open('http://nohost/plone/democontainer/++add++TestingType')
+    >>> browser.getControl(name='form.widgets.title').value = 'My versioned object'
+    >>> browser.getControl(name='form.widgets.description').value = 'The Description'
+    >>> browser.getControl(name='form.widgets.IVersionable.changeNote').value = 'created a object'
+    >>> browser.getControl(name='form.buttons.save').click()
+    >>> browser.url
+    'http://nohost/plone/democontainer/testingtype/view'
+
+
+So let's see the version history. There should be one version with the comment
+"created a object"::
+
+    >>> obj = self.portal.get('democontainer').get('testingtype')
+    >>> obj
+    <Item at /plone/democontainer/testingtype>
+    >>> pa = self.portal.portal_archivist
+    >>> history = pa.getHistoryMetadata(obj)
+    >>> history.getLength(countPurged=False)
+    1
+    >>> browser.open('http://nohost/plone/democontainer/testingtype/versions_history_form')
+    >>> 'created a object' in browser.contents
+    True
 
