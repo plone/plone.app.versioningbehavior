@@ -6,7 +6,8 @@ Just use the behavior ``plone.versioningbehavior.behaviors.IVersionable`` in
 your dexterity content type::
 
     >>> from plone.dexterity.fti import DexterityFTI
-    >>> fti = DexterityFTI('TestingType')
+    >>> fti = DexterityFTI('TestingType',
+    ...                    factory='TestingType')
     >>> fti.behaviors = (
     ...         'plone.versioningbehavior.behaviors.IVersionable',
     ... )
@@ -126,7 +127,8 @@ Create a container FTI::
 
     >>> container_fti = DexterityFTI('DemoContainer',
     ...                              klass='plone.dexterity.content.Container',
-    ...                              filter_content_types=False)
+    ...                              filter_content_types=False,
+    ...                              factory='DemoContainerMyFolder')
     >>> self.portal.portal_types._setObject('DemoContainer', container_fti)
     'DemoContainer'
     >>> container_schema = fti.lookupSchema()
@@ -166,4 +168,87 @@ So let's see the version history. There should be one version with the comment
     >>> browser.open('http://nohost/plone/democontainer/testingtype/versions_history_form')
     >>> 'created a object' in browser.contents
     True
+
+
+
+
+Dexterity containers should also be versionable.
+
+Let's create a new versioned container FTI::
+
+    >>> versioned_container_fti = DexterityFTI('VersionedContainer',
+    ...                                        klass='plone.dexterity.content.Container',
+    ...                                        filter_content_types=False,
+    ...                                        glboal_allow=True,
+    ...                                        factory='VersionedContainer')
+    >>> versioned_container_fti.behaviors = (
+    ...         'plone.versioningbehavior.behaviors.IVersionable',
+    ... )
+    >>> self.portal.portal_types._setObject('VersionedContainer', versioned_container_fti)
+    'VersionedContainer'
+    >>> versioned_container_schema = versioned_container_fti.lookupSchema()
+
+
+Enable versioning for the new content type::
+
+    >>> pr = self.portal.portal_repository
+    >>> pr._versionable_content_types.append('VersionedContainer')
+    >>> pr._version_policy_mapping['VersionedContainer'] = [
+    ...     'version_on_revert',
+    ...     'at_edit_autoversion',
+    ... ]
+
+
+Let's Create a versioned container object on the portal::
+
+    >>> browser.open('http://nohost/plone/++add++VersionedContainer')
+    >>> browser.getControl(name='form.widgets.title').value = 'Versioned container one'
+    >>> browser.getControl(name='form.widgets.IVersionable.changeNote').value = 'my change note'
+    >>> browser.getControl(name='form.buttons.save').click()
+    >>> browser.url
+    'http://nohost/plone/versionedcontainer/view'
+
+
+Do we have a initial version?
+
+    >>> obj = self.portal.get('versionedcontainer')
+    >>> obj
+    <Container at /plone/versionedcontainer>
+    >>> pa = self.portal.portal_archivist
+    >>> history = pa.getHistoryMetadata(obj)
+    >>> history.getLength(countPurged=False)
+    1
+    >>> browser.open('http://nohost/plone/versionedcontainer/versions_history_form')
+    >>> 'my change note' in browser.contents
+    True
+
+
+Another versioned container should be addable::
+
+    >>> browser.open('http://nohost/plone/versionedcontainer/folder_factories')
+    >>> 'VersionedContainer' in browser.contents
+    True
+
+
+Now we try to add another versioned container in the previously created versioned container::
+    >>> browser.open('http://nohost/plone/versionedcontainer/++add++VersionedContainer')
+    >>> browser.getControl(name='form.widgets.title').value = 'Versioned container two'
+    >>> browser.getControl(name='form.widgets.IVersionable.changeNote').value = 'another change note'
+    >>> browser.getControl(name='form.buttons.save').click()
+
+
+XXX : last test fails. check for version if it's not failing anymore:
+    ### obj = self.portal.get('versionedcontainer').get('versionedcontainer-1')
+    ### obj
+    <Container at /plone/versionedcontainer/versionedcontainer-1>
+    ### pa = self.portal.portal_archivist
+    ### history = pa.getHistoryMetadata(obj)
+    ### history.getLength(countPurged=False)
+    1
+    ### browser.open('http://nohost/plone/versionedcontainer/versionedcontainer-1/versions_history_form')
+    ### 'another change note' in browser.contents()
+    True
+
+
+
 
