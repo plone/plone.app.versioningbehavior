@@ -4,6 +4,9 @@ Changelog
 0.1a1 -
 ------------------
 
+* Load Products.CMFEditions before testing
+  [30.10.2009, jbaumann]
+
 * Added some more tests
   [30.10.2009, jbaumann]
 
