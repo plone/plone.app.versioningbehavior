@@ -1,9 +1,6 @@
-
-from Acquisition import aq_base
 from five import grok
 from zope.app.container.interfaces import IObjectAddedEvent
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
-from zope.annotation.interfaces import IAnnotations
 
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.utils import base_hasattr
@@ -36,8 +33,6 @@ def create_version_on_save(context, event):
                            pr.supportsPolicy(context, 'at_edit_autoversion')) or \
                           changeNote):
         pr.save(obj=context, comment=changeNote)
-    return
-
 
 @grok.subscribe(IVersioningSupport, IObjectAddedEvent)
 def create_initial_version_after_adding(context, event):
@@ -69,7 +64,3 @@ def create_initial_version_after_adding(context, event):
             context.portal_repository.save(obj=context, comment=changeNote)
         except FileTooLargeToVersionError:
             pass # the on edit save will emit a warning
-    return
-
-
-

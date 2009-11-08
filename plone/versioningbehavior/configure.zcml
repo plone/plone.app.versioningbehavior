@@ -17,12 +17,12 @@
     <i18n:registerTranslations directory="locales" />
 
     <plone:behavior
-            title="Versioning"
-            description="Versioning support with CMFEditions"
-            provides=".behaviors.IVersionable"
-            factory=".behaviors.Versionable"
-            marker=".behaviors.IVersioningSupport"
-            for="plone.dexterity.interfaces.IDexterityContent"
-            />
+        title="Versioning"
+        description="Versioning support with CMFEditions"
+        provides=".behaviors.IVersionable"
+        factory=".behaviors.Versionable"
+        marker=".behaviors.IVersioningSupport"
+        for="plone.dexterity.interfaces.IDexterityContent"
+        />
 
 </configure>
