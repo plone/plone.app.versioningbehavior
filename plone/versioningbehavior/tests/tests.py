@@ -25,17 +25,17 @@ doc_tests = (
 )
 
 functional_tests = (
-    'README.txt',
+    'doctest_behavior.txt',
 )
 
 def test_suite():
     return unittest.TestSuite(
         [ztc.FunctionalDocFileSuite(
-            '%s' % f, package='plone.versioningbehavior',
+            'tests/%s' % f, package='plone.versioningbehavior',
             test_class=ptc.FunctionalTestCase)
             for f in functional_tests] + 
         [ztc.ZopeDocFileSuite(
-            '%s' % f, package='plone.versioningbehavior',
+            'tests/%s' % f, package='plone.versioningbehavior',
             test_class=ptc.FunctionalTestCase)
             for f in doc_tests],
         )
