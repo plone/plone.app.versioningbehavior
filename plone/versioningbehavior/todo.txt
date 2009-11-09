@@ -4,7 +4,7 @@ TODO
 
 [ ] The History-Action should be visible if a object is versioned.
 
-[ ] The event handler create_initial_version_after_adding does work for
+[X] The event handler create_initial_version_after_adding does work for
     dexterity objects with an AT-object as parent, it's not working for objects
     with dexterity objects as parent
 
