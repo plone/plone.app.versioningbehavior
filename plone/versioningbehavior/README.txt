@@ -237,16 +237,17 @@ Now we try to add another versioned container in the previously created versione
     >>> browser.getControl(name='form.buttons.save').click()
 
 
-XXX : last test fails. check for version if it's not failing anymore:
-    ### obj = self.portal.get('versionedcontainer').get('versionedcontainer-1')
-    ### obj
-    <Container at /plone/versionedcontainer/versionedcontainer-1>
-    ### pa = self.portal.portal_archivist
-    ### history = pa.getHistoryMetadata(obj)
-    ### history.getLength(countPurged=False)
+So, we should have the initial version::
+
+    >>> obj = self.portal.get('versionedcontainer').get('versionedcontainer')
+    >>> obj
+    <Container at /plone/versionedcontainer/versionedcontainer>
+    >>> pa = self.portal.portal_archivist
+    >>> history = pa.getHistoryMetadata(obj)
+    >>> history.getLength(countPurged=False)
     1
-    ### browser.open('http://nohost/plone/versionedcontainer/versionedcontainer-1/versions_history_form')
-    ### 'another change note' in browser.contents()
+    >>> browser.open('http://nohost/plone/versionedcontainer/versionedcontainer/versions_history_form')
+    >>> 'another change note' in browser.contents
     True
 
 
