@@ -17,9 +17,14 @@ def create_version_on_save(context, event):
     """ event handler for creating a new version of the object after
     modifying.
     """
+    # XXX dirty hack for stagingbehavior, which triggers a event with
+    # a aq_based context when deleting the working copy
+    try:
+        pr = context.portal_repository
+    except AttributeError:
+        return
     # according to Products.CMFEditions' update_version_on_edit script
     changeNote = get_change_note(context.REQUEST, None)
-    pr = getToolByName(context, 'portal_repository')
     putils = getToolByName(context, 'plone_utils')
     isVersionable = pr.isVersionable(context)
 
