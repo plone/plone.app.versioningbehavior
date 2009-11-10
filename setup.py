@@ -7,8 +7,7 @@ setup(name='plone.versioningbehavior',
       version=version,
       description="Provides a behavior for using CMFEditions with dexterity content types",
       long_description=open("README.txt").read() + "\n" +
-                       open(os.path.join("docs", "HISTORY.txt")).read() + "\n" +
-                       open(os.path.join('plone','versioningbehavior', 'README.txt')).read(),
+                       open(os.path.join("docs", "HISTORY.txt")).read(),
       # Get more strings from http://www.python.org/pypi?%3Aaction=list_classifiers
       classifiers=[
         "Framework :: Plone",
