@@ -37,6 +37,7 @@ def create_version_on_save(context, event):
     if isVersionable and ((changed and \
                            pr.supportsPolicy(context, 'at_edit_autoversion')) or \
                           changeNote):
+        # new version on modify
         pr.save(obj=context, comment=changeNote)
 
 @grok.subscribe(IVersioningSupport, IObjectAddedEvent)
@@ -44,8 +45,13 @@ def create_initial_version_after_adding(context, event):
     if context.portal_factory.isTemporary(context):
         # don't do anything if we're in the factory
         return
-    pr = context.portal_repository
+
+    pr = getToolByName(context, 'portal_repository')
     isVersionable = pr.isVersionable(context)
+    if not isVersionable or \
+       not pr.supportsPolicy(context, 'at_edit_autoversion'):
+        return
+
     comment_field_name = 'form.widgets.IVersionable.changeNote'
 
     default_changeNote = _(u'initial_version_changeNote', default=u'Initial version')
@@ -62,10 +68,11 @@ def create_initial_version_after_adding(context, event):
             # set, perhaps it was imported, or versioning info was
             # inappropriately destroyed
             changed = True
+
     if not changed:
         return
-    if pr.supportsPolicy(context, 'at_edit_autoversion') and isVersionable:
-        try:
-            context.portal_repository.save(obj=context, comment=changeNote)
-        except FileTooLargeToVersionError:
-            pass # the on edit save will emit a warning
+
+    try:
+        context.portal_repository.save(obj=context, comment=changeNote)
+    except FileTooLargeToVersionError:
+        pass # the on edit save will emit a warning
