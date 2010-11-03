@@ -3,6 +3,8 @@ import os
 
 version = open('plone/versioningbehavior/version.txt').read().strip()
 
+tests_require = []
+
 setup(name='plone.versioningbehavior',
       version=version,
       description='Provides a behavior for using CMFEditions with ' + \
@@ -35,6 +37,8 @@ setup(name='plone.versioningbehavior',
         'plone.autoform',
         # -*- Extra requirements: -*-
         ],
+      tests_require=tests_require,
+      extras_require=dict(tests=tests_require),
       entry_points="""
       # -*- Entry points: -*-
       [z3c.autoinclude.plugin]
