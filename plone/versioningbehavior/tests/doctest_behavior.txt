@@ -22,13 +22,14 @@ automatic versioning for our content type.
 For this test we set this configuration manually::
 
     >>> from Products.CMFEditions import CopyModifyMergeRepositoryTool
+    >>> from Products.CMFEditions.setuphandlers import DEFAULT_POLICIES
     >>> from Products.CMFCore.utils import getToolByName
     >>> pr = getToolByName(portal, 'portal_repository')
-    >>> pr._versionable_content_types.append('TestingType')
-    >>> pr._version_policy_mapping['TestingType'] = [
-    ...     'version_on_revert',
-    ...     'at_edit_autoversion',
-    ... ]
+    >>> versionable_types = pr.getVersionableContentTypes()
+    >>> versionable_types.append('TestingType')
+    >>> pr.setVersionableContentTypes(versionable_types)
+    >>> for policy_id in DEFAULT_POLICIES:
+    ...     pr.addPolicyForContentType('TestingType', policy_id)
 
 
 Create a new Browser and connect it::
