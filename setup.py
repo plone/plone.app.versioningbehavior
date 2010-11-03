@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import os
 
-version = open('plone/versioningbehavior/version.txt').read().strip()
+version = '1.0a1-dev'
 
 tests_require = [
     'plone.app.dexterity',
