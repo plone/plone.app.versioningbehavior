@@ -2,9 +2,5 @@
 TODO
 ====
 
-[ ] if no changes are made but the editform is saved,
-    portal_repository.isUpToDate returns False but should return True. that
-    results in too many new versions
-
 [ ] Write some tests for the behavior and the event handlers
 
