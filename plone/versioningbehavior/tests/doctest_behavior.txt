@@ -22,7 +22,8 @@ automatic versioning for our content type.
 For this test we set this configuration manually::
 
     >>> from Products.CMFEditions import CopyModifyMergeRepositoryTool
-    >>> pr = self.portal.portal_repository
+    >>> from Products.CMFCore.utils import getToolByName
+    >>> pr = getToolByName(portal, 'portal_repository')
     >>> pr._versionable_content_types.append('TestingType')
     >>> pr._version_policy_mapping['TestingType'] = [
     ...     'version_on_revert',
@@ -191,7 +192,7 @@ Let's create a new versioned container FTI::
 
 Enable versioning for the new content type::
 
-    >>> pr = self.portal.portal_repository
+    >>> pr = getToolByName(portal, 'portal_repository')
     >>> pr._versionable_content_types.append('VersionedContainer')
     >>> pr._version_policy_mapping['VersionedContainer'] = [
     ...     'version_on_revert',
