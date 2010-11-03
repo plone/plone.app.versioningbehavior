@@ -30,8 +30,7 @@ setup(name='plone.versioningbehavior',
           'plone.dexterity',
           'plone.directives.form',
           'rwproperty',
-          'zope.interface',
-          'zope.schema',
+          'plone.autoform',
           # -*- Extra requirements: -*-
       ],
       entry_points="""
