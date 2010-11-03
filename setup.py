@@ -3,7 +3,9 @@ import os
 
 version = open('plone/versioningbehavior/version.txt').read().strip()
 
-tests_require = []
+tests_require = [
+    'plone.app.dexterity',
+    ]
 
 setup(name='plone.versioningbehavior',
       version=version,
