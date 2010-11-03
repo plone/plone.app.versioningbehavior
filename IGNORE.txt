@@ -3,3 +3,6 @@
 plone.versioningbehavior.egg-info
 build
 dist
+*.pyc
+*.mo
+*.swp
