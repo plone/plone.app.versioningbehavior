@@ -14,12 +14,15 @@ class IVersionable(form.Schema):
     content types. Be shure to enable versioning in the plone types
     control-panel for your content type.
     """
+
     changeNote = schema.TextLine(
         title=_(u'label_change_note', default=u'Change Note'),
         description=_(u'help_change_note',
-                        default=u'Enter a comment that describes the changes '
-                        'you made.'),
+                      default=u'Enter a comment that describes the changes '
+                      'you made.'),
         required=False)
+
+
 alsoProvides(IVersionable, IFormFieldProvider)
 
 
@@ -34,6 +37,7 @@ class Versionable(object):
     on the context. It stores it in a request-annotation for later use in
     event-handlers
     """
+
     implements(IVersionable)
     adapts(IDexterityContent)
 
