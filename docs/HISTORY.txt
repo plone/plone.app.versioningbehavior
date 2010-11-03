@@ -1,57 +1,58 @@
 Changelog
 =========
 
-0.1a1 -
-------------------
+
+1.0b1
+-----
 
 * Load Products.CMFEditions before testing
-  [30.10.2009, jbaumann]
+  [jbaumann]
 
 * Added some more tests
-  [30.10.2009, jbaumann]
+  [jbaumann]
 
 * Renamed package to plone.versioningbehavior (see dexterity mailing list)
-  [23.10.2009, jbaumann]
+  [jbaumann]
 
 * Re-enabled IObjectAddedEvent-Eventhandler. The pickling error was fixed in
   CMFEdition's trunk.
-  [19.10.2009, jbaumann]
+  [jbaumann]
 
 * Renamed the behavior marker interface IVersionOnSave to IVersioningSupport
   because it depends on the "version" settings in the types control panel if
   a content is automatically versioning on saving or not. The marker interface
   should only indicate if the type could be versioned or not.
-  [jone]
+  [jbaumann]
 
 * Added locales directory with own domain for local translations
-  [jone]
+  [jbaumann]
 
 * Updated README.txt, included doctests in long-description
-  [jone]
+  [jbaumann]
 
 * Updated tests: events and version creation are now tested properly
-  [jone]
+  [jbaumann]
 
 * Added helper method for getting the changenote from the request anntation
-  [jone]
+  [jbaumann]
 
 * Storing changenote in an annotation on the request between the field-adapter
   and the event handler which creates the version. That makes it possible to
   use different form and widget manager prefixes.
-  [jone]
+  [jbaumann]
 
 * Added localization for the comment field
-  [jone]
+  [jbaumann]
 
 * Disabled the Added-Event because it's not working due to a pickling problem
-  [jone]
+  [jbaumann]
 
 * Added a form-field changeNote. It's content is used as comment for the created version
-  [jone]
+  [jbaumann]
 
 * Added a Event-Handler for creating a new version on save
-  [jone]
+  [jbaumann]
 
 * Implemented the behavior plone.behaviors.versioning.behaviors.IVersionable
-  [jone]
+  [jbaumann]
 
