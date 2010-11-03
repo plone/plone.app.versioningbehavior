@@ -5,6 +5,7 @@ version = open('plone/versioningbehavior/version.txt').read().strip()
 
 tests_require = [
     'plone.app.dexterity',
+    'Products.PloneTestCase',
     ]
 
 setup(name='plone.versioningbehavior',
