@@ -1,8 +1,13 @@
 # created by: svn propset svn:ignore -F ./IGNORE.TXT .
 
-plone.versioningbehavior.egg-info
-build
-dist
-*.pyc
 *.mo
+*.pyc
 *.swp
+.installed.cfg
+bin/
+build
+buildout.cfg
+develop-eggs/
+dist
+parts/
+plone.versioningbehavior.egg-info
