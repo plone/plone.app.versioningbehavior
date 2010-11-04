@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import os
 
-version = '1.0a1-dev'
+version = '1.0b1'
 
 tests_require = [
     'plone.app.dexterity',
@@ -17,7 +17,11 @@ setup(name='plone.app.versioningbehavior',
       # Get more strings from
       # http://www.python.org/pypi?%3Aaction=list_classifiers
       classifiers=[
+        "Environment :: Web Environment",
         "Framework :: Plone",
+        "Framework :: Zope2",
+        "License :: OSI Approved :: GNU General Public License (GPL)",
+        "Operating System :: OS Independent",
         "Programming Language :: Python",
         "Topic :: Software Development :: Libraries :: Python Modules",
         ],
@@ -25,7 +29,7 @@ setup(name='plone.app.versioningbehavior',
       author='Jonas Baumann, 4teamwork GmbH',
       author_email='mailto:dexterity-development@googlegroups.com',
       url='http://plone.org/products/dexterity',
-      license='GPL',
+      license='GPL version 2',
       packages=find_packages(exclude=['ez_setup']),
       namespace_packages=['plone', 'plone.app'],
       include_package_data=True,

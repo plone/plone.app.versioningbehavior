@@ -1,0 +1,5 @@
+recursive-include plone *
+recursive-include docs *
+include *.txt
+global-exclude *.pyc
+global-exclude *.mo
