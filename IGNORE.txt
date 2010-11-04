@@ -10,4 +10,4 @@ buildout.cfg
 develop-eggs/
 dist
 parts/
-plone.versioningbehavior.egg-info
+plone.app.versioningbehavior.egg-info

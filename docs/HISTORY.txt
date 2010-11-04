@@ -5,6 +5,9 @@ Changelog
 1.0b1
 -----
 
+* Renamed package to `plone.app.versioningbehavior`
+  [jbaumann]
+
 * Load Products.CMFEditions before testing
   [jbaumann]
 

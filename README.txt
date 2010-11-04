@@ -12,7 +12,7 @@ CMFEdtions' view ``versions_history_form`` or the history viewlet (see default @
 Usage
 -----
 
-Just use the behavior ``plone.versioningbehavior.behaviors.IVersionable`` in
+Just use the behavior ``plone.app.versioningbehavior.behaviors.IVersionable`` in
 your dexterity content type.
 
 In your *profiles/default/types/YOURTYPE.xml* add the behavior::
@@ -23,7 +23,7 @@ In your *profiles/default/types/YOURTYPE.xml* add the behavior::
 
      <!-- enabled behaviors -->
      <property name="behaviors">
-         <element value="plone.versioningbehavior.behaviors.IVersionable" />
+         <element value="plone.app.versioningbehavior.behaviors.IVersionable" />
      </property>
 
     </object>

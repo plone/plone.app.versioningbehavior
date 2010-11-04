@@ -1,7 +1,7 @@
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.dexterity.interfaces import IDexterityContent
 from plone.directives import form
-from plone.versioningbehavior import MessageFactory as _
+from plone.app.versioningbehavior import MessageFactory as _
 from rwproperty import getproperty, setproperty
 from zope import schema
 from zope.annotation.interfaces import IAnnotations
@@ -52,4 +52,4 @@ class Versionable(object):
     def changeNote(self, value):
         # store the value for later use (see events.py)
         annotation = IAnnotations(self.context.REQUEST)
-        annotation['plone.versioningbehavior-changeNote'] = value
+        annotation['plone.app.versioningbehavior-changeNote'] = value

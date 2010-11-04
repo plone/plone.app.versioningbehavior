@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: plone.versioningbehavior\n"
+"Project-Id-Version: plone.app.versioningbehavior\n"
 "POT-Creation-Date: 2009-10-13 12:51+0000\n"
 "PO-Revision-Date: 2009-10-13 12:51+0000\n"
 "Last-Translator: Plone i18n <plone-i18n@lists.sourceforge.net>\n"
@@ -11,17 +11,17 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0\n"
 
 #. Default: "Enter a comment that describes the changes you made."
-#: plone.versioningbehavior/plone/versioningbehavior/behaviors.py:28
+#: plone.app.versioningbehavior/plone/app.versioningbehavior/behaviors.py:28
 msgid "help_change_note"
 msgstr "Geben Sie einen Kommentar ein, der die von Ihnen gemachten Änderungen beschreibt."
 
 #. Default: "Initial version"
-#: plone.versioningbehavior/plone/versioningbehavior/events.py:53
+#: plone.app.versioningbehavior/plone/app.versioningbehavior/events.py:53
 msgid "initial_version_changeNote"
 msgstr "Initialversion"
 
 #. Default: "Change Note"
-#: plone.versioningbehavior/plone/versioningbehavior/behaviors.py:27
+#: plone.app.versioningbehavior/plone/app.versioningbehavior/behaviors.py:27
 msgid "label_change_note"
 msgstr "Änderungsnotiz"
 

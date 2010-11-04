@@ -34,7 +34,7 @@ class TestDexterityIntegration(test_IntegrationTests.TestIntegration):
             factory='Document',
             global_allow=True,
             behaviors=(
-                'plone.versioningbehavior.behaviors.IVersionable',
+                'plone.app.versioningbehavior.behaviors.IVersionable',
                 'plone.app.dexterity.behaviors.metadata.IBasic',
                 'plone.app.dexterity.behaviors.metadata.IRelatedItems',
                 ),
@@ -59,7 +59,7 @@ class TestDexterityIntegration(test_IntegrationTests.TestIntegration):
             global_allow=True,
             allowed_content_types=('Document',),
             behaviors=(
-                'plone.versioningbehavior.behaviors.IVersionable',
+                'plone.app.versioningbehavior.behaviors.IVersionable',
                 'plone.app.dexterity.behaviors.metadata.IBasic',
                 'plone.app.dexterity.behaviors.metadata.IRelatedItems',
                 ))

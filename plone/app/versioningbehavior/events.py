@@ -3,9 +3,9 @@ from Products.CMFEditions.interfaces.IArchivist import ArchivistUnregisteredErro
 from Products.CMFEditions.interfaces.IModifier import FileTooLargeToVersionError
 from Products.CMFPlone.utils import base_hasattr
 from five import grok
-from plone.versioningbehavior import MessageFactory as _
-from plone.versioningbehavior.behaviors import IVersioningSupport
-from plone.versioningbehavior.utils import get_change_note
+from plone.app.versioningbehavior import MessageFactory as _
+from plone.app.versioningbehavior.behaviors import IVersioningSupport
+from plone.app.versioningbehavior.utils import get_change_note
 from zope.app.container.interfaces import IObjectAddedEvent
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 

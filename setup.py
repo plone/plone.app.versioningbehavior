@@ -8,7 +8,7 @@ tests_require = [
     'Products.PloneTestCase',
     ]
 
-setup(name='plone.versioningbehavior',
+setup(name='plone.app.versioningbehavior',
       version=version,
       description='Provides a behavior for using CMFEditions with ' + \
           'dexterity content types',

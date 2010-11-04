@@ -2,14 +2,14 @@
 Some Tests
 ----------
 
-Just use the behavior ``plone.versioningbehavior.behaviors.IVersionable`` in
+Just use the behavior ``plone.app.versioningbehavior.behaviors.IVersionable`` in
 your dexterity content type::
 
     >>> from plone.dexterity.fti import DexterityFTI
     >>> fti = DexterityFTI('TestingType',
     ...                    factory='TestingType')
     >>> fti.behaviors = (
-    ...         'plone.versioningbehavior.behaviors.IVersionable',
+    ...         'plone.app.versioningbehavior.behaviors.IVersionable',
     ... )
     >>> self.portal.portal_types._setObject('TestingType', fti)
     'TestingType'
@@ -57,10 +57,10 @@ Now we should be able to create a new TestingType-object::
 
 
 We should be able to access the object, it should provide the marker
-interface ``plone.versioningbehavior.behaviors.IVersioningSupport``::
+interface ``plone.app.versioningbehavior.behaviors.IVersioningSupport``::
 
     >>> obj = self.portal.get('testingtype')
-    >>> from plone.versioningbehavior.behaviors import IVersioningSupport
+    >>> from plone.app.versioningbehavior.behaviors import IVersioningSupport
     >>> IVersioningSupport.providedBy(obj)
     True
 
@@ -184,7 +184,7 @@ Let's create a new versioned container FTI::
     ...                                        glboal_allow=True,
     ...                                        factory='VersionedContainer')
     >>> versioned_container_fti.behaviors = (
-    ...         'plone.versioningbehavior.behaviors.IVersionable',
+    ...         'plone.app.versioningbehavior.behaviors.IVersionable',
     ... )
     >>> self.portal.portal_types._setObject('VersionedContainer', versioned_container_fti)
     'VersionedContainer'

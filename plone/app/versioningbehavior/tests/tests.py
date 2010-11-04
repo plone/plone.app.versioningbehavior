@@ -7,14 +7,14 @@ from Products.PloneTestCase import PloneTestCase as ptc
 from Products.PloneTestCase.layer import onsetup
 
 import plone.app.dexterity
-import plone.versioningbehavior
+import plone.app.versioningbehavior
 import Products.CMFEditions
 
 @onsetup
 def setup_product():
     zcml.load_config('meta.zcml', plone.app.dexterity)
     zcml.load_config('configure.zcml', plone.app.dexterity)
-    zcml.load_config('configure.zcml', plone.versioningbehavior)
+    zcml.load_config('configure.zcml', plone.app.versioningbehavior)
     zcml.load_config('configure.zcml', Products.CMFEditions)
 
 setup_product()
@@ -31,11 +31,11 @@ functional_tests = (
 def test_suite():
     return unittest.TestSuite(
         [ztc.FunctionalDocFileSuite(
-            'tests/%s' % f, package='plone.versioningbehavior',
+            'tests/%s' % f, package='plone.app.versioningbehavior',
             test_class=ptc.FunctionalTestCase)
             for f in functional_tests] + 
         [ztc.ZopeDocFileSuite(
-            'tests/%s' % f, package='plone.versioningbehavior',
+            'tests/%s' % f, package='plone.app.versioningbehavior',
             test_class=ptc.FunctionalTestCase)
             for f in doc_tests],
         )
