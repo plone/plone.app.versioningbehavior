@@ -97,7 +97,7 @@ def create_initial_version_after_adding(context, event):
         try:
             changed = not pr.isUpToDate(context, context.version_id)
         except ArchivistUnregisteredError:
-            # XXX: The object is not actually registered, but a version is
+            # The object is not actually registered, but a version is
             # set, perhaps it was imported, or versioning info was
             # inappropriately destroyed
             changed = True
