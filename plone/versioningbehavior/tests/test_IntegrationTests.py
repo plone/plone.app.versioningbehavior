@@ -1,32 +1,44 @@
-
+from Products.CMFCore.utils import getToolByName
 from Products.CMFEditions.tests import test_IntegrationTests
-
 from Products.PloneTestCase import PloneTestCase
+from plone.dexterity.fti import DexterityFTI
+from unittest import TestSuite, makeSuite
+
+
 PloneTestCase.setupPloneSite()
 
-from plone.dexterity.fti import DexterityFTI
 
 class TestDexterityIntegration(test_IntegrationTests.TestIntegration):
+    """This tests is the same tests as in CMFEditions, but it's run for
+    dexterity Document and dexterity Folder.
+    """
 
     def afterSetUp(self):
+        # get some tools
+        types_tool = getToolByName(self.portal, 'portal_types')
+        repo_tool = getToolByName(self.portal, 'portal_repository')
+        acl_users = getToolByName(self.portal, 'acl_users')
+
         # we need to have the Manager role to be able to add things
         # to the portal root
         self.setRoles(['Manager',])
 
         # add an additional user
-        self.portal.acl_users.userFolderAddUser('reviewer', 'reviewer',
-                                                ['Manager'], '')
+        acl_users.userFolderAddUser('reviewer', 'reviewer',
+                                    ['Manager'], '')
 
         # now create some dexterity FTIs...
         # ... a document
-        document_fti = DexterityFTI('TestingDocument',
-                                    factory='TestingDocument')
-        document_fti.behaviors = (
+        document_fti = DexterityFTI(
+            'Document',
+            factory='Document',
+            global_allow=True,
+            behaviors=(
                 'plone.versioningbehavior.behaviors.IVersionable',
                 'plone.app.dexterity.behaviors.metadata.IBasic',
                 'plone.app.dexterity.behaviors.metadata.IRelatedItems',
-        )
-        document_fti.model_source = '''
+                ),
+            model_source = '''
             <model xmlns="http://namespaces.plone.org/supermodel/schema">
                 <schema>
                     <field name="text" type="zope.schema.Text">
@@ -35,60 +47,54 @@ class TestDexterityIntegration(test_IntegrationTests.TestIntegration):
                     </field>
                 </schema>
             </model>
-        '''
-        self.portal.portal_types._setObject('TestingDocument', document_fti)
+        ''')
+        types_tool._delObject('Document')
+        types_tool._setObject('Document', document_fti)
+
         # ... and a folder
-        folder_fti = DexterityFTI('TestingFolder',
-                                  factory='TestingFolder')
-        folder_fti.behaviors = (
+        folder_fti = DexterityFTI(
+            'Folder',
+            factory='Folder',
+            klass='plone.dexterity.content.Container',
+            global_allow=True,
+            allowed_content_types=('Document',),
+            behaviors=(
                 'plone.versioningbehavior.behaviors.IVersionable',
                 'plone.app.dexterity.behaviors.metadata.IBasic',
                 'plone.app.dexterity.behaviors.metadata.IRelatedItems',
-        )
-        self.portal.portal_types._setObject('TestingFolder', folder_fti)
+                ))
+        types_tool._delObject('Folder')
+        types_tool._setObject('Folder', folder_fti)
+
+        # lets disable versioning while creating, otherwise we'd have to
+        # change all tests because we'd have an initial versions and the
+        # archetypes tests wouldnt have one after just calling
+        # invokeFactory - that's the difference between archetypes and
+        # zope events..
+
+        vtypes = repo_tool.getVersionableContentTypes()
+        vtypes.remove('Document')
+        repo_tool.setVersionableContentTypes(vtypes)
 
         # now add a document
-        self.portal.invokeFactory('TestingDocument', 'doc')
+        self.portal.invokeFactory('Document', 'doc')
 
         # and add a folder with two documents in it
-        self.portal.invokeFactory('TestingFolder', 'fol')
-        self.portal.fol.invokeFactory('TestingDocument', 'doc1')
-        self.portal.fol.invokeFactory('TestingDocument', 'doc2')
+        self.portal.invokeFactory('Folder', 'fol')
+        self.portal.fol.invokeFactory('Document', 'doc1')
+        self.portal.fol.invokeFactory('Document', 'doc2')
 
-    def test11_versionAFolderishObjectThatTreatsChildrensAsInsideRefs(self):
-        # XXX disabled
-        pass
+        # re-enable versioning
+        vtypes.append('Dpcument')
+        repo_tool.setVersionableContentTypes(vtypes)
 
     def test13_revertUpdatesCatalog(self):
-        # XXX disabled
         # This test in CMFEditions uses doc.edit, but we have no archetypes
         # objects so doc.edit is portal.edit (acquisition), which is wrong...
         pass
 
-    def test15_retrieveInsideRefsFolderWithAddedOrDeletedObjects(self):
-        # XXX disabled
-        pass
 
-    def test16_revertInsideRefsUpdatesCatalog(self):
-        # XXX disabled
-        pass
-
-    def test17_moveInsideRefThenRevertChangesUid(self):
-        # XXX disabled
-        pass
-
-    def test21_DontLeaveDanglingCatalogEntriesWhenInvokingFactory(self):
-        # XXX disabled
-        pass
-
-
-
-
-from unittest import TestSuite, makeSuite
 def test_suite():
-    from Products.PloneTestCase import PloneTestCase
-    from Testing.ZopeTestCase import FunctionalDocFileSuite as FileSuite
-
     suite = TestSuite()
     suite.addTest(makeSuite(TestDexterityIntegration))
     return suite
