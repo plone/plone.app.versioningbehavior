@@ -12,8 +12,9 @@ from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 
 @grok.subscribe(IVersioningSupport, IObjectModifiedEvent)
 def create_version_on_save(context, event):
-    """ event handler for creating a new version of the object after
-    modifying.
+    """Creates a new version on a versionable object when the object is saved.
+    A new version is created if the type is automatic versionable and has
+    changed or if the user has entered a change note.
     """
     # according to Products.CMFEditions' update_version_on_edit script
 
@@ -30,7 +31,11 @@ def create_version_on_save(context, event):
 
     create_version = False
 
-    changeNote = get_change_note(context.REQUEST, None)
+    if getattr(context, 'REQUEST', None):
+        changeNote = get_change_note(context.REQUEST, None)
+    else:
+        changeNote = None
+
     if changeNote:
         # user has entered a change note. create a new version even if nothing
         # has changed.
@@ -54,6 +59,12 @@ def create_version_on_save(context, event):
 
 @grok.subscribe(IVersioningSupport, IObjectAddedEvent)
 def create_initial_version_after_adding(context, event):
+    """Creates a initial version on a object which is added to a container
+    and may be just created.
+    The initial version is created if the content type is versionable,
+    automatic versioning is enabled for this type and there is no initial
+    version. If a changeNote was entered it's used as comment.
+    """
 
     if context.portal_factory.isTemporary(context):
         # don't do anything if we're in the factory
@@ -72,7 +83,10 @@ def create_initial_version_after_adding(context, event):
     # get the change not
     default_changeNote = _(u'initial_version_changeNote',
                            default=u'Initial version')
-    changeNote = get_change_note(context.REQUEST, default_changeNote)
+    if getattr(context, 'REQUEST', None):
+        changeNote = get_change_note(context.REQUEST, default_changeNote)
+    else:
+        changeNote = None
 
     changed = False
     if not base_hasattr(context, 'version_id'):
