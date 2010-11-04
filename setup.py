@@ -27,7 +27,7 @@ setup(name='plone.app.versioningbehavior',
       url='http://plone.org/products/dexterity',
       license='GPL',
       packages=find_packages(exclude=['ez_setup']),
-      namespace_packages=['plone'],
+      namespace_packages=['plone', 'plone.app'],
       include_package_data=True,
       zip_safe=False,
       install_requires=[
