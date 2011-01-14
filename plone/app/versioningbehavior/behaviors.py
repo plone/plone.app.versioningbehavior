@@ -2,6 +2,8 @@ from plone.autoform.interfaces import IFormFieldProvider
 from plone.dexterity.interfaces import IDexterityContent
 from plone.directives import form
 from plone.app.versioningbehavior import MessageFactory as _
+from z3c.form.interfaces import IAddForm
+from z3c.form.interfaces import IEditForm
 from rwproperty import getproperty, setproperty
 from zope import schema
 from zope.annotation.interfaces import IAnnotations
@@ -21,6 +23,10 @@ class IVersionable(form.Schema):
                       default=u'Enter a comment that describes the changes '
                       'you made.'),
         required=False)
+
+    form.omitted('changeNote')
+    form.no_omit(IEditForm, 'changeNote')
+    form.no_omit(IAddForm, 'changeNote')
 
 
 alsoProvides(IVersionable, IFormFieldProvider)

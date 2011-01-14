@@ -5,6 +5,9 @@ Changelog
 1.0b2 - unreleased
 ------------------
 
+* Changed the behavior so that the changeNote field is only
+  rendered in the Add and Edit forms.
+  [deo]
 
 
 1.0b1 - 2010-11-04
