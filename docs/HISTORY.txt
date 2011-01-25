@@ -2,27 +2,32 @@ Changelog
 =========
 
 
-1.0b2 - unreleased
+1.0b2 (Unreleased)
 ------------------
 
 * Changed the behavior so that the changeNote field is only
   rendered in the Add and Edit forms.
   [deo]
 
+* Made sure to always try to catch the ArchivistUnregisteredError
+  exception at create_version_on_save (this mimics the original
+  handling from CMFEditions).
+  [deo]
 
-1.0b1 - 2010-11-04
+
+1.0b1 (2010-11-04)
 ------------------
 
-* Renamed package to `plone.app.versioningbehavior`
+* Renamed package to `plone.app.versioningbehavior`.
   [jbaumann]
 
-* Load Products.CMFEditions before testing
+* Load Products.CMFEditions before testing.
   [jbaumann]
 
-* Added some more tests
+* Added some more tests.
   [jbaumann]
 
-* Renamed package to plone.versioningbehavior (see dexterity mailing list)
+* Renamed package to plone.versioningbehavior (see dexterity mailing list).
   [jbaumann]
 
 * Re-enabled IObjectAddedEvent-Eventhandler. The pickling error was fixed in
@@ -35,16 +40,16 @@ Changelog
   should only indicate if the type could be versioned or not.
   [jbaumann]
 
-* Added locales directory with own domain for local translations
+* Added locales directory with own domain for local translations.
   [jbaumann]
 
-* Updated README.txt, included doctests in long-description
+* Updated README.txt, included doctests in long-description.
   [jbaumann]
 
-* Updated tests: events and version creation are now tested properly
+* Updated tests: events and version creation are now tested properly.
   [jbaumann]
 
-* Added helper method for getting the changenote from the request anntation
+* Added helper method for getting the changenote from the request annotation.
   [jbaumann]
 
 * Storing changenote in an annotation on the request between the field-adapter
@@ -52,18 +57,18 @@ Changelog
   use different form and widget manager prefixes.
   [jbaumann]
 
-* Added localization for the comment field
+* Added localization for the comment field.
   [jbaumann]
 
-* Disabled the Added-Event because it's not working due to a pickling problem
+* Disabled the Added-Event because it's not working due to a pickling problem.
   [jbaumann]
 
-* Added a form-field changeNote. It's content is used as comment for the created version
+* Added a form-field changeNote. It's content is used as comment for the
+  created version.
   [jbaumann]
 
-* Added a Event-Handler for creating a new version on save
+* Added a Event-Handler for creating a new version on save.
   [jbaumann]
 
-* Implemented the behavior plone.behaviors.versioning.behaviors.IVersionable
+* Implemented the behavior plone.behaviors.versioning.behaviors.IVersionable.
   [jbaumann]
-

@@ -47,10 +47,14 @@ def create_version_on_save(context, event):
         if not base_hasattr(context, 'version_id'):
             # we do not have a initial version
             create_version = True
-
-        elif not pr.isUpToDate(context, context.version_id):
-            # repository is not up to date: something changed
-            create_version = True
+        else:
+            try:
+                create_version = not pr.isUpToDate(context, context.version_id)
+            except ArchivistUnregisteredError:
+                # The object is not actually registered, but a version is
+                # set, perhaps it was imported, or versioning info was
+                # inappropriately destroyed
+                create_version = True
 
     # create new version if needed
     if create_version:

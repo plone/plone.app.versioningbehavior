@@ -2,8 +2,8 @@
 Some Tests
 ----------
 
-Just use the behavior ``plone.app.versioningbehavior.behaviors.IVersionable`` in
-your dexterity content type::
+Just use the behavior ``plone.app.versioningbehavior.behaviors.IVersionable``
+in your dexterity content type::
 
     >>> from plone.dexterity.fti import DexterityFTI
     >>> fti = DexterityFTI('TestingType',
@@ -113,11 +113,31 @@ Now we should have one - and only one - version::
 
 
 And we should see our comment on the versions listing later...
+
     >>> browser.open('http://nohost/plone/testingtype-1/versions_history_form')
     >>> 'initial change note' in browser.contents
     True
 
 
+It should also be possible to copy/paste an existing content::
+
+    >>> browser.open('http://nohost/plone/@@folder_contents')
+    >>> browser.getControl(name='paths:list').displayValue = ['Blubb2']
+    >>> browser.getControl(name='folder_copy:method').click()
+    >>> browser.getControl(name='folder_paste:method').click()
+    >>> 'copy_of_testingtype' in self.portal.objectIds()
+    True
+
+
+After pasting, we can create a new version by simply editing it::
+
+    >>> browser.open('http://nohost/plone/copy_of_testingtype/edit')
+    >>> browser.getControl(name='form.widgets.title').value = 'Dup'
+    >>> field = browser.getControl(name='form.widgets.IVersionable.changeNote')
+    >>> field.value = 'Edited the duplicate'
+    >>> browser.getControl(name='form.buttons.save').click()
+    >>> browser.url
+    'http://nohost/plone/copy_of_testingtype'
 
 
 Dexterity Containers
@@ -170,8 +190,6 @@ So let's see the version history. There should be one version with the comment
     >>> browser.open('http://nohost/plone/democontainer/testingtype/versions_history_form')
     >>> 'created a object' in browser.contents
     True
-
-
 
 
 Dexterity containers should also be versionable.
@@ -251,7 +269,3 @@ So, we should have the initial version::
     >>> browser.open('http://nohost/plone/versionedcontainer/versionedcontainer/versions_history_form')
     >>> 'another change note' in browser.contents
     True
-
-
-
-
