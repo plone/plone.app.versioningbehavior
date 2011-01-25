@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-1.0b2 (Unreleased)
+1.0b2 (2011-01-25)
 ------------------
 
 * Changed the behavior so that the changeNote field is only
