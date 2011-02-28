@@ -37,12 +37,11 @@ setup(name='plone.app.versioningbehavior',
       install_requires=[
         'setuptools',
         'Products.CMFEditions',
-        'five.grok',
         'plone.dexterity',
         'plone.directives.form',
         'rwproperty',
         'plone.autoform',
-        # -*- Extra requirements: -*-
+        'zope.app.container',
         ],
       tests_require=tests_require,
       extras_require=dict(tests=tests_require),

@@ -2,16 +2,13 @@ from Products.CMFCore.utils import getToolByName
 from Products.CMFEditions.interfaces.IArchivist import ArchivistUnregisteredError
 from Products.CMFEditions.interfaces.IModifier import FileTooLargeToVersionError
 from Products.CMFPlone.utils import base_hasattr
-from five import grok
 from plone.app.versioningbehavior import MessageFactory as _
 from plone.app.versioningbehavior.behaviors import IVersioningSupport
 from plone.app.versioningbehavior.utils import get_change_note
-from zope.app.container.interfaces import IObjectAddedEvent
-from zope.container.interfaces import IContainerModifiedEvent
+from zope.app.container.interfaces import IContainerModifiedEvent
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 
 
-@grok.subscribe(IVersioningSupport, IObjectModifiedEvent)
 def create_version_on_save(context, event):
     """Creates a new version on a versionable object when the object is saved.
     A new version is created if the type is automatic versionable and has
@@ -66,7 +63,6 @@ def create_version_on_save(context, event):
         pr.save(obj=context, comment=changeNote)
 
 
-@grok.subscribe(IVersioningSupport, IObjectAddedEvent)
 def create_initial_version_after_adding(context, event):
     """Creates a initial version on a object which is added to a container
     and may be just created.
@@ -74,10 +70,6 @@ def create_initial_version_after_adding(context, event):
     automatic versioning is enabled for this type and there is no initial
     version. If a changeNote was entered it's used as comment.
     """
-
-    if context.portal_factory.isTemporary(context):
-        # don't do anything if we're in the factory
-        return
 
     pr = getToolByName(context, 'portal_repository')
     if not pr.isVersionable(context):

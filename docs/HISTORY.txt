@@ -5,6 +5,9 @@ Changelog
 1.0b3 (Unreleased)
 ------------------
 
+* Remove grok usage, tidy up and declare zope.app.container dependency.
+  [elro]
+
 * Only version the modified object, not its container on modification.
   [elro]
 
