@@ -256,7 +256,8 @@ Now we try to add another versioned container in the previously created versione
 
 So, we should have the initial version::
 
-    >>> obj = self.portal.get('versionedcontainer').get('versionedcontainer')
+    >>> parent = self.portal['versionedcontainer']
+    >>> obj = parent['versionedcontainer']
     >>> obj
     <Container at /plone/versionedcontainer/versionedcontainer>
     >>> pa = self.portal.portal_archivist
@@ -266,3 +267,9 @@ So, we should have the initial version::
     >>> browser.open('http://nohost/plone/versionedcontainer/versionedcontainer/versions_history_form')
     >>> 'another change note' in browser.contents
     True
+
+Check that the parent does not get versioned inappropriately.
+
+    >>> history = pa.getHistoryMetadata(parent)
+    >>> history.getLength(countPurged=False)
+    1
