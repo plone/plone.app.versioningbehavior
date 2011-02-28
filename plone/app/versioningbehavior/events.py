@@ -7,6 +7,7 @@ from plone.app.versioningbehavior import MessageFactory as _
 from plone.app.versioningbehavior.behaviors import IVersioningSupport
 from plone.app.versioningbehavior.utils import get_change_note
 from zope.app.container.interfaces import IObjectAddedEvent
+from zope.container.interfaces import IContainerModifiedEvent
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 
 
@@ -17,6 +18,10 @@ def create_version_on_save(context, event):
     changed or if the user has entered a change note.
     """
     # according to Products.CMFEditions' update_version_on_edit script
+
+    # only version the modified object, not its container on modification
+    if IContainerModifiedEvent.providedBy(event):
+        return
 
     # XXX dirty hack for stagingbehavior, which triggers a event with
     # a aq_based context when deleting the working copy

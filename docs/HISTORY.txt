@@ -5,6 +5,8 @@ Changelog
 1.0b3 (Unreleased)
 ------------------
 
+* Only version the modified object, not its container on modification.
+  [elro]
 
 1.0b2 (2011-01-25)
 ------------------
