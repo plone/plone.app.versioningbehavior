@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-1.0b3 (Unreleased)
+1.0b3 (2011-03-01)
 ------------------
 
 * Remove grok usage, tidy up and declare zope.app.container dependency.
