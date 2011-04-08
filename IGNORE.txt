@@ -4,10 +4,10 @@
 *.pyc
 *.swp
 .installed.cfg
-bin/
+bin
 build
 buildout.cfg
-develop-eggs/
+develop-eggs
 dist
-parts/
+parts
 plone.app.versioningbehavior.egg-info
