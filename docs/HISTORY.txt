@@ -2,6 +2,12 @@ Changelog
 =========
 
 
+1.0b4 (unreleased)
+------------------
+
+* Added support for versioning blobs (NamedBlobFile, NamedBlobImage).
+  [buchi]
+
 1.0b3 (2011-03-01)
 ------------------
 

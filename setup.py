@@ -6,6 +6,7 @@ version = '1.0b3'
 tests_require = [
     'plone.app.dexterity',
     'Products.PloneTestCase',
+    'plone.namedfile[blobs]',
     ]
 
 setup(name='plone.app.versioningbehavior',
