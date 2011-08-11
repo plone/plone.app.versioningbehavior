@@ -8,6 +8,7 @@ from plone.namedfile.interfaces import INamedBlobImageField
 from Products.CMFCore.utils import getToolByName
 from Products.CMFEditions.interfaces.IArchivist import ArchivistRetrieveError
 from Products.CMFEditions.interfaces.IModifier import IAttributeModifier
+from Products.CMFEditions.interfaces.IModifier import ICloneModifier
 from Products.CMFEditions.Modifiers import ConditionalTalesModifier
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from ZODB.blob import Blob
@@ -36,7 +37,7 @@ class CloneNamedFileBlobs:
     packed away.
     """
 
-    implements(IAttributeModifier)
+    implements(IAttributeModifier, ICloneModifier)
 
     def __init__(self, id_, title):
         self.id = str(id_)
@@ -101,6 +102,26 @@ class CloneNamedFileBlobs:
             fname = name.split('.')[-1]
             field = iface.get(fname)
             field.get(iface(obj))._blob = blob
+
+    def getOnCloneModifiers(self, obj):
+        """Removes references to blobs.
+        """
+        blob_refs = {}
+
+        for schemata in iterSchemata(obj):
+            for name, field in getFields(schemata).items():
+                if (INamedBlobFileField.providedBy(field) or
+                    INamedBlobImageField.providedBy(field)):
+                    blob = field.get(field.interface(obj))._blob
+                    blob_refs[id(aq_base(blob))] = True
+
+        def persistent_id(obj):
+            return blob_refs.get(id(obj), None)
+
+        def persistent_load(obj):
+            return None
+
+        return persistent_id, persistent_load, [], []
 
 InitializeClass(CloneNamedFileBlobs)
 

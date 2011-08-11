@@ -99,6 +99,30 @@ class TestModifiers(PloneTestCase.PloneTestCase):
         modifier.reattachReferencedAttributes(file2, attrs_dict)
         self.assertTrue(IBlobFile(file2).file._blob is blob)
 
+    def testCloneNamedFileBlobsOnCloneModifiers(self):
+        file_fti = DexterityFTI(
+            'BlobFile',
+            model_source = """
+            <model xmlns="http://namespaces.plone.org/supermodel/schema">
+                <schema>
+                    <field name="file" type="plone.namedfile.field.NamedBlobFile">
+                        <title>File</title>
+                        <required>True</required>
+                    </field>
+                </schema>
+            </model>
+        """)
+        self.portal.portal_types._setObject('BlobFile', file_fti)
+
+        file1 = createContentInContainer(self.portal, 'BlobFile')
+        file1.file = NamedBlobFile('dummy test data', filename=u'test.txt')
+        modifier = CloneNamedFileBlobs('modifier', 'Modifier')
+        pers_id, pers_load, empty1, empty2 = modifier.getOnCloneModifiers(file1)
+        self.assertTrue(pers_id(file1.file._blob))
+        self.assertTrue(pers_load(file1.file._blob) is None)
+        self.assertTrue(empty1 == [])
+        self.assertTrue(empty2 == [])
+
 
 def test_suite():
     suite = TestSuite()
