@@ -22,7 +22,7 @@ manage_CloneNamedFileBlobsAddForm =  \
 
 
 def manage_addCloneNamedFileBlobs(self, id, title=None, REQUEST=None):
-    """Add a skip parent pointers modifier
+    """Add a clone namedfile blobs modifier.
     """
     modifier = CloneNamedFileBlobs(id, title)
     self._setObject(id, modifier)
