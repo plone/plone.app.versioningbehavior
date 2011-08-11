@@ -5,6 +5,10 @@ Changelog
 1.0b4 (unreleased)
 ------------------
 
+* Added generic setup profile which installs and enables the modifier for
+  cloning blobs and disables the Skip_z3c_blobfile modifier.
+  [buchi]
+
 * Added support for versioning blobs (NamedBlobFile, NamedBlobImage).
   [buchi]
 

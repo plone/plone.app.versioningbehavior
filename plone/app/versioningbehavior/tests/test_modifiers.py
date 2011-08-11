@@ -10,7 +10,10 @@ from ZODB.interfaces import IBlob
 from zope.interface import alsoProvides
 from StringIO import StringIO
 from zope.configuration import xmlconfig
-PloneTestCase.setupPloneSite()
+
+PloneTestCase.setupPloneSite(
+    extension_profiles=['plone.app.versioningbehavior:default'])
+
 
 class IBlobFile(form.Schema):
         file = field.NamedBlobFile(title=u'File')

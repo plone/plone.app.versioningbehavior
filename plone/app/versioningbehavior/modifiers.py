@@ -110,7 +110,7 @@ modifiers = (
         'id': 'CloneNamedFileBlobs',
         'title': "Store blobs by reference on content",
         'enabled': True,
-        'condition': "python: True",
+        'condition': "python:True",
         'wrapper': ConditionalTalesModifier,
         'modifier': CloneNamedFileBlobs,
         'form': manage_CloneNamedFileBlobsAddForm,
