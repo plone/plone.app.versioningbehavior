@@ -60,7 +60,10 @@ class CloneNamedFileBlobs:
             for name, field in getFields(schemata).items():
                 if (INamedBlobFileField.providedBy(field) or
                     INamedBlobImageField.providedBy(field)):
-                    blob_file = field.get(field.interface(obj)).open()
+                    field_value = field.get(field.interface(obj))
+                    if field_value is None:
+                        continue
+                    blob_file = field_value.open()
                     save_new = True
                     dotted_name = '.'.join([schemata.__identifier__, name])
 
@@ -107,13 +110,13 @@ class CloneNamedFileBlobs:
         """Removes references to blobs.
         """
         blob_refs = {}
-
         for schemata in iterSchemata(obj):
             for name, field in getFields(schemata).items():
                 if (INamedBlobFileField.providedBy(field) or
                     INamedBlobImageField.providedBy(field)):
-                    blob = field.get(field.interface(obj))._blob
-                    blob_refs[id(aq_base(blob))] = True
+                    field_value = field.get(field.interface(obj))
+                    if field_value is not None:
+                        blob_refs[id(aq_base(field_value._blob))] = True
 
         def persistent_id(obj):
             return blob_refs.get(id(obj), None)

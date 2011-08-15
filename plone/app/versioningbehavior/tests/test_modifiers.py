@@ -123,6 +123,29 @@ class TestModifiers(PloneTestCase.PloneTestCase):
         self.assertTrue(empty1 == [])
         self.assertTrue(empty2 == [])
 
+    def testCloneNamedFileBlobsWithNoFile(self):
+        file_fti = DexterityFTI(
+            'BlobFile',
+            model_source = """
+            <model xmlns="http://namespaces.plone.org/supermodel/schema">
+                <schema>
+                    <field name="file" type="plone.namedfile.field.NamedBlobFile">
+                        <title>File</title>
+                        <required>True</required>
+                    </field>
+                </schema>
+            </model>
+        """)
+        self.portal.portal_types._setObject('BlobFile', file_fti)
+        file1 = createContentInContainer(self.portal, 'BlobFile')
+        modifier = CloneNamedFileBlobs('modifier', 'Modifier')
+        attrs_dict = modifier.getReferencedAttributes(file1)
+        self.assertTrue(attrs_dict=={})
+        pers_id, pers_load, empty1, empty2 = modifier.getOnCloneModifiers(file1)
+        self.assertTrue(pers_id(None) is None)
+        self.assertTrue(pers_load(None) is None)
+        self.assertTrue(empty1 == [])
+        self.assertTrue(empty2 == [])       
 
 def test_suite():
     suite = TestSuite()
