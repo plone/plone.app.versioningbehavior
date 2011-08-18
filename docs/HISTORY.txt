@@ -5,7 +5,11 @@ Changelog
 1.0b5 (unreleased)
 ------------------
 
-- Fixed CloneNamedFileBlobs modifier to handle fields with value ``None``.
+* Fixed setuphandler to not fail with older versions of Products.CMFEditions
+  that do not have a Skip_z3c_blobfile modifier.
+  [buchi]
+
+* Fixed CloneNamedFileBlobs modifier to handle fields with value ``None``.
   [buchi]
 
 

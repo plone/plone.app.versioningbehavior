@@ -22,8 +22,9 @@ def install_modifiers(context, logger):
 
 def disable_skip_z3c_blobfile(context, logger):
     portal_modifier = getToolByName(context, 'portal_modifier')
-    modifier = portal_modifier.get('Skip_z3c_blobfile')
-    modifier.edit(enabled=False)
+    if 'Skip_z3c_blobfile' in portal_modifier.objectIds():
+        modifier = portal_modifier.get('Skip_z3c_blobfile')
+        modifier.edit(enabled=False)
 
 
 def import_various(context):
