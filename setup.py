@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import os
 
-version = '1.0b6dev'
+version = '1.0b6'
 
 tests_require = [
     'plone.app.dexterity',
@@ -42,6 +42,7 @@ setup(name='plone.app.versioningbehavior',
         'plone.directives.form',
         'rwproperty',
         'plone.autoform',
+        'plone.namedfile[blobs]',
         'zope.app.container',
         ],
       tests_require=tests_require,
