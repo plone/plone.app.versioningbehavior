@@ -70,21 +70,22 @@ class CloneNamedFileBlobs:
                     if prior_rev is not None:
                         prior_obj = prior_rev.object
                         prior_blob = field.get(field.interface(prior_obj))
-                        prior_file = prior_blob.open()
+                        if prior_blob is not None:
+                            prior_file = prior_blob.open()
 
-                        # Check for file size differences
-                        if (os.fstat(prior_file.fileno()).st_size ==
-                            os.fstat(blob_file.fileno()).st_size):
-                            # Files are the same size, compare line by line
-                            for line, prior_line in izip(blob_file,
-                                                         prior_file):
-                                if line != prior_line:
-                                    break
-                            else:
-                                # The files are the same, save a reference
-                                # to the prior versions blob on this version
-                                file_data[dotted_name] = prior_blob._blob
-                                save_new = False
+                            # Check for file size differences
+                            if (os.fstat(prior_file.fileno()).st_size ==
+                                os.fstat(blob_file.fileno()).st_size):
+                                # Files are the same size, compare line by line
+                                for line, prior_line in izip(blob_file,
+                                                             prior_file):
+                                    if line != prior_line:
+                                        break
+                                else:
+                                    # The files are the same, save a reference
+                                    # to the prior versions blob on this version
+                                    file_data[dotted_name] = prior_blob._blob
+                                    save_new = False
 
                     if save_new:
                         new_blob = file_data[dotted_name] = Blob()

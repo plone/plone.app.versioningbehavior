@@ -145,7 +145,23 @@ class TestModifiers(PloneTestCase.PloneTestCase):
         self.assertTrue(pers_id(None) is None)
         self.assertTrue(pers_load(None) is None)
         self.assertTrue(empty1 == [])
-        self.assertTrue(empty2 == [])       
+        self.assertTrue(empty2 == [])
+
+        # Previous version without file but working copy has a file.
+        self.portal.portal_repository.save(file1)
+        file1.file = NamedBlobFile('dummy test data', filename=u'test.txt')
+        attrs_dict = modifier.getReferencedAttributes(file1)
+        self.assertTrue(
+            'plone.dexterity.schema.generated.plone_0_BlobFile.file'
+            in attrs_dict)
+        blob = attrs_dict.values()[0]
+        self.assertTrue(IBlob.providedBy(blob))
+        pers_id, pers_load, empty1, empty2 = modifier.getOnCloneModifiers(file1)
+        self.assertTrue(pers_id(file1.file._blob))
+        self.assertTrue(pers_load(file1.file._blob) is None)
+        self.assertTrue(empty1 == [])
+        self.assertTrue(empty2 == [])
+
 
 def test_suite():
     suite = TestSuite()

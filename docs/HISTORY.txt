@@ -4,6 +4,10 @@ Changelog
 1.0b7 (unreleased)
 ------------------
 
+* Fixed a bug in the CloneNamedFileBlobs modifier causing an AttributeError
+  when the previous version doesn't have a blob and the working copy has one.
+  [buchi]
+
 
 1.0b6 (2011-09-25)
 ------------------
