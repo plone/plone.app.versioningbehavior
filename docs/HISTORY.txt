@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.0b7 (unreleased)
+1.0b7 (2011-10-03)
 ------------------
 
 * Fixed a bug in the CloneNamedFileBlobs modifier causing an AttributeError
