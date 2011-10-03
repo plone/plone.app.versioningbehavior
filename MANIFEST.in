@@ -1,5 +1,5 @@
 recursive-include plone *
 recursive-include docs *
 include *.txt
+exclude .gitignore
 global-exclude *.pyc
-global-exclude *.mo
