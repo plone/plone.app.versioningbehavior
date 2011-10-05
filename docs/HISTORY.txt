@@ -4,7 +4,8 @@ Changelog
 1.0b8 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Added pt_BR translation.
+  [rafaelbco, davisagli]
 
 
 1.0b7 (2011-10-03)

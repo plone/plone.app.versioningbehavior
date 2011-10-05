@@ -1,0 +1,26 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: plone.app.versioningbehavior\n"
+"POT-Creation-Date: 2009-10-13 12:51+0000\n"
+"PO-Revision-Date: 2009-10-13 12:51+0000\n"
+"Last-Translator: Rafael Oliveira <rafaelbco@gmail.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+
+#. Default: "Enter a comment that describes the changes you made."
+#: plone.app.versioningbehavior/plone/app.versioningbehavior/behaviors.py:28
+msgid "help_change_note"
+msgstr "Informe um comentário descrevendo as alterações que você fez."
+
+#. Default: "Initial version"
+#: plone.app.versioningbehavior/plone/app.versioningbehavio/events.py:53
+msgid "initial_version_changeNote"
+msgstr "Versão inicial"
+
+#. Default: "Change Note"
+#: plone.app.versioningbehavior/plone/app.versioningbehavior/behaviors.py:27
+msgid "label_change_note"
+msgstr "Comentário interno (opcional)"
+
