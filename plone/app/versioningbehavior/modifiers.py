@@ -3,17 +3,20 @@ from Acquisition import aq_base
 from App.class_init import InitializeClass
 from itertools import izip
 from plone.dexterity.utils import iterSchemata, resolveDottedName
+from plone.dexterity.interfaces import IDexterityContent
 from plone.namedfile.interfaces import INamedBlobFileField
 from plone.namedfile.interfaces import INamedBlobImageField
 from Products.CMFCore.utils import getToolByName
 from Products.CMFEditions.interfaces.IArchivist import ArchivistRetrieveError
 from Products.CMFEditions.interfaces.IModifier import IAttributeModifier
 from Products.CMFEditions.interfaces.IModifier import ICloneModifier
+from Products.CMFEditions.interfaces.IModifier import ISaveRetrieveModifier
 from Products.CMFEditions.Modifiers import ConditionalTalesModifier
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from ZODB.blob import Blob
 from zope.interface import implements
 from zope.schema import getFields
+from z3c.relationfield.interfaces import IRelationChoice, IRelationList
 
 
 manage_CloneNamedFileBlobsAddForm =  \
@@ -26,6 +29,22 @@ def manage_addCloneNamedFileBlobs(self, id, title=None, REQUEST=None):
     """Add a clone namedfile blobs modifier.
     """
     modifier = CloneNamedFileBlobs(id, title)
+    self._setObject(id, modifier)
+
+    if REQUEST is not None:
+        REQUEST['RESPONSE'].redirect(self.absolute_url()+'/manage_main')
+
+
+manage_SkipRelationsAddForm =  \
+    PageTemplateFile('www/SkipRelations.pt',
+                   globals(),
+                   __name__='manage_SkipRelationsAddForm')
+
+
+def manage_addSkipRelations(self, id, title=None, REQUEST=None):
+    """Add a skip relations modifier.
+    """
+    modifier = SkipRelations(id, title)
     self._setObject(id, modifier)
 
     if REQUEST is not None:
@@ -130,6 +149,56 @@ class CloneNamedFileBlobs:
 InitializeClass(CloneNamedFileBlobs)
 
 
+class SkipRelations:
+    """Standard modifier to avoid cloning of relations and
+    restore them from the working copy.
+    """
+
+    implements(ICloneModifier, ISaveRetrieveModifier)
+
+    def __init__(self, id_, title):
+        self.id = str(id_)
+        self.title = str(title)
+
+    def getOnCloneModifiers(self, obj):
+        """Removes relations.
+        """
+        relations = {}
+        if IDexterityContent.providedBy(obj):
+            for schemata in iterSchemata(obj):
+                for name, field in getFields(schemata).items():
+                    if (IRelationChoice.providedBy(field) or
+                        IRelationList.providedBy(field)):
+                        field_value = field.get(field.interface(obj))
+                        if field_value is not None:
+                            relations[id(aq_base(field_value))] = True
+
+        def persistent_id(obj):
+            return relations.get(id(obj), None)
+
+        def persistent_load(obj):
+            return None
+
+        return persistent_id, persistent_load, [], []
+
+    def beforeSaveModifier(self, obj, clone):
+        """Does nothing, the pickler does the work."""
+        return {}, [], []
+
+    def afterRetrieveModifier(self, obj, repo_clone, preserve=()):
+        """Restore relations from the working copy."""
+        if IDexterityContent.providedBy(obj):
+            for schemata in iterSchemata(obj):
+                for name, field in getFields(schemata).items():
+                    if (IRelationChoice.providedBy(field) or
+                        IRelationList.providedBy(field)):
+                        field.set(field.interface(repo_clone),
+                                  field.get(field.interface(obj)))
+        return [], [], {}
+
+InitializeClass(SkipRelations)
+
+
 modifiers = (
     {
         'id': 'CloneNamedFileBlobs',
@@ -140,6 +209,17 @@ modifiers = (
         'modifier': CloneNamedFileBlobs,
         'form': manage_CloneNamedFileBlobsAddForm,
         'factory': manage_addCloneNamedFileBlobs,
+        'icon': 'www/modifier.gif',
+    },
+    {
+        'id': 'SkipRelations',
+        'title': "Skip saving of relations",
+        'enabled': True,
+        'condition': "python:True",
+        'wrapper': ConditionalTalesModifier,
+        'modifier': SkipRelations,
+        'form': manage_SkipRelationsAddForm,
+        'factory': manage_addSkipRelations,
         'icon': 'www/modifier.gif',
     },
 )

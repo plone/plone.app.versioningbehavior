@@ -1,15 +1,19 @@
 from Products.PloneTestCase import PloneTestCase
 from plone.dexterity.fti import DexterityFTI
 from plone.app.versioningbehavior.modifiers import CloneNamedFileBlobs
+from plone.app.versioningbehavior.modifiers import SkipRelations
 from unittest import TestSuite, makeSuite
 from plone.namedfile.file import NamedBlobFile
 from plone.namedfile import field
 from plone.directives import form
-from plone.dexterity.utils import createContentInContainer
+from plone.dexterity.utils import createContentInContainer, createContent
 from ZODB.interfaces import IBlob
-from zope.interface import alsoProvides
+from zope.interface import alsoProvides, Interface
 from StringIO import StringIO
 from zope.configuration import xmlconfig
+from zope.component import getUtility
+from z3c.relationfield.schema import RelationChoice, RelationList
+from z3c.relationfield.relation import RelationValue
 
 PloneTestCase.setupPloneSite(
     extension_profiles=['plone.app.versioningbehavior:default'])
@@ -18,6 +22,13 @@ PloneTestCase.setupPloneSite(
 class IBlobFile(form.Schema):
         file = field.NamedBlobFile(title=u'File')
 alsoProvides(IBlobFile, form.IFormFieldProvider)
+
+
+class IRelationsType(Interface):
+    single = RelationChoice(title=u"Single",
+                            required=False, values=[])
+    multiple = RelationList(title=u"Multiple (Relations field)",
+                            required=False)
 
 
 class TestModifiers(PloneTestCase.PloneTestCase):
@@ -161,6 +172,42 @@ class TestModifiers(PloneTestCase.PloneTestCase):
         self.assertTrue(pers_load(file1.file._blob) is None)
         self.assertTrue(empty1 == [])
         self.assertTrue(empty2 == [])
+
+    def testRelations(self):
+        rel_fti = DexterityFTI(
+            'RelationsType',
+            schema="plone.app.versioningbehavior.tests.test_modifiers.IRelationsType")
+        self.portal.portal_types._setObject('RelationsType', rel_fti)
+
+        # Setup IIntIds utility which is required for relations to work
+        from five.intid import site
+        from zope.app.intid.interfaces import IIntIds
+        site.add_intids(self.portal)
+        intids = getUtility(IIntIds)
+
+        source = createContentInContainer(self.portal, 'RelationsType')
+        target = createContentInContainer(self.portal, 'RelationsType')
+        source.single = RelationValue(intids.getId(target))
+        source.multiple = [RelationValue(intids.getId(target))]
+
+        # Update relations
+        from zope.lifecycleevent import ObjectModifiedEvent
+        from zope.event import notify
+        notify(ObjectModifiedEvent(source))
+
+        modifier = SkipRelations('modifier', 'Modifier')
+        pers_id, pers_load, empty1, empty2 = modifier.getOnCloneModifiers(source)
+        self.assertTrue(pers_id(source.single))
+        self.assertTrue(pers_id(source.multiple))
+        self.assertTrue(pers_load(source.single) is None)
+        self.assertTrue(pers_load(source.multiple) is None)
+        self.assertTrue(empty1 == [])
+        self.assertTrue(empty2 == [])
+
+        repo_clone = createContent('RelationsType')
+        modifier.afterRetrieveModifier(source, repo_clone)
+        self.assertTrue(repo_clone.single is source.single)
+        self.assertTrue(repo_clone.multiple is source.multiple)
 
 
 def test_suite():

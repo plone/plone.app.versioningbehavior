@@ -7,6 +7,10 @@ Changelog
 - Added pt_BR translation.
   [rafaelbco, davisagli]
 
+- Added support for versioning items with relations (plone.app.relationfield).
+  Relations are skipped on clone and added from the working copy on restore.
+  [buchi]
+
 
 1.0b7 (2011-10-03)
 ------------------

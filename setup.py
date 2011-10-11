@@ -4,7 +4,6 @@ import os
 version = '1.0b8dev'
 
 tests_require = [
-    'plone.app.dexterity',
     'Products.PloneTestCase',
     'plone.namedfile[blobs]',
     ]
@@ -36,13 +35,14 @@ setup(name='plone.app.versioningbehavior',
       include_package_data=True,
       zip_safe=False,
       install_requires=[
-        'setuptools',
-        'Products.CMFEditions',
+        'plone.app.dexterity[relations]',
+        'plone.autoform',
         'plone.dexterity',
         'plone.directives.form',
-        'rwproperty',
-        'plone.autoform',
         'plone.namedfile[blobs]',
+        'Products.CMFEditions',
+        'rwproperty',
+        'setuptools',
         'zope.app.container',
         ],
       tests_require=tests_require,
