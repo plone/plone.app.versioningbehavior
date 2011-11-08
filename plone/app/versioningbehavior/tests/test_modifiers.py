@@ -36,12 +36,12 @@ class TestModifiers(PloneTestCase.PloneTestCase):
     def afterSetUp(self):
         # we need to have the Manager role to be able to add things
         # to the portal root
-        self.setRoles(['Manager',])
+        self.setRoles(['Manager', ])
 
     def testCloneNamedFileBlobsInSchema(self):
         file_fti = DexterityFTI(
             'BlobFile',
-            model_source = """
+            model_source="""
             <model xmlns="http://namespaces.plone.org/supermodel/schema">
                 <schema>
                     <field name="file" type="plone.namedfile.field.NamedBlobFile">
@@ -62,7 +62,7 @@ class TestModifiers(PloneTestCase.PloneTestCase):
             in attrs_dict)
         blob = attrs_dict.values()[0]
         self.assertTrue(IBlob.providedBy(blob))
-        
+
         file2 = createContentInContainer(self.portal, 'BlobFile')
         file2.file = NamedBlobFile('dummy test data', filename=u'test.txt')
         modifier.reattachReferencedAttributes(file2, attrs_dict)
@@ -90,7 +90,7 @@ class TestModifiers(PloneTestCase.PloneTestCase):
 
         file_fti = DexterityFTI(
             'BlobFile',
-            behaviors = [IBlobFile.__identifier__])
+            behaviors=[IBlobFile.__identifier__])
         self.portal.portal_types._setObject('BlobFile', file_fti)
 
         file1 = createContentInContainer(self.portal, 'BlobFile')
@@ -113,7 +113,7 @@ class TestModifiers(PloneTestCase.PloneTestCase):
     def testCloneNamedFileBlobsOnCloneModifiers(self):
         file_fti = DexterityFTI(
             'BlobFile',
-            model_source = """
+            model_source="""
             <model xmlns="http://namespaces.plone.org/supermodel/schema">
                 <schema>
                     <field name="file" type="plone.namedfile.field.NamedBlobFile">
@@ -137,7 +137,7 @@ class TestModifiers(PloneTestCase.PloneTestCase):
     def testCloneNamedFileBlobsWithNoFile(self):
         file_fti = DexterityFTI(
             'BlobFile',
-            model_source = """
+            model_source="""
             <model xmlns="http://namespaces.plone.org/supermodel/schema">
                 <schema>
                     <field name="file" type="plone.namedfile.field.NamedBlobFile">
@@ -151,7 +151,7 @@ class TestModifiers(PloneTestCase.PloneTestCase):
         file1 = createContentInContainer(self.portal, 'BlobFile')
         modifier = CloneNamedFileBlobs('modifier', 'Modifier')
         attrs_dict = modifier.getReferencedAttributes(file1)
-        self.assertTrue(attrs_dict=={})
+        self.assertTrue(attrs_dict == {})
         pers_id, pers_load, empty1, empty2 = modifier.getOnCloneModifiers(file1)
         self.assertTrue(pers_id(None) is None)
         self.assertTrue(pers_load(None) is None)

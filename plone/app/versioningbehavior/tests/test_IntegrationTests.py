@@ -21,7 +21,7 @@ class TestDexterityIntegration(test_IntegrationTests.TestIntegration):
 
         # we need to have the Manager role to be able to add things
         # to the portal root
-        self.setRoles(['Manager',])
+        self.setRoles(['Manager', ])
 
         # add an additional user
         acl_users.userFolderAddUser('reviewer', 'reviewer',
@@ -38,7 +38,7 @@ class TestDexterityIntegration(test_IntegrationTests.TestIntegration):
                 'plone.app.dexterity.behaviors.metadata.IBasic',
                 'plone.app.dexterity.behaviors.metadata.IRelatedItems',
                 ),
-            model_source = '''
+            model_source='''
             <model xmlns="http://namespaces.plone.org/supermodel/schema">
                 <schema>
                     <field name="text" type="zope.schema.Text">

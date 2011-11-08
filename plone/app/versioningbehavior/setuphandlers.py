@@ -30,7 +30,8 @@ def disable_skip_z3c_blobfile(context, logger):
 def import_various(context):
     """Miscellanous steps import handle
     """
-    if context.readDataFile('plone.app.versioningbehavior_various.txt') is None:
+    if context.readDataFile(
+        'plone.app.versioningbehavior_various.txt') is None:
         return
 
     logger = context.getLogger('plone.app.versioningbehavior')

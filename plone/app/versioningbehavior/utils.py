@@ -12,9 +12,10 @@ def get_change_note(request, default=None):
     value = _marker
     if IBrowserRequest.providedBy(request):
         annotations = IAnnotations(request)
-        value = annotations.get('plone.app.versioningbehavior-changeNote', _marker)
+        value = annotations.get(
+            'plone.app.versioningbehavior-changeNote', _marker)
 
-    if not value or value==_marker:
+    if not value or value == _marker:
         return default
 
     return value

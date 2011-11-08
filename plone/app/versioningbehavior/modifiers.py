@@ -32,7 +32,7 @@ def manage_addCloneNamedFileBlobs(self, id, title=None, REQUEST=None):
     self._setObject(id, modifier)
 
     if REQUEST is not None:
-        REQUEST['RESPONSE'].redirect(self.absolute_url()+'/manage_main')
+        REQUEST['RESPONSE'].redirect(self.absolute_url() + '/manage_main')
 
 
 manage_SkipRelationsAddForm =  \
@@ -48,7 +48,7 @@ def manage_addSkipRelations(self, id, title=None, REQUEST=None):
     self._setObject(id, modifier)
 
     if REQUEST is not None:
-        REQUEST['RESPONSE'].redirect(self.absolute_url()+'/manage_main')
+        REQUEST['RESPONSE'].redirect(self.absolute_url() + '/manage_main')
 
 
 class CloneNamedFileBlobs:
@@ -102,7 +102,8 @@ class CloneNamedFileBlobs:
                                         break
                                 else:
                                     # The files are the same, save a reference
-                                    # to the prior versions blob on this version
+                                    # to the prior versions blob on this
+                                    # version
                                     file_data[dotted_name] = prior_blob._blob
                                     save_new = False
 
