@@ -41,6 +41,7 @@ More Information
 
 For more information about how the versioning works see the documentations of
 Products.CMFEdtitions:
-* http://pypi.python.org/pypi/Products.CMFEditions
-* http://plone.org/products/cmfeditions/
+
+ * http://pypi.python.org/pypi/Products.CMFEditions
+ * http://plone.org/products/cmfeditions/
 
