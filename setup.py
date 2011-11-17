@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import os
 
-version = '1.0b8dev'
+version = '1.0'
 
 tests_require = [
     'Products.PloneTestCase',
