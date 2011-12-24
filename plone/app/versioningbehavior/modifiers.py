@@ -170,7 +170,7 @@ class SkipRelations:
                 for name, field in getFields(schemata).items():
                     if (IRelationChoice.providedBy(field) or
                         IRelationList.providedBy(field)):
-                        field_value = field.get(field.interface(obj))
+                        field_value = field.query(field.interface(obj))
                         if field_value is not None:
                             relations[id(aq_base(field_value))] = True
 
@@ -194,7 +194,7 @@ class SkipRelations:
                     if (IRelationChoice.providedBy(field) or
                         IRelationList.providedBy(field)):
                         field.set(field.interface(repo_clone),
-                                  field.get(field.interface(obj)))
+                                  field.query(field.interface(obj)))
         return [], [], {}
 
 InitializeClass(SkipRelations)

@@ -30,6 +30,14 @@ class IRelationsType(Interface):
     multiple = RelationList(title=u"Multiple (Relations field)",
                             required=False)
 
+ 
+class IRelationsBehavior(form.Schema):
+    single = RelationChoice(title=u"Single",
+                            required=False, values=[])
+    multiple = RelationList(title=u"Multiple (Relations field)",
+                            required=False)
+alsoProvides(IRelationsBehavior, form.IFormFieldProvider)
+
 
 class TestModifiers(PloneTestCase.PloneTestCase):
 
@@ -187,6 +195,23 @@ class TestModifiers(PloneTestCase.PloneTestCase):
 
         source = createContentInContainer(self.portal, 'RelationsType')
         target = createContentInContainer(self.portal, 'RelationsType')
+
+        # Test modifier when no relations are set
+        modifier = SkipRelations('modifier', 'Modifier')
+        pers_id, pers_load, empty1, empty2 = modifier.getOnCloneModifiers(source)
+        self.assertTrue(pers_id(None) is None)
+        self.assertTrue(pers_id(None) is None)
+        self.assertTrue(pers_load(None) is None)
+        self.assertTrue(pers_load(None) is None)
+        self.assertTrue(empty1 == [])
+        self.assertTrue(empty2 == [])
+
+        repo_clone = createContent('RelationsType')
+        modifier.afterRetrieveModifier(source, repo_clone)
+        self.assertTrue(repo_clone.single is source.single)
+        self.assertTrue(repo_clone.multiple is source.multiple)
+
+        # Add some relations
         source.single = RelationValue(intids.getId(target))
         source.multiple = [RelationValue(intids.getId(target))]
 
@@ -209,7 +234,79 @@ class TestModifiers(PloneTestCase.PloneTestCase):
         self.assertTrue(repo_clone.single is source.single)
         self.assertTrue(repo_clone.multiple is source.multiple)
 
+    def testRelationsInBehaviors(self):
+        configuration = """\
+        <configure
+             package="plone.behavior"
+             xmlns="http://namespaces.zope.org/zope"
+             xmlns:plone="http://namespaces.plone.org/plone"
+             i18n_domain="plone.behavior.tests">
 
+             <include package="plone.behavior" file="meta.zcml" />
+
+            <plone:behavior
+                title="Relations behavior"
+                description="A behavior"
+                provides="plone.app.versioningbehavior.tests.test_modifiers.IRelationsBehavior"
+                />
+        </configure>
+        """
+        xmlconfig.xmlconfig(StringIO(configuration))
+        rel_fti = DexterityFTI(
+            'RelationsType',
+            behaviors=[IRelationsBehavior.__identifier__])
+        self.portal.portal_types._setObject('RelationsType', rel_fti)
+
+        # Setup IIntIds utility which is required for relations to work
+        from five.intid import site
+        from zope.app.intid.interfaces import IIntIds
+        site.add_intids(self.portal)
+        intids = getUtility(IIntIds)
+
+        source = createContentInContainer(self.portal, 'RelationsType')
+        target = createContentInContainer(self.portal, 'RelationsType')        
+
+        # Test modifier when no relations are set
+        modifier = SkipRelations('modifier', 'Modifier')
+        pers_id, pers_load, empty1, empty2 = modifier.getOnCloneModifiers(source)
+        self.assertTrue(pers_id(None) is None)
+        self.assertTrue(pers_id(None) is None)
+        self.assertTrue(pers_load(None) is None)
+        self.assertTrue(pers_load(None) is None)
+        self.assertTrue(empty1 == [])
+        self.assertTrue(empty2 == [])
+
+        repo_clone = createContent('RelationsType')
+        modifier.afterRetrieveModifier(source, repo_clone)
+        self.assertTrue(repo_clone.single is None)
+        self.assertTrue(repo_clone.multiple is None)
+
+        # Add some relations
+        IRelationsBehavior(source).single = RelationValue(intids.getId(target))
+        IRelationsBehavior(source).multiple = [RelationValue(intids.getId(target))]
+
+        # Update relations
+        from zope.lifecycleevent import ObjectModifiedEvent
+        from zope.event import notify
+        notify(ObjectModifiedEvent(source))
+
+        modifier = SkipRelations('modifier', 'Modifier')
+        pers_id, pers_load, empty1, empty2 = modifier.getOnCloneModifiers(source)
+        self.assertTrue(pers_id(IRelationsBehavior(source).single))
+        self.assertTrue(pers_id(IRelationsBehavior(source).multiple))
+        self.assertTrue(pers_load(IRelationsBehavior(source).single) is None)
+        self.assertTrue(pers_load(IRelationsBehavior(source).multiple) is None)
+        self.assertTrue(empty1 == [])
+        self.assertTrue(empty2 == [])
+
+        repo_clone = createContent('RelationsType')
+        modifier.afterRetrieveModifier(source, repo_clone)
+        self.assertTrue(IRelationsBehavior(repo_clone).single
+                        is IRelationsBehavior(source).single)
+        self.assertTrue(IRelationsBehavior(repo_clone).multiple
+                        is IRelationsBehavior(source).multiple)
+
+ 
 def test_suite():
     suite = TestSuite()
     suite.addTest(makeSuite(TestModifiers))
