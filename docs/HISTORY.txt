@@ -4,6 +4,9 @@ Changelog
 1.1 (unreleased)
 ----------------
 
+- Added french translations.
+  [jone]
+
 - Fixed SkipRelations modifier to also work with behaviors which are storing
   relations in attributes.
   [buchi]
