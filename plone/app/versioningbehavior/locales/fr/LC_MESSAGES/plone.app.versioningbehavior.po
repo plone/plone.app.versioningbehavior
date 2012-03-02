@@ -12,7 +12,7 @@ msgstr ""
 #. Default: "Enter a comment that describes the changes you made."
 #: plone.app.versioningbehavior/plone/app.versioningbehavior/behaviors.py:28
 msgid "help_change_note"
-msgstr "Saisie d'un commentaire expliquant vos modifications."
+msgstr "Saisissez un commentaire, expliquant vos modifications."
 
 #. Default: "Initial version"
 #: plone.app.versioningbehavior/plone/app.versioningbehavio/events.py:53
