@@ -53,6 +53,12 @@ Now we should be able to create a new TestingType-object::
     >>> browser.url
     'http://nohost/plone/testingtype/view'
 
+The 'changeNote' field should not be visible in the view::
+
+    >>> 'changeNote' in browser.contents
+    False
+    >>> 'Change Note' in browser.contents
+    False
 
 We should be able to access the object, it should provide the marker
 interface ``plone.app.versioningbehavior.behaviors.IVersioningSupport``::
