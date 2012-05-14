@@ -17,6 +17,7 @@
          For supporting the old versions we grok the package if
          grok is installed. /-->
     <configure zcml:condition="installed five.grok">
+        <include package="five.grok" />
         <grok:grok package="." />
     </configure>
 

@@ -4,6 +4,10 @@ Changelog
 1.1.1 (unreleased)
 ------------------
 
+- Include grok when grok package is installed.
+  This makes sure the ZCML for the `grok` directive is loaded.
+  [lgraf]
+
 - For dexterity 1.x compatibility grok the package if grok is installed.
   [jone]
 
