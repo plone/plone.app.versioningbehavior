@@ -11,6 +11,8 @@ Changelog
 - For dexterity 1.x compatibility grok the package if grok is installed.
   [jone]
 
+- Added Dutch translations.
+  [kingel]
 
 1.1 (2012-02-20)
 ----------------
