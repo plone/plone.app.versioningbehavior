@@ -125,7 +125,8 @@ class CloneNamedFileBlobs:
             iface = resolveDottedName('.'.join(name.split('.')[:-1]))
             fname = name.split('.')[-1]
             field = iface.get(fname)
-            field.get(iface(obj))._blob = blob
+            if field is not None: # Field may have been removed from schema
+                field.get(iface(obj))._blob = blob
 
     def getOnCloneModifiers(self, obj):
         """Removes references to blobs.
