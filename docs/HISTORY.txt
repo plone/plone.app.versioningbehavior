@@ -14,6 +14,10 @@ Changelog
 - Added Dutch translations.
   [kingel]
 
+- Fix case where versioning of blobs would cause an error if a
+  field was removed from a schema between revisions.
+  [mikerhodes]
+
 1.1 (2012-02-20)
 ----------------
 
