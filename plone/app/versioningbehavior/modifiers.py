@@ -33,7 +33,11 @@ def getCallbacks(values):
     ``None``.
     """
 
-    mapping = dict((id(value), True) for value in values)
+    # Important: We must keep a reference to the
+    # field value here because it may be a newly
+    # created object and we want to ensure that
+    # it's not garbage collected and "reused".
+    mapping = dict((id(value), value) for value in values)
 
     def persistent_id(obj):
         return mapping.get(id(obj), None)
