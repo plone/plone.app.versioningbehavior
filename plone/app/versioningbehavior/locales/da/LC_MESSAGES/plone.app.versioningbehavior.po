@@ -1,0 +1,27 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: plone.app.versioningbehavior\n"
+"POT-Creation-Date: 2012-10-17 12:51+0000\n"
+"PO-Revision-Date: 2012-10-17 12:51+0000\n"
+"Last-Translator: Thomas Clement Mogensen <tmog@headnet.dk>\n"
+"Language-Team:  Plone i18n <plone-i18n@lists.sourceforge.net>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+
+#. Default: "Enter a comment that describes the changes you made."
+#: plone.app.versioningbehavior/plone/app.versioningbehavior/behaviors.py:28
+msgid "help_change_note"
+msgstr "Beskriv de ændringer du har foretaget."
+
+#. Default: "Initial version"
+#: plone.app.versioningbehavior/plone/app.versioningbehavior/events.py:53
+msgid "initial_version_changeNote"
+msgstr "Første version"
+
+#. Default: "Change Note"
+#: plone.app.versioningbehavior/plone/app.versioningbehavior/behaviors.py:27
+msgid "label_change_note"
+msgstr "Ændringsnote"
+
