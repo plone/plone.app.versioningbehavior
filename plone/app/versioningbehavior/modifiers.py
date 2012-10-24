@@ -25,6 +25,40 @@ manage_CloneNamedFileBlobsAddForm =  \
                    __name__='manage_CloneNamedFileBlobs')
 
 
+def getCallbacks(values):
+    """Return persistent callbacks.
+
+    Register the provided values in a mapping object and return a set
+    of persistent callbacks that effectively replace the values with
+    ``None``.
+    """
+
+    # Important: We must keep a reference to the
+    # field value here because it may be a newly
+    # created object and we want to ensure that
+    # it's not garbage collected and "reused".
+    mapping = dict((id(value), value) for value in values)
+
+    def persistent_id(obj):
+        return mapping.get(id(obj), None)
+
+    def persistent_load(obj):
+        return None
+
+    return persistent_id, persistent_load
+
+
+def getFieldValues(obj, *ifaces):
+    if IDexterityContent.providedBy(obj):
+        for schemata in iterSchemata(obj):
+            for name, field in getFields(schemata).items():
+                for iface in ifaces:
+                    if iface.providedBy(field):
+                        field_value = field.query(field.interface(obj))
+                        if field_value is not None:
+                            yield field_value
+
+
 def manage_addCloneNamedFileBlobs(self, id, title=None, REQUEST=None):
     """Add a clone namedfile blobs modifier.
     """
@@ -131,20 +165,11 @@ class CloneNamedFileBlobs:
     def getOnCloneModifiers(self, obj):
         """Removes references to blobs.
         """
-        blob_refs = {}
-        for schemata in iterSchemata(obj):
-            for name, field in getFields(schemata).items():
-                if (INamedBlobFileField.providedBy(field) or
-                    INamedBlobImageField.providedBy(field)):
-                    field_value = field.get(field.interface(obj))
-                    if field_value is not None:
-                        blob_refs[id(aq_base(field_value._blob))] = True
 
-        def persistent_id(obj):
-            return blob_refs.get(id(obj), None)
-
-        def persistent_load(obj):
-            return None
+        persistent_id, persistent_load = getCallbacks(
+            aq_base(value._blob) for value
+            in getFieldValues(obj, INamedBlobFileField, INamedBlobImageField)
+        )
 
         return persistent_id, persistent_load, [], []
 
@@ -165,21 +190,11 @@ class SkipRelations:
     def getOnCloneModifiers(self, obj):
         """Removes relations.
         """
-        relations = {}
-        if IDexterityContent.providedBy(obj):
-            for schemata in iterSchemata(obj):
-                for name, field in getFields(schemata).items():
-                    if (IRelationChoice.providedBy(field) or
-                        IRelationList.providedBy(field)):
-                        field_value = field.query(field.interface(obj))
-                        if field_value is not None:
-                            relations[id(aq_base(field_value))] = True
 
-        def persistent_id(obj):
-            return relations.get(id(obj), None)
-
-        def persistent_load(obj):
-            return None
+        persistent_id, persistent_load = getCallbacks(
+            aq_base(value) for value
+            in getFieldValues(obj, IRelationChoice, IRelationList)
+        )
 
         return persistent_id, persistent_load, [], []
 

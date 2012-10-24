@@ -4,6 +4,11 @@ Changelog
 1.1.1 (unreleased)
 ------------------
 
+- Fixed an issue where a clone modifier would cause an incorrect
+  pickle due to an implementation detail in CPython's memory
+  allocation routine (exposed in Python as the object ``id``).
+  [malthe]
+
 - Include grok when grok package is installed.
   This makes sure the ZCML for the `grok` directive is loaded.
   [lgraf]
