@@ -4,6 +4,8 @@ Changelog
 1.1.1 (unreleased)
 ------------------
 
+- danish translation added [tmog]
+
 - Fixed an issue where a clone modifier would cause an incorrect
   pickle due to an implementation detail in CPython's memory
   allocation routine (exposed in Python as the object ``id``).
