@@ -92,11 +92,6 @@ class TestDexterityIntegration(test_IntegrationTests.TestIntegration):
         # This test in CMFEditions uses doc.edit, but we have no archetypes
         # objects so doc.edit is portal.edit (acquisition), which is wrong...
         pass
-    
-    def test23_RegistryBasesNotVersionedOrRestored(self):
-        # Skip this test since it adds a broken interface to the registry,
-        # which our modifier breaks on.
-        pass
 
 
 def test_suite():
