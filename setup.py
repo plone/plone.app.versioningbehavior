@@ -4,7 +4,13 @@ import os
 version = '1.1.1dev'
 
 tests_require = [
+    'Products.CMFDiffTool',
+    'Products.CMFEditions',
+    'Products.CMFPlone',
     'Products.PloneTestCase',
+    'plone.app.dexterity',
+    'plone.app.testing',
+    'plone.app.versioningbehavior',
     'plone.namedfile[blobs]',
     ]
 
@@ -44,6 +50,7 @@ setup(name='plone.app.versioningbehavior',
         'rwproperty',
         'setuptools',
         'zope.app.container',
+        'five.grok',
         ],
       tests_require=tests_require,
       extras_require=dict(tests=tests_require),

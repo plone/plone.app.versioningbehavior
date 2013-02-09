@@ -4,6 +4,10 @@ Changelog
 1.1.1 (unreleased)
 ------------------
 
+- Merge Rafael Oliveira's (@rafaelbco) versions_history_form fixes
+  from collective.cmfeditionsdexteritycompat.
+  [rpatterson]
+
 - danish translation added [tmog]
 
 - Fixed an issue where a clone modifier would cause an incorrect
