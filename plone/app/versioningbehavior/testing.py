@@ -22,7 +22,6 @@ class PackageLayer(ptc.BasePTCLayer):
         self.loadZCML('configure.zcml', package=plone.app.versioningbehavior)
         self.loadZCML('configure.zcml', package=Products.CMFEditions)
 
-        self.addProfile('Products.CMFEditions:CMFEditions')
         self.addProfile('plone.app.dexterity:default')
         self.addProfile('plone.app.versioningbehavior:default')
 
