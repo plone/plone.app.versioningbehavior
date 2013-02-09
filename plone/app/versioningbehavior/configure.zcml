@@ -49,6 +49,20 @@
         handler=".subscribers.create_version_on_save"
         />
 
+    <browser:page
+          for="plone.dexterity.interfaces.IDexterityContent"
+          name="version-view"
+          permission="zope2.View"
+          class=".browser.VersionView"
+          />
+
+    <browser:page
+          for="plone.dexterity.interfaces.IDexterityContent"
+          name="download-version"
+          permission="zope2.View"
+          class=".browser.VersionView"
+          />
+
     <genericsetup:registerProfile
         name="default"
         title="plone.app.versioningbehavior"
