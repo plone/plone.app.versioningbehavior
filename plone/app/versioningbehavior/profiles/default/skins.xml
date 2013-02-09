@@ -7,7 +7,7 @@
     
 
  <skin-path name="*">
-  <layer name="plone_app_versioningbehavior" insert-after="custom"/>
+  <layer name="plone_app_versioningbehavior" insert-before="cmfeditions_views"/>
  </skin-path>
 
 </object>
