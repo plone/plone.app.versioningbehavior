@@ -77,7 +77,7 @@ class FunctionalTestCase(unittest.TestCase):
         # Title and description are metadata, not in content-core.
         self.assertFalse(self.obj1.title in self.browser.contents)
         self.assertFalse(self.obj1.description in self.browser.contents)
-        self.assertTrue(self.obj1.text in self.browser.contents)
+        self.assertIn(self.obj1.text, self.browser.contents)
 
     def test_version_view(self):
         transaction.commit()
@@ -89,7 +89,7 @@ class FunctionalTestCase(unittest.TestCase):
         # Title and description are metadata, not in content-core.
         self.assertFalse(self.obj1.title in self.browser.contents)
         self.assertFalse(self.obj1.description in self.browser.contents)
-        self.assertTrue(self.obj1.text in self.browser.contents)
+        self.assertIn(self.obj1.text, self.browser.contents)
 
     def test_versions_history_form_should_work_with_dexterity_content(self):
         old_text = self.obj1.text
@@ -160,17 +160,16 @@ class FunctionalTestCase(unittest.TestCase):
         self.browser.open(
             '%s/%s/versions_history_form?version_id=%s'
             % (self.portal_url, obj_id, version_id))
-        self.assertTrue('Working Copy' in self.browser.contents)
-        self.assertTrue(
-            ('/%s/versions_history_form?version_id=%s' % (obj_id, version_id))
-            in self.browser.contents)
-        self.assertTrue('Working Copy' in self.browser.contents)
-        self.assertTrue('Revert to this revision' in self.browser.contents)
-        self.assertTrue(('/%s/version_diff?version_id1' % obj_id)
-                        in self.browser.contents)
-        self.assertTrue(('Preview of Revision %s' % version_id)
-                        in self.browser.contents)
-        self.assertTrue(
-            ('<h1 class="documentFirstHeading">%s</h1>' % str(title))
-            in self.browser.contents)
-        self.assertTrue(str(text) in self.browser.contents)
+        self.assertIn('Working Copy', self.browser.contents)
+        self.assertIn(
+            '/%s/versions_history_form?version_id=%s' % (obj_id, version_id),
+            self.browser.contents)
+        self.assertIn('Working Copy', self.browser.contents)
+        self.assertIn('Revert to this revision', self.browser.contents)
+        self.assertIn(
+            '/%s/version_diff?version_id1' % obj_id, self.browser.contents)
+        self.assertIn('Preview of Revision %s' % version_id,
+                      self.browser.contents)
+        self.assertIn('<h1 class="documentFirstHeading">%s</h1>' % str(title),
+                      self.browser.contents)
+        self.assertIn(str(text), self.browser.contents)
