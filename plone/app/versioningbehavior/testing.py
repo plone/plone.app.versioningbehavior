@@ -17,10 +17,8 @@ class PackageLayer(PloneSandboxLayer):
     def setUpZope(self, app, configurationContext):
         import plone.app.dexterity
         import plone.app.versioningbehavior
-        import plone.app.versioningbehavior.tests
         self.loadZCML(package=plone.app.dexterity)
         self.loadZCML(package=plone.app.versioningbehavior)
-        self.loadZCML(package=plone.app.versioningbehavior.tests)
 
     def setUpPloneSite(self, portal):
         self.applyProfile(portal, 'plone.app.versioningbehavior:default')

@@ -1,5 +1,4 @@
 #coding=utf8
-from Products.Five.browser import BrowserView
 from plone.app.versioningbehavior.testing import (
     FUNCTIONAL_TESTING, TEST_CONTENT_TYPE_ID)
 from mechanize import LinkNotFoundError
@@ -7,26 +6,8 @@ from plone.app.testing import setRoles
 from plone.app.testing.interfaces import (
     TEST_USER_ID, TEST_USER_PASSWORD, TEST_USER_NAME)
 from plone.testing.z2 import Browser
-from zExceptions import Unauthorized
 import transaction
 import unittest2 as unittest
-
-
-class CustomView(BrowserView):
-    """
-    A custom view. It raises an `Unauthorized` when one tries to
-    access the `macros` attribute, simulating what occurs with Grok
-    based views.
-    """
-
-    def __call__(self):
-        return '<div id="content-core">Custom view</div>'
-
-    def __getattr__(self, name):
-        if name == 'macros':
-            raise Unauthorized
-
-        raise AttributeError
 
 
 class FunctionalTestCase(unittest.TestCase):
@@ -137,24 +118,6 @@ class FunctionalTestCase(unittest.TestCase):
             0, page.getId(), old_title, old_text)
         self._assert_versions_history_form(
             1, page.getId(), new_title, new_text)
-
-    def test_history_form_with_content_custom_view(self):
-        """
-        This test reproduce the following situation: a Dexterity
-        content type has a custom default view set up using Grok. This
-        set up makes the `get_macros` skin script raise an
-        `Unauthorized` error.
-
-        To solve this we created a `get_macros_wrapper` script to
-        handle the `Unauthorized`. This test reproduce this situation
-        to prevent regressions.
-        """
-        old_default_view = self.test_content_type_fti.default_view
-
-        self.test_content_type_fti.default_view = '@@custom-view'
-        self.test_versions_history_form_should_work_with_dexterity_content()
-
-        self.test_content_type_fti.default_view = old_default_view
 
     def _assert_versions_history_form(self, version_id, obj_id, title, text):
         self.browser.open(
