@@ -1,14 +1,14 @@
-import unittest2 as unittest
-from plone.app.versioningbehavior.testing import INTEGRATION_TESTING
+from plone.app.versioningbehavior import testing
 from Products.CMFCore.utils import getToolByName
 
+from Products.PloneTestCase import PloneTestCase
 
-class InstallTestCase(unittest.TestCase):
 
-    layer = INTEGRATION_TESTING
+class InstallTestCase(PloneTestCase.FunctionalTestCase):
 
-    def setUp(self):
-        self.portal = self.layer['portal']
+    layer = testing.package_layer
+
+    def afterSetUp(self):
         self.portal_skins = getToolByName(self.portal, 'portal_skins')
 
     def test_should_override_versions_history_form_skin_template(self):

@@ -1,28 +1,32 @@
 #coding=utf8
 from Products.CMFCore.utils import getToolByName
 from Products.CMFDiffTool.TextDiff import TextDiff
-from plone.app.testing import (
-    IntegrationTesting, FunctionalTesting, PLONE_FIXTURE, PloneSandboxLayer)
 from plone.dexterity.fti import DexterityFTI
+
+from collective.testcaselayer import ptc
+from collective.testcaselayer import common
 
 TEST_CONTENT_TYPE_ID = 'TestContentType'
 
 DEFAULT_POLICIES = ('at_edit_autoversion', 'version_on_revert',)
 
 
-class PackageLayer(PloneSandboxLayer):
+class PackageLayer(ptc.BasePTCLayer):
 
-    defaultBases = (PLONE_FIXTURE,)
-
-    def setUpZope(self, app, configurationContext):
+    def afterSetUp(self):
+        import Products.CMFEditions
         import plone.app.dexterity
         import plone.app.versioningbehavior
-        self.loadZCML(package=plone.app.dexterity)
-        self.loadZCML(package=plone.app.versioningbehavior)
+        self.loadZCML('meta.zcml', package=plone.app.dexterity)
+        self.loadZCML('configure.zcml', package=plone.app.dexterity)
+        self.loadZCML('configure.zcml', package=plone.app.versioningbehavior)
+        self.loadZCML('configure.zcml', package=Products.CMFEditions)
 
-    def setUpPloneSite(self, portal):
-        self.applyProfile(portal, 'plone.app.versioningbehavior:default')
+        self.addProfile('Products.CMFEditions:CMFEditions')
+        self.addProfile('plone.app.dexterity:default')
+        self.addProfile('plone.app.versioningbehavior:default')
 
+        portal = self.portal
         types_tool = getToolByName(portal, 'portal_types')
 
         fti = DexterityFTI(
@@ -47,7 +51,7 @@ class PackageLayer(PloneSandboxLayer):
         )
         types_tool._setObject(TEST_CONTENT_TYPE_ID, fti)
 
-        self['test_content_type_fti'] = fti
+        self.test_content_type_fti = fti
 
         diff_tool = getToolByName(portal, 'portal_diff')
         diff_tool.setDiffForPortalType(
@@ -61,8 +65,4 @@ class PackageLayer(PloneSandboxLayer):
             portal_repository.addPolicyForContentType(
                 TEST_CONTENT_TYPE_ID, policy_id)
 
-FIXTURE = PackageLayer()
-INTEGRATION_TESTING = IntegrationTesting(
-    bases=(FIXTURE,), name='plone.app.versioningbehavior:Integration')
-FUNCTIONAL_TESTING = FunctionalTesting(
-    bases=(FIXTURE,), name='plone.app.versioningbehavior:Functional')
+package_layer = PackageLayer([common.common_layer])
