@@ -31,9 +31,30 @@ In your *profiles/default/types/YOURTYPE.xml* add the behavior::
 
 The IVersionable behavior just adds versioning support to your content type,
 but it does not enable it.
+
 You have to set the "versioning" option in the Plone types control panel
 (/@@types-controlpanel) to either "Manual" or "Automatic" for activating
 versioning.
+
+If you want to automatically enable versioning for your custom content types
+through generic setup you have to create a file "repositorytool.xml" in your
+gs profile (e.g. "profiles/default") with the following content::
+
+    <?xml version="1.0"?>
+    <repositorytool>
+        <policymap>
+            <type name="MyType">
+                <policy name="at_edit_autoversion"/>
+                <policy name="version_on_revert"/>
+            </type>
+            <type name="AnotherType">
+                <policy name="at_edit_autoversion"/>
+                <policy name="version_on_revert"/>
+            </type>
+        </policymap>
+    </repositorytool>
+
+See http://plone.org/documentation/manual/upgrade-guide/version/upgrading-plone-4.0-to-4.1/updating-add-on-products-for-plone-4.1/use-generic-setup-for-defining-versioning-policies for more details.
 
 
 More Information
