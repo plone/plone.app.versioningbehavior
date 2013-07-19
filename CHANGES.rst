@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.1.1 (unreleased)
+1.1.1 (2013-07-19)
 ------------------
 
 - Merge Rafael Oliveira's (@rafaelbco) versions_history_form fixes
@@ -28,6 +28,7 @@ Changelog
 - Fix case where versioning of blobs would cause an error if a
   field was removed from a schema between revisions.
   [mikerhodes]
+
 
 1.1 (2012-02-20)
 ----------------
