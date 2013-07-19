@@ -19,7 +19,7 @@ setup(name='plone.app.versioningbehavior',
       description='Provides a behavior for using CMFEditions with ' + \
           'dexterity content types',
       long_description=open("README.rst").read() + "\n" + \
-          open(os.path.join("docs", "HISTORY.txt")).read(),
+          open(os.path.join("CHANGES.rst")).read(),
       # Get more strings from
       # http://www.python.org/pypi?%3Aaction=list_classifiers
       classifiers=[
