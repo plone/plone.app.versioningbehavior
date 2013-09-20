@@ -9,6 +9,7 @@ in your dexterity content type::
     >>> fti = DexterityFTI('TestingType',
     ...                    factory='TestingType')
     >>> fti.behaviors = (
+    ...         'plone.app.dexterity.behaviors.metadata.IBasic',
     ...         'plone.app.versioningbehavior.behaviors.IVersionable',
     ... )
     >>> self.portal.portal_types._setObject('TestingType', fti)
@@ -48,8 +49,8 @@ Now we should be able to create a new TestingType-object::
     >>> browser.getControl("Add").click()
     >>> browser.url
     'http://nohost/plone/++add++TestingType'
-    >>> browser.getControl(name='form.widgets.title').value = 'Blubb'
-    >>> browser.getControl(name='form.buttons.save').click()
+    >>> browser.getControl('Title').value = 'Blubb'
+    >>> browser.getControl('Save').click()
     >>> browser.url
     'http://nohost/plone/testingtype/view'
 
@@ -72,7 +73,7 @@ interface ``plone.app.versioningbehavior.behaviors.IVersioningSupport``::
 After creating the object we wan't to create a new version by simply editing it::
 
     >>> browser.open('http://nohost/plone/testingtype/edit')
-    >>> browser.getControl(name='form.widgets.title').value = 'Blubb2'
+    >>> browser.getControl('Title').value = 'Blubb2'
     >>> field = browser.getControl(name='form.widgets.IVersionable.changeNote')
     >>> field.value = 'just a test'
     >>> browser.getControl(name='form.buttons.save').click()
@@ -99,7 +100,7 @@ And we should be able to list the versions::
 A freshly created object should have a initial version::
 
     >>> browser.open('http://nohost/plone/++add++TestingType')
-    >>> browser.getControl(name='form.widgets.title').value = 'Init test'
+    >>> browser.getControl('Title').value = 'Init test'
     >>> browser.getControl(name='form.widgets.IVersionable.changeNote') \
     ...     .value = 'initial change note'
     >>> browser.getControl(name='form.buttons.save').click()
@@ -136,7 +137,7 @@ It should also be possible to copy/paste an existing content::
 After pasting, we can create a new version by simply editing it::
 
     >>> browser.open('http://nohost/plone/copy_of_testingtype/edit')
-    >>> browser.getControl(name='form.widgets.title').value = 'Dup'
+    >>> browser.getControl('Title').value = 'Dup'
     >>> field = browser.getControl(name='form.widgets.IVersionable.changeNote')
     >>> field.value = 'Edited the duplicate'
     >>> browser.getControl(name='form.buttons.save').click()
@@ -151,10 +152,14 @@ We should also be able to use versionig for dexterity contents in dexterity cont
 
 Create a container FTI::
 
-    >>> container_fti = DexterityFTI('DemoContainer',
-    ...                              klass='plone.dexterity.content.Container',
-    ...                              filter_content_types=False,
-    ...                              factory='DemoContainerMyFolder')
+    >>> container_fti = DexterityFTI(
+    ...     'DemoContainer',
+    ...     klass='plone.dexterity.content.Container',
+    ...     filter_content_types=False,
+    ...     factory='DemoContainerMyFolder',
+    ...     behaviors = ('plone.app.dexterity.behaviors.metadata.IBasic',),
+    ...     )
+
     >>> self.portal.portal_types._setObject('DemoContainer', container_fti)
     'DemoContainer'
     >>> container_schema = fti.lookupSchema()
@@ -163,8 +168,7 @@ Create a container FTI::
 Create a container object::
 
     >>> browser.open('http://nohost/plone/++add++DemoContainer')
-    >>> browser.getControl(name='form.widgets.title').value = 'MyFolder'
-    >>> browser.getControl(name='form.widgets.description').value = 'MyFolder'
+    >>> browser.getControl('Title').value = 'MyFolder'
     >>> browser.getControl(name='form.buttons.save').click()
     >>> browser.url
     'http://nohost/plone/democontainer/view'
@@ -173,8 +177,7 @@ Create a container object::
 Now we add a versioned object to the container::
 
     >>> browser.open('http://nohost/plone/democontainer/++add++TestingType')
-    >>> browser.getControl(name='form.widgets.title').value = 'My versioned object'
-    >>> browser.getControl(name='form.widgets.description').value = 'The Description'
+    >>> browser.getControl('Title').value = 'My versioned object'
     >>> browser.getControl(name='form.widgets.IVersionable.changeNote').value = 'created a object'
     >>> browser.getControl(name='form.buttons.save').click()
     >>> browser.url
@@ -200,12 +203,15 @@ Dexterity containers should also be versionable.
 
 Let's create a new versioned container FTI::
 
-    >>> versioned_container_fti = DexterityFTI('VersionedContainer',
-    ...                                        klass='plone.dexterity.content.Container',
-    ...                                        filter_content_types=False,
-    ...                                        glboal_allow=True,
-    ...                                        factory='VersionedContainer')
+    >>> versioned_container_fti = DexterityFTI(
+    ...     'VersionedContainer',
+    ...     klass='plone.dexterity.content.Container',
+    ...     filter_content_types=False,
+    ...     glboal_allow=True,
+    ...     factory='VersionedContainer',
+    ...     )
     >>> versioned_container_fti.behaviors = (
+    ...         'plone.app.dexterity.behaviors.metadata.IBasic',
     ...         'plone.app.versioningbehavior.behaviors.IVersionable',
     ... )
     >>> self.portal.portal_types._setObject('VersionedContainer', versioned_container_fti)
@@ -225,7 +231,7 @@ Enable versioning for the new content type::
 Let's Create a versioned container object on the portal::
 
     >>> browser.open('http://nohost/plone/++add++VersionedContainer')
-    >>> browser.getControl(name='form.widgets.title').value = 'Versioned container one'
+    >>> browser.getControl('Title').value = 'Versioned container one'
     >>> browser.getControl(name='form.widgets.IVersionable.changeNote').value = 'my change note'
     >>> browser.getControl(name='form.buttons.save').click()
     >>> browser.url
@@ -255,7 +261,7 @@ Another versioned container should be addable::
 
 Now we try to add another versioned container in the previously created versioned container::
     >>> browser.open('http://nohost/plone/versionedcontainer/++add++VersionedContainer')
-    >>> browser.getControl(name='form.widgets.title').value = 'Versioned container two'
+    >>> browser.getControl('Title').value = 'Versioned container two'
     >>> browser.getControl(name='form.widgets.IVersionable.changeNote').value = 'another change note'
     >>> browser.getControl(name='form.buttons.save').click()
 
