@@ -4,7 +4,9 @@ Changelog
 1.1.2 (unreleased)
 ------------------
 
--
+- Remove plone.directives.form dependency since this fetches five.grok, which
+  is not allowed in Plone core.
+  [timo]
 
 
 1.1.1 (2013-07-19)

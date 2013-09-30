@@ -1,6 +1,7 @@
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.dexterity.interfaces import IDexterityContent
-from plone.directives import form
+from plone.autoform import directives as form
+from plone.supermodel import model
 from plone.app.versioningbehavior import MessageFactory as _
 from z3c.form.interfaces import IAddForm
 from z3c.form.interfaces import IEditForm
@@ -11,7 +12,7 @@ from zope.component import adapts
 from zope.interface import Interface, implements, alsoProvides
 
 
-class IVersionable(form.Schema):
+class IVersionable(model.Schema):
     """ Behavior for enabling CMFEditions's versioning for dexterity
     content types. Be shure to enable versioning in the plone types
     control-panel for your content type.

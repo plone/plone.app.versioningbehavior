@@ -5,7 +5,9 @@ from plone.app.versioningbehavior.modifiers import SkipRelations
 from unittest import TestSuite, makeSuite
 from plone.namedfile.file import NamedBlobFile
 from plone.namedfile import field
-from plone.directives import form
+from plone.supermodel import model
+from plone.autoform.interfaces import IFormFieldProvider
+from plone.autoform import directives as form
 from plone.dexterity.utils import createContentInContainer, createContent
 from ZODB.interfaces import IBlob
 from zope.interface import alsoProvides, Interface
@@ -19,9 +21,9 @@ PloneTestCase.setupPloneSite(
     extension_profiles=['plone.app.versioningbehavior:default'])
 
 
-class IBlobFile(form.Schema):
+class IBlobFile(model.Schema):
         file = field.NamedBlobFile(title=u'File')
-alsoProvides(IBlobFile, form.IFormFieldProvider)
+alsoProvides(IBlobFile, IFormFieldProvider)
 
 
 class IRelationsType(Interface):
@@ -30,13 +32,13 @@ class IRelationsType(Interface):
     multiple = RelationList(title=u"Multiple (Relations field)",
                             required=False)
 
- 
-class IRelationsBehavior(form.Schema):
+
+class IRelationsBehavior(model.Schema):
     single = RelationChoice(title=u"Single",
                             required=False, values=[])
     multiple = RelationList(title=u"Multiple (Relations field)",
                             required=False)
-alsoProvides(IRelationsBehavior, form.IFormFieldProvider)
+alsoProvides(IRelationsBehavior, IFormFieldProvider)
 
 
 class TestModifiers(PloneTestCase.PloneTestCase):
@@ -264,7 +266,7 @@ class TestModifiers(PloneTestCase.PloneTestCase):
         intids = getUtility(IIntIds)
 
         source = createContentInContainer(self.portal, 'RelationsType')
-        target = createContentInContainer(self.portal, 'RelationsType')        
+        target = createContentInContainer(self.portal, 'RelationsType')
 
         # Test modifier when no relations are set
         modifier = SkipRelations('modifier', 'Modifier')
@@ -306,7 +308,7 @@ class TestModifiers(PloneTestCase.PloneTestCase):
         self.assertTrue(IRelationsBehavior(repo_clone).multiple
                         is IRelationsBehavior(source).multiple)
 
- 
+
 def test_suite():
     suite = TestSuite()
     suite.addTest(makeSuite(TestModifiers))
