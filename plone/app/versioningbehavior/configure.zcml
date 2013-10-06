@@ -65,9 +65,9 @@
 
     <genericsetup:registerProfile
         name="default"
-        title="plone.app.versioningbehavior"
+        title="Dexterity versioning support"
         directory="profiles/default"
-        description="Profile for plone.app.versioningbehavior"
+        description="Adds CMFEditions support for Dexterity using plone.app.versioningbehavior"
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
 
