@@ -67,7 +67,7 @@
         name="default"
         title="Dexterity versioning support"
         directory="profiles/default"
-        description="Adds CMFEditions support for Dexterity using plone.app.versioningbehavior"
+        description="Adds CMFEditions support for Dexterity."
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
 
