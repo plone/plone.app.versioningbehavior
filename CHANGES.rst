@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.1.2 (unreleased)
+1.1.2 (2014-02-26)
 ------------------
 
 - Remove plone.directives.form dependency since this fetches five.grok, which
