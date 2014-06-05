@@ -113,7 +113,13 @@ class CloneNamedFileBlobs:
             for name, field in getFields(schemata).items():
                 if (INamedBlobFileField.providedBy(field) or
                     INamedBlobImageField.providedBy(field)):
-                    field_value = field.get(field.interface(obj))
+                    try:
+                        # field.get may raise an AttributeError if the field
+                        # is provided by a behavior and hasn't been
+                        # initialized yet
+                        field_value = field.get(field.interface(obj))
+                    except AttributeError:
+                        field_value = None
                     if field_value is None:
                         continue
                     blob_file = field_value.open()

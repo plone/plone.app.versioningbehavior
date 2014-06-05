@@ -4,7 +4,9 @@ Changelog
 1.1.4 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Deal with AttributeError when trying to access fields provided by behaviors
+  using attribute storage.
+  [lgraf]
 
 
 1.1.3 (2014-02-26)
