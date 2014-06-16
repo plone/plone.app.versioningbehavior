@@ -8,6 +8,9 @@ Changelog
   using attribute storage.
   [lgraf]
 
+- Added Traditional Chinese translations.
+  [marr]
+
 
 1.1.3 (2014-02-26)
 ------------------
