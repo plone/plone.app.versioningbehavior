@@ -1,14 +1,14 @@
-from plone.app.versioningbehavior import testing
+from plone.app.versioningbehavior.testing import VERSIONING_FUNCTIONAL_TESTING
 from Products.CMFCore.utils import getToolByName
+from unittest2 import TestCase
 
-from Products.PloneTestCase import PloneTestCase
 
+class InstallTestCase(TestCase):
 
-class InstallTestCase(PloneTestCase.FunctionalTestCase):
+    layer = VERSIONING_FUNCTIONAL_TESTING
 
-    layer = testing.package_layer
-
-    def afterSetUp(self):
+    def setUp(self):
+        self.portal = self.layer['portal']
         self.portal_skins = getToolByName(self.portal, 'portal_skins')
 
     def test_should_override_versions_history_form_skin_template(self):

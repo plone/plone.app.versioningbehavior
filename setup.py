@@ -4,11 +4,10 @@ import os
 version = '1.1.4.dev0'
 
 tests_require = [
+    'plone.app.testing',
     'Products.CMFDiffTool',
-    'Products.CMFEditions',
+    'Products.CMFEditions [test]',
     'Products.CMFPlone',
-    'Products.PloneTestCase',
-    'collective.testcaselayer',
     'plone.app.dexterity',
     'plone.app.testing',
     'plone.app.versioningbehavior',

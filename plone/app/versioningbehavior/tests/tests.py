@@ -1,17 +1,13 @@
+from plone.app.versioningbehavior.testing import VERSIONING_FUNCTIONAL_TESTING
+from plone.testing import layered
+import doctest
 import unittest
-
-from Testing import ZopeTestCase as ztc
-from Products.PloneTestCase import PloneTestCase as ptc
-from plone.app.versioningbehavior import testing
 
 
 def test_suite():
-    functional = ztc.FunctionalDocFileSuite(
-        'tests/doctest_behavior.txt',
-        package='plone.app.versioningbehavior',
-        test_class=ptc.FunctionalTestCase)
-    functional.layer = testing.package_layer
-    return unittest.TestSuite([functional])
-
-if __name__ == '__main__':
-    unittest.main(defaultTest='test_suite')
+    suite = unittest.TestSuite()
+    suite.addTests([
+            layered(doctest.DocFileSuite('doctest_behavior.txt'),
+                    layer=VERSIONING_FUNCTIONAL_TESTING),
+            ])
+    return suite

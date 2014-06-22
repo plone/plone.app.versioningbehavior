@@ -1,43 +1,59 @@
 #coding=utf8
 
-from collective.testcaselayer import common
-from collective.testcaselayer import ptc
+from plone.app.testing import applyProfile
+from plone.app.testing import FunctionalTesting
+from plone.app.testing import PLONE_FIXTURE
+from plone.app.testing import PloneSandboxLayer
 from plone.dexterity.fti import DexterityFTI
 from Products.CMFCore.utils import getToolByName
 from Products.CMFDiffTool.TextDiff import TextDiff
+from Products.PloneTestCase.layer import onteardown
+from zope.configuration import xmlconfig
 import plone.protect.auto
+
+
+def fix_plonetestcase_mess():
+    """Registers a Products.PloneTestCase cleanup.
+    It is a nested teardown so that we can meake sure that it is executate
+    as last tear down function.
+    """
+    def reset_zope2():
+        """Testing.ZopeTestCase.layer.ZopeLite does not support tearing down.
+        This results in a partically teared down Zope2 instance.
+        This function resets the Zope2 initialization state so that we can
+        initialize another Zope2 instance with p.a.testing.
+        """
+        import Zope2
+        Zope2._began_startup = 0
+    onteardown(reset_zope2)()
+onteardown(fix_plonetestcase_mess)()
 
 
 TEST_CONTENT_TYPE_ID = 'TestContentType'
 DEFAULT_POLICIES = ('at_edit_autoversion', 'version_on_revert',)
 
 
-class PackageLayer(ptc.BasePTCLayer):
+class VersioningLayer(PloneSandboxLayer):
+    defaultBases = (PLONE_FIXTURE,)
 
-    def afterSetUp(self):
-        import Products.CMFEditions
-        import plone.app.dexterity
+    def setUpZope(self, app, configurationContext):
         import plone.app.versioningbehavior
-        self.loadZCML('meta.zcml', package=plone.app.dexterity)
-        self.loadZCML('configure.zcml', package=plone.app.dexterity)
-        self.loadZCML('configure.zcml', package=plone.app.versioningbehavior)
-        self.loadZCML('configure.zcml', package=Products.CMFEditions)
+        xmlconfig.file('configure.zcml', plone.app.versioningbehavior,
+                       context=configurationContext)
 
-        self.addProfile('plone.app.dexterity:default')
-        self.addProfile('plone.app.versioningbehavior:default')
+    def setUpPloneSite(self, portal):
+        applyProfile(portal, 'plone.app.versioningbehavior:default')
+        self.registerVersionedDocumentFTI(portal)
 
-        portal = self.portal
+    def registerVersionedDocumentFTI(self, portal):
         types_tool = getToolByName(portal, 'portal_types')
-
         fti = DexterityFTI(
             TEST_CONTENT_TYPE_ID,
-            factory=TEST_CONTENT_TYPE_ID,
             global_allow=True,
             behaviors=(
                 'plone.app.versioningbehavior.behaviors.IVersionable',
                 'plone.app.dexterity.behaviors.metadata.IBasic',
-                'plone.app.dexterity.behaviors.metadata.IRelatedItems',
-            ),
+                ),
             model_source='''
                 <model xmlns="http://namespaces.plone.org/supermodel/schema">
                     <schema>
@@ -47,11 +63,8 @@ class PackageLayer(ptc.BasePTCLayer):
                         </field>
                     </schema>
                 </model>
-                '''
-        )
+                ''')
         types_tool._setObject(TEST_CONTENT_TYPE_ID, fti)
-
-        self.test_content_type_fti = fti
 
         diff_tool = getToolByName(portal, 'portal_diff')
         diff_tool.setDiffForPortalType(
@@ -65,11 +78,15 @@ class PackageLayer(ptc.BasePTCLayer):
             portal_repository.addPolicyForContentType(
                 TEST_CONTENT_TYPE_ID, policy_id)
 
+    def testSetUp(self):
         self.CSRF_DISABLED_ORIGINAL = plone.protect.auto.CSRF_DISABLED
         plone.protect.auto.CSRF_DISABLED = True
 
-    def beforeTearDown(self):
+    def testTearDown(self):
         plone.protect.auto.CSRF_DISABLED = self.CSRF_DISABLED_ORIGINAL
-        super(PackageLayer, self).beforeTearDown()
 
-package_layer = PackageLayer([common.common_layer])
+
+VERSIONING_FIXTURE = VersioningLayer()
+VERSIONING_FUNCTIONAL_TESTING = FunctionalTesting(
+    bases=(VERSIONING_FIXTURE,),
+    name="plone.app.versioningbehavior:functional")

@@ -1,21 +1,30 @@
 #coding=utf8
-from plone.app.versioningbehavior import testing
-from plone.app.versioningbehavior.testing import (
-    TEST_CONTENT_TYPE_ID)
-from mechanize import LinkNotFoundError
-from Products.Five.testbrowser import Browser
-from Products.PloneTestCase import PloneTestCase
+
+from plone.app.testing import setRoles
+from plone.app.testing import TEST_USER_ID
+from plone.app.testing import TEST_USER_NAME
+from plone.app.testing import TEST_USER_PASSWORD
+from plone.app.versioningbehavior.testing import TEST_CONTENT_TYPE_ID
+from plone.app.versioningbehavior.testing import VERSIONING_FUNCTIONAL_TESTING
+from plone.testing.z2 import Browser
+from unittest2 import TestCase
+import transaction
 
 
-class FunctionalTestCase(PloneTestCase.FunctionalTestCase):
+class FunctionalTestCase(TestCase):
 
-    layer = testing.package_layer
+    layer = VERSIONING_FUNCTIONAL_TESTING
 
-    def afterSetUp(self):
+    def setUp(self):
+        self.portal = self.layer['portal']
         self.portal_url = self.portal.absolute_url()
-        self.browser = Browser()
+
+        self.browser = Browser(self.layer['app'])
         self.browser.handleErrors = False
-        self.setRoles(['Manager', 'Member'], PloneTestCase.default_user)
+        self.browser.addHeader('Authorization', 'Basic %s:%s' % (
+                TEST_USER_NAME, TEST_USER_PASSWORD,))
+
+        setRoles(self.portal, TEST_USER_ID, ['Manager', 'Member'])
         self.portal.invokeFactory(
             type_name=TEST_CONTENT_TYPE_ID,
             id='obj1',
@@ -24,31 +33,9 @@ class FunctionalTestCase(PloneTestCase.FunctionalTestCase):
             text=u'Object 1 some footext.',
         )
         self.obj1 = self.portal['obj1']
-        self.test_content_type_fti = self.layer.test_content_type_fti
-
-    def _dump_to_file(self):
-        f = open('/tmp/a.html', 'w')
-        f.write(self.browser.contents)
-        f.close()
-
-    def _login_browser(self, userid, password):
-        self.browser.open(self.portal_url + '/login_form')
-        self.browser.getControl(name='__ac_name').value = userid
-        self.browser.getControl(name='__ac_password').value = password
-        self.browser.getControl(name='submit').click()
-
-    def assertLinkNotExists(self, *args, **kwargs):
-        self.assertRaises(
-            LinkNotFoundError, self.browser.getLink, *args, **kwargs)
-
-    def assertControlNotExists(self, *args, **kwargs):
-        self.assertRaises(
-            LookupError, self.browser.getControl, *args, **kwargs)
+        transaction.commit()
 
     def test_content_core_view(self):
-        self._login_browser(
-            PloneTestCase.default_user, PloneTestCase.default_password)
-
         self.browser.open(self.obj1.absolute_url() + '/@@content-core')
 
         # Title and description are metadata, not in content-core.
@@ -57,9 +44,6 @@ class FunctionalTestCase(PloneTestCase.FunctionalTestCase):
         self.assertIn(self.obj1.text, self.browser.contents)
 
     def test_version_view(self):
-        self._login_browser(
-            PloneTestCase.default_user, PloneTestCase.default_password)
-
         self.browser.open(
             self.obj1.absolute_url() + '/@@version-view?version_id=0')
 
@@ -75,8 +59,6 @@ class FunctionalTestCase(PloneTestCase.FunctionalTestCase):
         new_text = 'Some other text for object 1.'
         new_title = 'My special new title for object 1'
 
-        self._login_browser(
-            PloneTestCase.default_user, PloneTestCase.default_password)
         self.browser.open(self.obj1.absolute_url() + '/edit')
         self.browser.getControl(label='Title').value = new_title
         self.browser.getControl(label='Text').value = new_text
@@ -86,34 +68,6 @@ class FunctionalTestCase(PloneTestCase.FunctionalTestCase):
             0, self.obj1.getId(), old_title, old_text)
         self._assert_versions_history_form(
             1, self.obj1.getId(), new_title, new_text)
-
-    def test_versions_history_form_should_work_with_archetypes_content(self):
-        old_text = self.obj1.text
-        old_title = self.obj1.title
-
-        new_text = 'Some other text for page 1.'
-        new_title = 'My special new title for page 1'
-
-        self.portal.invokeFactory(
-            type_name='Document',
-            id='page1',
-            title=old_title,
-            text=old_text,
-        )
-        page = self.portal['page1']
-
-        self._login_browser(
-            PloneTestCase.default_user, PloneTestCase.default_password)
-
-        self.browser.open(page.absolute_url() + '/edit')
-        self.browser.getControl(label='Title').value = new_title
-        self.browser.getControl(label='Body Text').value = new_text
-        self.browser.getControl(name='form.button.save').click()
-
-        self._assert_versions_history_form(
-            0, page.getId(), old_title, old_text)
-        self._assert_versions_history_form(
-            1, page.getId(), new_title, new_text)
 
     def _assert_versions_history_form(self, version_id, obj_id, title, text):
         self.browser.open(
