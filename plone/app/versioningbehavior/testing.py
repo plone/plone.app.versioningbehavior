@@ -1,13 +1,14 @@
 #coding=utf8
+
+from collective.testcaselayer import common
+from collective.testcaselayer import ptc
+from plone.dexterity.fti import DexterityFTI
 from Products.CMFCore.utils import getToolByName
 from Products.CMFDiffTool.TextDiff import TextDiff
-from plone.dexterity.fti import DexterityFTI
+import plone.protect.auto
 
-from collective.testcaselayer import ptc
-from collective.testcaselayer import common
 
 TEST_CONTENT_TYPE_ID = 'TestContentType'
-
 DEFAULT_POLICIES = ('at_edit_autoversion', 'version_on_revert',)
 
 
@@ -63,5 +64,12 @@ class PackageLayer(ptc.BasePTCLayer):
         for policy_id in DEFAULT_POLICIES:
             portal_repository.addPolicyForContentType(
                 TEST_CONTENT_TYPE_ID, policy_id)
+
+        self.CSRF_DISABLED_ORIGINAL = plone.protect.auto.CSRF_DISABLED
+        plone.protect.auto.CSRF_DISABLED = True
+
+    def beforeTearDown(self):
+        plone.protect.auto.CSRF_DISABLED = self.CSRF_DISABLED_ORIGINAL
+        super(PackageLayer, self).beforeTearDown()
 
 package_layer = PackageLayer([common.common_layer])
