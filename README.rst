@@ -60,7 +60,7 @@ See http://plone.org/documentation/manual/upgrade-guide/version/upgrading-plone-
 More Information
 ----------------
 
-For more information about how the versioning works see the documentations of
+For more information about how the versioning works see the documentation of
 Products.CMFEditions:
 
  * http://pypi.python.org/pypi/Products.CMFEditions
