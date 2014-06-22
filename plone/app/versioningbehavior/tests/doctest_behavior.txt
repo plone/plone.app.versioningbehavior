@@ -126,10 +126,10 @@ And we should see our comment on the versions listing later...
 
 It should also be possible to copy/paste an existing content::
 
-    >>> browser.open('http://nohost/plone/@@folder_contents')
-    >>> browser.getControl(name='paths:list').displayValue = ['Blubb2']
-    >>> browser.getControl(name='folder_copy:method').click()
-    >>> browser.getControl(name='folder_paste:method').click()
+    >>> browser.open('http://nohost/plone/testingtype')
+    >>> browser.getLink('Copy').click()
+    >>> browser.open('http://nohost/plone/')
+    >>> browser.getLink('Paste').click()
     >>> 'copy_of_testingtype' in self.portal.objectIds()
     True
 

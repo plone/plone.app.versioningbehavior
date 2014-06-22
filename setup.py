@@ -8,6 +8,7 @@ tests_require = [
     'Products.CMFEditions',
     'Products.CMFPlone',
     'Products.PloneTestCase',
+    'collective.testcaselayer',
     'plone.app.dexterity',
     'plone.app.testing',
     'plone.app.versioningbehavior',
