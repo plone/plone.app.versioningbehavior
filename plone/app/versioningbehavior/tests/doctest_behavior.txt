@@ -1,4 +1,16 @@
 
+    >>> from plone.app.testing import TEST_USER_ID
+    >>> from plone.app.testing import TEST_USER_NAME
+    >>> from plone.app.testing import TEST_USER_PASSWORD
+    >>> from plone.app.testing import setRoles
+    >>> from plone.testing.z2 import Browser
+    >>> import transaction
+
+    >>> portal = layer['portal']
+    >>> app = layer['app']
+    >>> setRoles(portal, TEST_USER_ID, ['Manager'])
+
+
 Some Tests
 ----------
 
@@ -12,7 +24,7 @@ in your dexterity content type::
     ...         'plone.app.dexterity.behaviors.metadata.IBasic',
     ...         'plone.app.versioningbehavior.behaviors.IVersionable',
     ... )
-    >>> self.portal.portal_types._setObject('TestingType', fti)
+    >>> portal.portal_types._setObject('TestingType', fti)
     'TestingType'
     >>> schema = fti.lookupSchema()
 
@@ -29,15 +41,13 @@ For this test we set this configuration manually::
     >>> pr.setVersionableContentTypes(versionable_types)
     >>> for policy_id in ('at_edit_autoversion', 'version_on_revert'):
     ...     pr.addPolicyForContentType('TestingType', policy_id)
-
+    >>> transaction.commit()
 
 Create a new Browser and connect it::
 
-    >>> from Products.Five.testbrowser import Browser
-    >>> browser = Browser()
+    >>> browser = Browser(app)
     >>> browser.handleErrors = False
-    >>> self.app.acl_users.userFolderAddUser('root', 'secret', ['Manager'], [])
-    >>> browser.addHeader('Authorization', 'Basic root:secret')
+    >>> browser.addHeader('Authorization', 'Basic %s:%s' % (TEST_USER_NAME, TEST_USER_PASSWORD))
 
 
 Now we should be able to create a new TestingType-object::
@@ -64,7 +74,7 @@ The 'changeNote' field should not be visible in the view::
 We should be able to access the object, it should provide the marker
 interface ``plone.app.versioningbehavior.behaviors.IVersioningSupport``::
 
-    >>> obj = self.portal.get('testingtype')
+    >>> obj = portal.get('testingtype')
     >>> from plone.app.versioningbehavior.behaviors import IVersioningSupport
     >>> IVersioningSupport.providedBy(obj)
     True
@@ -83,8 +93,8 @@ After creating the object we wan't to create a new version by simply editing it:
 
 Now we should have at least one version::
 
-    >>> obj = self.portal.get('testingtype')
-    >>> pa = self.portal.portal_archivist
+    >>> obj = portal.get('testingtype')
+    >>> pa = portal.portal_archivist
     >>> history = pa.getHistoryMetadata(obj)
     >>> history.getLength(countPurged=False) > 0
     True
@@ -110,8 +120,8 @@ A freshly created object should have a initial version::
 
 Now we should have one - and only one - version::
 
-    >>> obj = self.portal.get('testingtype-1')
-    >>> pa = self.portal.portal_archivist
+    >>> obj = portal.get('testingtype-1')
+    >>> pa = portal.portal_archivist
     >>> history = pa.getHistoryMetadata(obj)
     >>> history.getLength(countPurged=False)
     1
@@ -130,7 +140,7 @@ It should also be possible to copy/paste an existing content::
     >>> browser.getLink('Copy').click()
     >>> browser.open('http://nohost/plone/')
     >>> browser.getLink('Paste').click()
-    >>> 'copy_of_testingtype' in self.portal.objectIds()
+    >>> 'copy_of_testingtype' in portal.objectIds()
     True
 
 
@@ -160,9 +170,10 @@ Create a container FTI::
     ...     behaviors = ('plone.app.dexterity.behaviors.metadata.IBasic',),
     ...     )
 
-    >>> self.portal.portal_types._setObject('DemoContainer', container_fti)
+    >>> portal.portal_types._setObject('DemoContainer', container_fti)
     'DemoContainer'
     >>> container_schema = fti.lookupSchema()
+    >>> transaction.commit()
 
 
 Create a container object::
@@ -187,10 +198,10 @@ Now we add a versioned object to the container::
 So let's see the version history. There should be one version with the comment
 "created a object"::
 
-    >>> obj = self.portal.get('democontainer').get('testingtype')
+    >>> obj = portal.get('democontainer').get('testingtype')
     >>> obj
     <Item at /plone/democontainer/testingtype>
-    >>> pa = self.portal.portal_archivist
+    >>> pa = portal.portal_archivist
     >>> history = pa.getHistoryMetadata(obj)
     >>> history.getLength(countPurged=False)
     1
@@ -214,10 +225,9 @@ Let's create a new versioned container FTI::
     ...         'plone.app.dexterity.behaviors.metadata.IBasic',
     ...         'plone.app.versioningbehavior.behaviors.IVersionable',
     ... )
-    >>> self.portal.portal_types._setObject('VersionedContainer', versioned_container_fti)
+    >>> portal.portal_types._setObject('VersionedContainer', versioned_container_fti)
     'VersionedContainer'
     >>> versioned_container_schema = versioned_container_fti.lookupSchema()
-
 
 Enable versioning for the new content type::
 
@@ -227,6 +237,7 @@ Enable versioning for the new content type::
     >>> pr.setVersionableContentTypes(versionable_types)
     >>> for policy_id in ('at_edit_autoversion', 'version_on_revert'):
     ...     pr.addPolicyForContentType('VersionedContainer', policy_id)
+    >>> transaction.commit()
 
 Let's Create a versioned container object on the portal::
 
@@ -240,10 +251,10 @@ Let's Create a versioned container object on the portal::
 
 Do we have a initial version?
 
-    >>> obj = self.portal.get('versionedcontainer')
+    >>> obj = portal.get('versionedcontainer')
     >>> obj
     <Container at /plone/versionedcontainer>
-    >>> pa = self.portal.portal_archivist
+    >>> pa = portal.portal_archivist
     >>> history = pa.getHistoryMetadata(obj)
     >>> history.getLength(countPurged=False)
     1
@@ -268,11 +279,11 @@ Now we try to add another versioned container in the previously created versione
 
 So, we should have the initial version::
 
-    >>> parent = self.portal['versionedcontainer']
+    >>> parent = portal['versionedcontainer']
     >>> obj = parent['versionedcontainer']
     >>> obj
     <Container at /plone/versionedcontainer/versionedcontainer>
-    >>> pa = self.portal.portal_archivist
+    >>> pa = portal.portal_archivist
     >>> history = pa.getHistoryMetadata(obj)
     >>> history.getLength(countPurged=False)
     1
