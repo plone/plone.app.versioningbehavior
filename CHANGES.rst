@@ -4,6 +4,10 @@ Changelog
 1.1.4 (unreleased)
 ------------------
 
+- Remove customization of ``versions_history_form`` since the changes were ported to
+  ``Products.CMFEditions>2.2.9``.
+  [rafaelbco]
+
 - Deal with AttributeError when trying to access fields provided by behaviors
   using attribute storage.
   [lgraf]

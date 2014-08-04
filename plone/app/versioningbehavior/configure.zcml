@@ -14,8 +14,6 @@
 
     <five:registerPackage package="." initialize=".initialize" />
 
-    <cmf:registerDirectory name="plone_app_versioningbehavior"/>
-
     <include package="plone.app.dexterity" />
 
     <!-- Dexterity 1.x uses grok / martian based directive.

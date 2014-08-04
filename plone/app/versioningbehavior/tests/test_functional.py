@@ -80,7 +80,7 @@ class FunctionalTestCase(TestCase):
         self.assertIn('Working Copy', self.browser.contents)
         self.assertIn('Revert to this revision', self.browser.contents)
         self.assertIn(
-            '/%s/version_diff?version_id1' % obj_id, self.browser.contents)
+            '/%s/@@history?one' % obj_id, self.browser.contents)
         self.assertIn('Preview of Revision %s' % version_id,
                       self.browser.contents)
         self.assertIn('<h1 class="documentFirstHeading">%s</h1>' % str(title),
