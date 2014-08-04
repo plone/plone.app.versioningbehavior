@@ -16,6 +16,8 @@
 
     <cmf:registerDirectory name="plone_app_versioningbehavior"/>
 
+    <include package="plone.app.dexterity" />
+
     <!-- Dexterity 1.x uses grok / martian based directive.
          Newer dexterity versions do not use grok anymore.
          For supporting the old versions we grok the package if

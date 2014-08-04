@@ -9,7 +9,15 @@ from Products.CMFCore.utils import getToolByName
 from Products.CMFDiffTool.TextDiff import TextDiff
 from Products.PloneTestCase.layer import onteardown
 from zope.configuration import xmlconfig
-import plone.protect.auto
+
+# Make it work with plone.protect < 3.0.0 where the `auto` module is not available.
+# This is necessary for Plone 4.3.x compatibility.
+try:
+    from plone.protect import auto as protect_auto
+except ImportError:
+    class DummyAuto(object):
+        CSRF_DISABLED = True
+    protect_auto = DummyAuto()
 
 
 def fix_plonetestcase_mess():
@@ -79,11 +87,11 @@ class VersioningLayer(PloneSandboxLayer):
                 TEST_CONTENT_TYPE_ID, policy_id)
 
     def testSetUp(self):
-        self.CSRF_DISABLED_ORIGINAL = plone.protect.auto.CSRF_DISABLED
-        plone.protect.auto.CSRF_DISABLED = True
+        self.CSRF_DISABLED_ORIGINAL = protect_auto.CSRF_DISABLED
+        protect_auto.CSRF_DISABLED = True
 
     def testTearDown(self):
-        plone.protect.auto.CSRF_DISABLED = self.CSRF_DISABLED_ORIGINAL
+        protect_auto.CSRF_DISABLED = self.CSRF_DISABLED_ORIGINAL
 
 
 VERSIONING_FIXTURE = VersioningLayer()
