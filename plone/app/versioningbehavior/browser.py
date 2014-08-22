@@ -29,7 +29,7 @@ class DownloadVersion(object):
 
         if file_ is None:
             raise NotFound(self, filename, self.request)
-        
+
         set_headers(file_, self.request.response, filename=filename)
 
         return stream_data(file_)
