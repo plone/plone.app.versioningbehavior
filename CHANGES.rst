@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.1.4 (unreleased)
+1.1.4 (2014-08-25)
 ------------------
 
 - Deal with AttributeError when trying to access fields provided by behaviors
