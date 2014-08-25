@@ -1,12 +1,16 @@
 Changelog
 =========
 
-1.1.4 (unreleased)
+1.2.0 (unreleased)
 ------------------
 
 - Remove customization of ``versions_history_form`` since the changes were ported to
   ``Products.CMFEditions>2.2.9``.
   [rafaelbco]
+
+
+1.1.4 (2014-08-25)
+------------------
 
 - Deal with AttributeError when trying to access fields provided by behaviors
   using attribute storage.
