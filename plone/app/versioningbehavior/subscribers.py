@@ -1,12 +1,11 @@
+# -*- coding: utf-8 -*-
+from plone.app.versioningbehavior import MessageFactory as _
+from plone.app.versioningbehavior.utils import get_change_note
 from Products.CMFCore.utils import getToolByName
 from Products.CMFEditions.interfaces.IArchivist import ArchivistUnregisteredError
 from Products.CMFEditions.interfaces.IModifier import FileTooLargeToVersionError
 from Products.CMFPlone.utils import base_hasattr
-from plone.app.versioningbehavior import MessageFactory as _
-from plone.app.versioningbehavior.behaviors import IVersioningSupport
-from plone.app.versioningbehavior.utils import get_change_note
 from zope.app.container.interfaces import IContainerModifiedEvent
-from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 
 
 def create_version_on_save(context, event):
@@ -109,4 +108,4 @@ def create_initial_version_after_adding(context, event):
     try:
         context.portal_repository.save(obj=context, comment=changeNote)
     except FileTooLargeToVersionError:
-        pass # the on edit save will emit a warning
+        pass  # the on edit save will emit a warning

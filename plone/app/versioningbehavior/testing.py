@@ -1,5 +1,4 @@
-#coding=utf8
-
+# -*- coding: utf-8 -*-
 from plone.app.testing import applyProfile
 from plone.app.testing import FunctionalTesting
 from plone.app.testing import PLONE_FIXTURE
@@ -61,8 +60,8 @@ class VersioningLayer(PloneSandboxLayer):
             behaviors=(
                 'plone.app.versioningbehavior.behaviors.IVersionable',
                 'plone.app.dexterity.behaviors.metadata.IBasic',
-                ),
-            model_source='''
+            ),
+            model_source="""
                 <model xmlns="http://namespaces.plone.org/supermodel/schema">
                     <schema>
                         <field name="text" type="zope.schema.Text">
@@ -71,7 +70,7 @@ class VersioningLayer(PloneSandboxLayer):
                         </field>
                     </schema>
                 </model>
-                ''')
+                """)
         types_tool._setObject(TEST_CONTENT_TYPE_ID, fti)
 
         diff_tool = getToolByName(portal, 'portal_diff')
@@ -97,4 +96,4 @@ class VersioningLayer(PloneSandboxLayer):
 VERSIONING_FIXTURE = VersioningLayer()
 VERSIONING_FUNCTIONAL_TESTING = FunctionalTesting(
     bases=(VERSIONING_FIXTURE,),
-    name="plone.app.versioningbehavior:functional")
+    name='plone.app.versioningbehavior:functional')

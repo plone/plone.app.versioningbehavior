@@ -1,8 +1,10 @@
+# -*- coding: utf-8 -*-
+from plone.dexterity.fti import DexterityFTI
 from Products.CMFCore.utils import getToolByName
 from Products.CMFEditions.tests import test_IntegrationTests
 from Products.PloneTestCase import PloneTestCase
-from plone.dexterity.fti import DexterityFTI
-from unittest import TestSuite, makeSuite
+from unittest import makeSuite
+from unittest import TestSuite
 
 
 PloneTestCase.setupPloneSite()
@@ -37,8 +39,8 @@ class TestDexterityIntegration(test_IntegrationTests.TestIntegration):
                 'plone.app.versioningbehavior.behaviors.IVersionable',
                 'plone.app.dexterity.behaviors.metadata.IBasic',
                 'plone.app.dexterity.behaviors.metadata.IRelatedItems',
-                ),
-            model_source='''
+            ),
+            model_source="""
             <model xmlns="http://namespaces.plone.org/supermodel/schema">
                 <schema>
                     <field name="text" type="zope.schema.Text">
@@ -47,7 +49,7 @@ class TestDexterityIntegration(test_IntegrationTests.TestIntegration):
                     </field>
                 </schema>
             </model>
-        ''')
+        """)
         types_tool._delObject('Document')
         types_tool._setObject('Document', document_fti)
 
@@ -62,7 +64,7 @@ class TestDexterityIntegration(test_IntegrationTests.TestIntegration):
                 'plone.app.versioningbehavior.behaviors.IVersionable',
                 'plone.app.dexterity.behaviors.metadata.IBasic',
                 'plone.app.dexterity.behaviors.metadata.IRelatedItems',
-                ))
+            ))
         types_tool._delObject('Folder')
         types_tool._setObject('Folder', folder_fti)
 

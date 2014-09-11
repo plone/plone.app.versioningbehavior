@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from Products.PloneTestCase import PloneTestCase
 from plone.dexterity.fti import DexterityFTI
 from plone.app.versioningbehavior.modifiers import CloneNamedFileBlobs
@@ -7,7 +8,6 @@ from plone.namedfile.file import NamedBlobFile
 from plone.namedfile import field
 from plone.supermodel import model
 from plone.autoform.interfaces import IFormFieldProvider
-from plone.autoform import directives as form
 from plone.dexterity.utils import createContentInContainer, createContent
 from ZODB.interfaces import IBlob
 from zope.interface import alsoProvides, Interface
@@ -27,16 +27,16 @@ alsoProvides(IBlobFile, IFormFieldProvider)
 
 
 class IRelationsType(Interface):
-    single = RelationChoice(title=u"Single",
+    single = RelationChoice(title=u'Single',
                             required=False, values=[])
-    multiple = RelationList(title=u"Multiple (Relations field)",
+    multiple = RelationList(title=u'Multiple (Relations field)',
                             required=False)
 
 
 class IRelationsBehavior(model.Schema):
-    single = RelationChoice(title=u"Single",
+    single = RelationChoice(title=u'Single',
                             required=False, values=[])
-    multiple = RelationList(title=u"Multiple (Relations field)",
+    multiple = RelationList(title=u'Multiple (Relations field)',
                             required=False)
 alsoProvides(IRelationsBehavior, IFormFieldProvider)
 
@@ -186,7 +186,7 @@ class TestModifiers(PloneTestCase.PloneTestCase):
     def testRelations(self):
         rel_fti = DexterityFTI(
             'RelationsType',
-            schema="plone.app.versioningbehavior.tests.test_modifiers.IRelationsType")
+            schema='plone.app.versioningbehavior.tests.test_modifiers.IRelationsType')
         self.portal.portal_types._setObject('RelationsType', rel_fti)
 
         # Setup IIntIds utility which is required for relations to work

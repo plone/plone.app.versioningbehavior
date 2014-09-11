@@ -1,15 +1,18 @@
+# -*- coding: utf-8 -*-
+from plone.app.versioningbehavior import MessageFactory as _
+from plone.autoform import directives as form
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.dexterity.interfaces import IDexterityContent
-from plone.autoform import directives as form
 from plone.supermodel import model
-from plone.app.versioningbehavior import MessageFactory as _
+from rwproperty import getproperty, setproperty
 from z3c.form.interfaces import IAddForm
 from z3c.form.interfaces import IEditForm
-from rwproperty import getproperty, setproperty
 from zope import schema
 from zope.annotation.interfaces import IAnnotations
 from zope.component import adapts
-from zope.interface import Interface, implements, alsoProvides
+from zope.interface import alsoProvides
+from zope.interface import implements
+from zope.interface import Interface
 
 
 class IVersionable(model.Schema):

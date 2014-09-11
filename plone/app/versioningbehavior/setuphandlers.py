@@ -1,6 +1,7 @@
+# -*- coding: utf-8 -*-
+from plone.app.versioningbehavior.modifiers import modifiers
 from Products.CMFCore.utils import getToolByName
 from Products.CMFEditions.interfaces.IModifier import IConditionalTalesModifier
-from plone.app.versioningbehavior.modifiers import modifiers
 
 
 def install_modifiers(context, logger):
@@ -31,7 +32,7 @@ def import_various(context):
     """Miscellanous steps import handle
     """
     if context.readDataFile(
-        'plone.app.versioningbehavior_various.txt') is None:
+            'plone.app.versioningbehavior_various.txt') is None:
         return
 
     logger = context.getLogger('plone.app.versioningbehavior')

@@ -1,8 +1,10 @@
-from zope.publisher.interfaces import NotFound
+# -*- coding: utf-8 -*-
 from plone.namedfile.utils import set_headers, stream_data
 from Products.CMFCore.utils import getToolByName
-import re
 from zope.component import getMultiAdapter
+from zope.publisher.interfaces import NotFound
+
+import re
 
 
 class VersionView(object):
@@ -16,6 +18,7 @@ class VersionView(object):
             r'''/@@download-version?field_id=\g<field_id>&filename=\g<filename>&version_id=''' + version_id + '"',
             html
         )
+
 
 class DownloadVersion(object):
 
@@ -33,4 +36,3 @@ class DownloadVersion(object):
         set_headers(file_, self.request.response, filename=filename)
 
         return stream_data(file_)
-

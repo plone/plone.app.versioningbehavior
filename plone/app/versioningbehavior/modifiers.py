@@ -1,4 +1,4 @@
-import os
+# -*- coding: utf-8 -*-
 from Acquisition import aq_base
 from App.class_init import InitializeClass
 from itertools import izip
@@ -18,11 +18,15 @@ from zope.interface import implements
 from zope.schema import getFields
 from z3c.relationfield.interfaces import IRelationChoice, IRelationList
 
+import os
+
 
 manage_CloneNamedFileBlobsAddForm =  \
-    PageTemplateFile('www/CloneNamedFileBlobs.pt',
-                   globals(),
-                   __name__='manage_CloneNamedFileBlobs')
+    PageTemplateFile(
+        'www/CloneNamedFileBlobs.pt',
+        globals(),
+        __name__='manage_CloneNamedFileBlobs',
+    )
 
 
 def getCallbacks(values):
@@ -70,9 +74,11 @@ def manage_addCloneNamedFileBlobs(self, id, title=None, REQUEST=None):
 
 
 manage_SkipRelationsAddForm =  \
-    PageTemplateFile('www/SkipRelations.pt',
-                   globals(),
-                   __name__='manage_SkipRelationsAddForm')
+    PageTemplateFile(
+        'www/SkipRelations.pt',
+        globals(),
+        __name__='manage_SkipRelationsAddForm',
+    )
 
 
 def manage_addSkipRelations(self, id, title=None, REQUEST=None):
@@ -112,7 +118,7 @@ class CloneNamedFileBlobs:
         for schemata in iterSchemata(obj):
             for name, field in getFields(schemata).items():
                 if (INamedBlobFileField.providedBy(field) or
-                    INamedBlobImageField.providedBy(field)):
+                        INamedBlobImageField.providedBy(field)):
                     try:
                         # field.get may raise an AttributeError if the field
                         # is provided by a behavior and hasn't been
@@ -134,7 +140,7 @@ class CloneNamedFileBlobs:
 
                             # Check for file size differences
                             if (os.fstat(prior_file.fileno()).st_size ==
-                                os.fstat(blob_file.fileno()).st_size):
+                                    os.fstat(blob_file.fileno()).st_size):
                                 # Files are the same size, compare line by line
                                 for line, prior_line in izip(blob_file,
                                                              prior_file):
@@ -165,7 +171,7 @@ class CloneNamedFileBlobs:
             iface = resolveDottedName('.'.join(name.split('.')[:-1]))
             fname = name.split('.')[-1]
             field = iface.get(fname)
-            if field is not None: # Field may have been removed from schema
+            if field is not None:  # Field may have been removed from schema
                 field.get(iface(obj))._blob = blob
 
     def getOnCloneModifiers(self, obj):
@@ -214,7 +220,7 @@ class SkipRelations:
             for schemata in iterSchemata(obj):
                 for name, field in getFields(schemata).items():
                     if (IRelationChoice.providedBy(field) or
-                        IRelationList.providedBy(field)):
+                            IRelationList.providedBy(field)):
                         field.set(field.interface(repo_clone),
                                   field.query(field.interface(obj)))
         return [], [], {}

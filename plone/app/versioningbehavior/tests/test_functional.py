@@ -1,5 +1,4 @@
-#coding=utf8
-
+# -*- coding: utf-8 -*-
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import TEST_USER_NAME
@@ -8,6 +7,7 @@ from plone.app.versioningbehavior.testing import TEST_CONTENT_TYPE_ID
 from plone.app.versioningbehavior.testing import VERSIONING_FUNCTIONAL_TESTING
 from plone.testing.z2 import Browser
 from unittest2 import TestCase
+
 import transaction
 
 
@@ -21,8 +21,8 @@ class FunctionalTestCase(TestCase):
 
         self.browser = Browser(self.layer['app'])
         self.browser.handleErrors = False
-        self.browser.addHeader('Authorization', 'Basic %s:%s' % (
-                TEST_USER_NAME, TEST_USER_PASSWORD,))
+        self.browser.addHeader(
+            'Authorization', 'Basic %s:%s' % (TEST_USER_NAME, TEST_USER_PASSWORD,))
 
         setRoles(self.portal, TEST_USER_ID, ['Manager', 'Member'])
         self.portal.invokeFactory(
