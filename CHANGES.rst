@@ -4,7 +4,8 @@ Changelog
 1.2.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Added Italian translations.
+  [cekk]
 
 
 1.2.0 (2014-09-11)
