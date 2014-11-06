@@ -5,7 +5,7 @@ from Products.CMFCore.utils import getToolByName
 from Products.CMFEditions.interfaces.IArchivist import ArchivistUnregisteredError
 from Products.CMFEditions.interfaces.IModifier import FileTooLargeToVersionError
 from Products.CMFPlone.utils import base_hasattr
-from zope.app.container.interfaces import IContainerModifiedEvent
+from zope.container.interfaces import IContainerModifiedEvent
 
 
 def create_version_on_save(context, event):

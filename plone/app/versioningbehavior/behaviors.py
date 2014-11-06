@@ -4,7 +4,6 @@ from plone.autoform import directives as form
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.dexterity.interfaces import IDexterityContent
 from plone.supermodel import model
-from rwproperty import getproperty, setproperty
 from z3c.form.interfaces import IAddForm
 from z3c.form.interfaces import IEditForm
 from zope import schema
@@ -54,11 +53,11 @@ class Versionable(object):
     def __init__(self, context):
         self.context = context
 
-    @getproperty
+    @property
     def changeNote(self):
         return ''
 
-    @setproperty
+    @changeNote.setter
     def changeNote(self, value):
         # store the value for later use (see events.py)
         annotation = IAnnotations(self.context.REQUEST)

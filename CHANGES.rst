@@ -4,6 +4,9 @@ Changelog
 1.2.1 (unreleased)
 ------------------
 
+- Remove dependencies on zope.app.container and rwproperty.
+  [davisagli]
+
 - Added Italian translations.
   [cekk]
 

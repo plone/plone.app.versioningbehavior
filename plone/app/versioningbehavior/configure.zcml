@@ -45,7 +45,7 @@
 
     <subscriber
         for="plone.app.versioningbehavior.behaviors.IVersioningSupport
-             zope.app.container.interfaces.IObjectAddedEvent"
+             zope.lifecycleevent.interfaces.IObjectAddedEvent"
         handler=".subscribers.create_version_on_save"
         />
 
