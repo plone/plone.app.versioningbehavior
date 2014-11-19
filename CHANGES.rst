@@ -4,6 +4,10 @@ Changelog
 1.2.1 (unreleased)
 ------------------
 
+- Ported tests to plone.app.testing.
+  Removed PloneTestCase / p.a.testing compatibility hack.
+  [jone]
+
 - Remove dependencies on zope.app.container and rwproperty.
   [davisagli]
 

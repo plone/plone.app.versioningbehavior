@@ -2,12 +2,8 @@
 from plone.dexterity.fti import DexterityFTI
 from Products.CMFCore.utils import getToolByName
 from Products.CMFEditions.tests import test_IntegrationTests
-from Products.PloneTestCase import PloneTestCase
 from unittest import makeSuite
 from unittest import TestSuite
-
-
-PloneTestCase.setupPloneSite()
 
 
 class TestDexterityIntegration(test_IntegrationTests.TestIntegration):

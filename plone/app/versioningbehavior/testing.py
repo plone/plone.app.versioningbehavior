@@ -6,7 +6,6 @@ from plone.app.testing import PloneSandboxLayer
 from plone.dexterity.fti import DexterityFTI
 from Products.CMFCore.utils import getToolByName
 from Products.CMFDiffTool.TextDiff import TextDiff
-from Products.PloneTestCase.layer import onteardown
 from zope.configuration import xmlconfig
 
 # Make it work with plone.protect < 3.0.0 where the `auto` module is not available.
@@ -17,23 +16,6 @@ except ImportError:
     class DummyAuto(object):
         CSRF_DISABLED = True
     protect_auto = DummyAuto()
-
-
-def fix_plonetestcase_mess():
-    """Registers a Products.PloneTestCase cleanup.
-    It is a nested teardown so that we can meake sure that it is executate
-    as last tear down function.
-    """
-    def reset_zope2():
-        """Testing.ZopeTestCase.layer.ZopeLite does not support tearing down.
-        This results in a partically teared down Zope2 instance.
-        This function resets the Zope2 initialization state so that we can
-        initialize another Zope2 instance with p.a.testing.
-        """
-        import Zope2
-        Zope2._began_startup = 0
-    onteardown(reset_zope2)()
-onteardown(fix_plonetestcase_mess)()
 
 
 TEST_CONTENT_TYPE_ID = 'TestContentType'

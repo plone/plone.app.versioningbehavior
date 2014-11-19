@@ -1,24 +1,21 @@
 # -*- coding: utf-8 -*-
-from Products.PloneTestCase import PloneTestCase
-from plone.dexterity.fti import DexterityFTI
 from plone.app.versioningbehavior.modifiers import CloneNamedFileBlobs
 from plone.app.versioningbehavior.modifiers import SkipRelations
-from unittest import TestSuite, makeSuite
-from plone.namedfile.file import NamedBlobFile
-from plone.namedfile import field
-from plone.supermodel import model
 from plone.autoform.interfaces import IFormFieldProvider
+from plone.dexterity.fti import DexterityFTI
 from plone.dexterity.utils import createContentInContainer, createContent
-from ZODB.interfaces import IBlob
-from zope.interface import alsoProvides, Interface
+from plone.namedfile import field
+from plone.namedfile.file import NamedBlobFile
+from plone.supermodel import model
+from Products.CMFEditions.tests.base import CMFEditionsBaseTestCase
 from StringIO import StringIO
-from zope.configuration import xmlconfig
-from zope.component import getUtility
-from z3c.relationfield.schema import RelationChoice, RelationList
+from unittest import TestSuite, makeSuite
 from z3c.relationfield.relation import RelationValue
-
-PloneTestCase.setupPloneSite(
-    extension_profiles=['plone.app.versioningbehavior:default'])
+from z3c.relationfield.schema import RelationChoice, RelationList
+from ZODB.interfaces import IBlob
+from zope.component import getUtility
+from zope.configuration import xmlconfig
+from zope.interface import alsoProvides, Interface
 
 
 class IBlobFile(model.Schema):
@@ -41,7 +38,7 @@ class IRelationsBehavior(model.Schema):
 alsoProvides(IRelationsBehavior, IFormFieldProvider)
 
 
-class TestModifiers(PloneTestCase.PloneTestCase):
+class TestModifiers(CMFEditionsBaseTestCase):
 
     def afterSetUp(self):
         # we need to have the Manager role to be able to add things
