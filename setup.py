@@ -12,6 +12,7 @@ tests_require = [
     'plone.app.testing',
     'plone.app.versioningbehavior',
     'plone.namedfile[blobs]',
+    'zope.app.intid',
     ]
 
 setup(name='plone.app.versioningbehavior',
@@ -25,10 +26,12 @@ setup(name='plone.app.versioningbehavior',
       classifiers=[
         "Environment :: Web Environment",
         "Framework :: Plone",
+        "Framework :: Plone :: 5.0",
         "Framework :: Zope2",
         "License :: OSI Approved :: GNU General Public License (GPL)",
         "Operating System :: OS Independent",
         "Programming Language :: Python",
+        "Programming Language :: Python :: 2.7",
         "Topic :: Software Development :: Libraries :: Python Modules",
         ],
       keywords='plone dexterity behavior versioning CMFEditions',
