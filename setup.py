@@ -12,6 +12,7 @@ tests_require = [
     'plone.app.testing',
     'plone.app.versioningbehavior',
     'plone.namedfile[blobs]',
+    'zope.app.intid',
     ]
 
 setup(name='plone.app.versioningbehavior',
