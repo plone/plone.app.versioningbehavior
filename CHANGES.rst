@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.2.1 (unreleased)
+1.2.1 (2015-03-13)
 ------------------
 
 - Ported tests to plone.app.testing.
