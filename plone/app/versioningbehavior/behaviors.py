@@ -23,14 +23,14 @@ class IVersionable(model.Schema):
     changeNote = schema.TextLine(
         title=_(u'label_change_note', default=u'Change Note'),
         description=_(u'help_change_note',
-                      default=u'Enter a comment that describes the changes '
-                      'you made.'),
+                      default=u'Enter a comment that describes the changes you made. '
+                              u'If versioning is manual, you must set a change note '
+                              u'to create the new version.'),
         required=False)
 
     form.omitted('changeNote')
     form.no_omit(IEditForm, 'changeNote')
     form.no_omit(IAddForm, 'changeNote')
-
 
 alsoProvides(IVersionable, IFormFieldProvider)
 

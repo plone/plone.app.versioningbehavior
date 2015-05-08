@@ -4,7 +4,8 @@ Changelog
 1.2.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- provide better description of how new versions are created when in manual mode
+  [vangheem]
 
 
 1.2.1 (2015-03-13)
