@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: plone.app.versioningbehavior\n"
-"POT-Creation-Date: 2009-10-13 12:51+0000\n"
+"POT-Creation-Date: 2015-05-11 18:00+0000\n"
 "PO-Revision-Date: 2014-12-11 13:03+0100\n"
 "Last-Translator: Francisco Gregori <francisco.gregori@upcnet.es>\n"
 "Language-Team: Plone i18n <plone-i18n@lists.sourceforge.net>\n"
@@ -12,19 +12,24 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
 
-#. Default: "Enter a comment that describes the changes you made."
-#: plone.app.versioningbehavior/plone/app.versioningbehavior/behaviors.py:28
+#. Default: "Enter a comment that describes the changes you made. If versioning is manual, you must set a change note to create the new version."
+#: ../behaviors.py:25
+#, fuzzy
 msgid "help_change_note"
 msgstr "Escrigui un comentari que descrigui els canvis realitzats."
 
 #. Default: "Initial version"
-#: plone.app.versioningbehavior/plone/app.versioningbehavio/events.py:53
+#: ../subscribers.py:84
 msgid "initial_version_changeNote"
 msgstr "Versió inicial"
 
 #. Default: "Change Note"
-#: plone.app.versioningbehavior/plone/app.versioningbehavior/behaviors.py:27
+#: ../behaviors.py:24
 msgid "label_change_note"
 msgstr "Comentari sobre el canvi"
 
