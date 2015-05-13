@@ -1,8 +1,11 @@
 Changelog
 =========
 
-1.2.2 (unreleased)
+1.2.2 (2015-05-13)
 ------------------
+
+- Synchronize translations
+  [vincentfretin]
 
 - provide better description of how new versions are created when in manual mode
   [vangheem]
