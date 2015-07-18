@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.2.3 (unreleased)
+1.2.3 (2015-07-18)
 ------------------
 
 - Correct functional test, it was not checking correct on version1.
