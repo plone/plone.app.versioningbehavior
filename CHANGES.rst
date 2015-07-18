@@ -4,7 +4,8 @@ Changelog
 1.2.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Correct functional test, it was not checking correct on version1.
+  [bloodbare]
 
 
 1.2.2 (2015-05-13)
@@ -34,7 +35,7 @@ Changelog
 1.2.0 (2014-09-11)
 ------------------
 
-- Remove customization of versions_history_form since the changes were ported 
+- Remove customization of versions_history_form since the changes were ported
   to Products.CMFEditions>2.2.9.
   [rafaelbco]
 
