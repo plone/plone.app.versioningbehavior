@@ -4,7 +4,8 @@ Changelog
 1.2.4 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Updated basque translation
+  [erral]
 
 
 1.2.3 (2015-07-18)
