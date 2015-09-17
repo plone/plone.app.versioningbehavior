@@ -10,7 +10,6 @@ tests_require = [
     'Products.CMFPlone',
     'plone.app.dexterity',
     'plone.app.testing',
-    'plone.app.versioningbehavior',
     'plone.namedfile[blobs]',
     'zope.app.intid',
     ]
