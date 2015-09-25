@@ -16,9 +16,8 @@ msgstr ""
 
 #. Default: "Enter a comment that describes the changes you made. If versioning is manual, you must set a change note to create the new version."
 #: ../behaviors.py:25
-#, fuzzy
 msgid "help_change_note"
-msgstr "Inserisci un commento per descrivere le modifiche che hai apportato."
+msgstr "Inserisci un commento per descrivere le modifiche che hai apportato. In caso di versionamento manuale imposta un commento alle modifiche per creare la nuova versione."
 
 #. Default: "Initial version"
 #: ../subscribers.py:84
@@ -29,4 +28,3 @@ msgstr "Versione iniziale"
 #: ../behaviors.py:24
 msgid "label_change_note"
 msgstr "Commento alle modifiche"
-
