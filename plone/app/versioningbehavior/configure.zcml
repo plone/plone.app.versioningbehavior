@@ -60,7 +60,7 @@
           for="plone.dexterity.interfaces.IDexterityContent"
           name="download-version"
           permission="zope2.View"
-          class=".browser.VersionView"
+          class=".browser.DownloadVersion"
           />
 
     <genericsetup:registerProfile
