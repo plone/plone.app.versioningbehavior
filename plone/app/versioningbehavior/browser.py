@@ -11,6 +11,14 @@ class VersionView(object):
 
     download_url_patterns = (
         re.compile(r'/@@download/(?P<field_id>.*?)/(?P<filename>.*?)"'),
+
+        # Behavior name before field name, like "LeadImage.image"
+        re.compile(
+            r'/versions_history_form/'
+            r'\+\+widget\+\+form\.widgets\.\S+\.(?P<field_id>.*?)'
+            r'/@@download/(?P<filename>.*?)"'
+        ),
+
         re.compile(
             r'/versions_history_form/'
             r'\+\+widget\+\+form\.widgets\.(?P<field_id>.*?)'
@@ -31,7 +39,7 @@ class VersionView(object):
 
         for pattern in self.download_url_patterns:
             repl = self.version_of_namedfile_template.format(version_id=version_id)
-            transformed_html = pattern.sub(repl, html)
+            transformed_html = pattern.sub(repl, transformed_html)
 
         return transformed_html
 
@@ -44,7 +52,10 @@ class DownloadVersion(object):
         filename = self.request.filename
         repository = getToolByName(self.context, 'portal_repository')
         old_obj = repository.retrieve(self.context, version_id).object
-        file_ = getattr(old_obj, field_id)
+
+        # Will only work if the file is stored as an attribute with the same
+        # name of the field.
+        file_ = getattr(old_obj, field_id, None)
 
         if file_ is None:
             raise NotFound(self, filename, self.request)
