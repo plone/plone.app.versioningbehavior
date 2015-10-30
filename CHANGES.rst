@@ -4,8 +4,11 @@ Changelog
 1.2.6 (unreleased)
 ------------------
 
+Fixes:
+
 - Update Italian translations
   [ale-rt, cekk]
+
 
 1.2.5 (2015-09-20)
 ------------------
