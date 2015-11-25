@@ -80,7 +80,7 @@ Fixes:
 1.1.3 (2014-02-26)
 ------------------
 
-- Include *.rst files in the release. 1.1.2 was a brown bag release.
+- Include ``*.rst`` files in the release. 1.1.2 was a brown bag release.
   [timo]
 
 
