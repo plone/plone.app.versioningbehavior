@@ -9,12 +9,16 @@ Fixes:
 - Update Italian translations
   [ale-rt, cekk]
 
+- Fixes #10: Views for Image and File versions don't work.
+  [rafaelbco]
+
 
 1.2.5 (2015-09-20)
 ------------------
 
 - Update French translations
   [enclope]
+
 
 1.2.4 (2015-09-11)
 ------------------
