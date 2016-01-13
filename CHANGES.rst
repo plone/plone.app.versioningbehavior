@@ -10,7 +10,8 @@ New:
 
 Fixes:
 
-- *add item here*
+- Update Traditional Chinese translations.
+  [l34marr]
 
 
 1.2.6 (2015-11-28)
