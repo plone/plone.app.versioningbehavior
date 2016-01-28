@@ -25,9 +25,6 @@
         <grok:grok package="." />
     </configure>
 
-    <!-- register translations -->
-    <i18n:registerTranslations directory="locales" />
-
     <plone:behavior
         title="Versioning"
         description="Versioning support with CMFEditions"
