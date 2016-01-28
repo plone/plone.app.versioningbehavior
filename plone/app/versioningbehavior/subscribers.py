@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from plone.app.versioningbehavior import MessageFactory as _
+from plone.app.versioningbehavior import _
 from plone.app.versioningbehavior.utils import get_change_note
 from Products.CMFCore.utils import getToolByName
 from Products.CMFEditions.interfaces.IArchivist import ArchivistUnregisteredError

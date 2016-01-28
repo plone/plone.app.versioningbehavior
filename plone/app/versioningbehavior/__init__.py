@@ -2,9 +2,9 @@
 from plone.namedfile.interfaces import HAVE_BLOBS
 from Products.CMFCore.permissions import ManagePortal
 
-import zope.i18nmessageid
+from zope.i18nmessageid import MessageFactory
 
-MessageFactory = zope.i18nmessageid.MessageFactory('plone.app.versioningbehavior')
+_ = MessageFactory('plone')
 
 
 def initialize(context):

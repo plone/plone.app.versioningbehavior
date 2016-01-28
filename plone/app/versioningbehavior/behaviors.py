@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from plone.app.versioningbehavior import MessageFactory as _
+from plone.app.versioningbehavior import _
 from plone.autoform import directives as form
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.dexterity.interfaces import IDexterityContent
