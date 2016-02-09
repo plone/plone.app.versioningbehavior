@@ -21,7 +21,7 @@ setup(name='plone.app.versioningbehavior',
       long_description=open("README.rst").read() + "\n" + \
           open(os.path.join("CHANGES.rst")).read(),
       # Get more strings from
-      # http://www.python.org/pypi?%3Aaction=list_classifiers
+      # https://pypi.python.org/pypi?%3Aaction=list_classifiers
       classifiers=[
         "Environment :: Web Environment",
         "Framework :: Plone",
