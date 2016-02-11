@@ -6,12 +6,11 @@ Changelog
 
 New:
 
-- *add item here*
+- Used plone i18n domain and removed locales folder.  [klinger]
 
 Fixes:
 
-- Update Traditional Chinese translations.
-  [l34marr]
+- Updated Traditional Chinese translations.  [l34marr]
 
 
 1.2.6 (2015-11-28)
