@@ -1,17 +1,16 @@
 # -*- coding: utf-8 -*-
-from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import TEST_USER_NAME
 from plone.app.testing import TEST_USER_PASSWORD
+from plone.app.testing import setRoles
 from plone.app.versioningbehavior.testing import TEST_CONTENT_TYPE_ID
 from plone.app.versioningbehavior.testing import VERSIONING_FUNCTIONAL_TESTING
 from plone.testing.z2 import Browser
-from unittest2 import TestCase
-
 import transaction
+import unittest
 
 
-class FunctionalTestCase(TestCase):
+class FunctionalTestCase(unittest.TestCase):
 
     layer = VERSIONING_FUNCTIONAL_TESTING
 
@@ -74,6 +73,7 @@ class FunctionalTestCase(TestCase):
             '%s/%s/versions_history_form?version_id=%s'
             % (self.portal_url, obj_id, version_id))
         self.assertIn('Working Copy', self.browser.contents)
+
         if version_id == 0:
             self.assertIn(
                 '/%s/versions_history_form?version_id=%s' % (obj_id, version_id),

@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
-from plone.app.testing import applyProfile
-from plone.app.testing import FunctionalTesting
-from plone.app.testing import PLONE_FIXTURE
-from plone.app.testing import PloneSandboxLayer
-from plone.dexterity.fti import DexterityFTI
 from Products.CMFCore.utils import getToolByName
 from Products.CMFDiffTool.TextDiff import TextDiff
+from plone.app.testing import FunctionalTesting
+from plone.app.testing import IntegrationTesting
+from plone.app.testing import PLONE_FIXTURE
+from plone.app.testing import PloneSandboxLayer
+from plone.app.testing import applyProfile
+from plone.dexterity.fti import DexterityFTI
 from zope.configuration import xmlconfig
 
 # Make it work with plone.protect < 3.0.0 where the `auto` module is not available.
@@ -44,11 +45,17 @@ class VersioningLayer(PloneSandboxLayer):
                 'plone.app.dexterity.behaviors.metadata.IBasic',
             ),
             model_source="""
-                <model xmlns="http://namespaces.plone.org/supermodel/schema">
+                <model xmlns="http://namespaces.plone.org/supermodel/schema"
+                       xmlns:marshal="http://namespaces.plone.org/supermodel/marshal">
                     <schema>
                         <field name="text" type="zope.schema.Text">
                             <title>Text</title>
                             <required>False</required>
+                        </field>
+                        <field name="file" type="plone.namedfile.field.NamedBlobFile"
+                            marshal:primary="true">
+                          <title>File</title>
+                          <required>False</required>
                         </field>
                     </schema>
                 </model>
@@ -79,3 +86,6 @@ VERSIONING_FIXTURE = VersioningLayer()
 VERSIONING_FUNCTIONAL_TESTING = FunctionalTesting(
     bases=(VERSIONING_FIXTURE,),
     name='plone.app.versioningbehavior:functional')
+VERSIONING_INTEGRATION_TESTING = IntegrationTesting(
+    bases=(VERSIONING_FIXTURE,),
+    name='plone.app.versioningbehavior:integration')
