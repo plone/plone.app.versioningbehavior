@@ -16,6 +16,7 @@ from ZODB.interfaces import IBlob
 from zope.component import getUtility
 from zope.configuration import xmlconfig
 from zope.interface import alsoProvides, Interface
+from ..testing import VERSIONING_INTEGRATION_TESTING
 
 
 class IBlobFile(model.Schema):
@@ -39,6 +40,8 @@ alsoProvides(IRelationsBehavior, IFormFieldProvider)
 
 
 class TestModifiers(CMFEditionsBaseTestCase):
+
+    layer = VERSIONING_INTEGRATION_TESTING
 
     def afterSetUp(self):
         # we need to have the Manager role to be able to add things
