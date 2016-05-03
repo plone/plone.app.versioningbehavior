@@ -10,7 +10,8 @@ New:
 
 Fixes:
 
-- *add item here*
+- Fixes #25: URLs like `${absolute_url}/@@images/${uuid}.png` are not converted
+  on `@@version-view`. [rafaelbco]
 
 
 1.2.7 (2016-02-11)
