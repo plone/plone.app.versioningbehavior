@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from ..testing import VERSIONING_INTEGRATION_TESTING
 from plone.dexterity.fti import DexterityFTI
 from Products.CMFCore.utils import getToolByName
 from Products.CMFEditions.tests import test_IntegrationTests
@@ -10,6 +11,8 @@ class TestDexterityIntegration(test_IntegrationTests.TestIntegration):
     """This tests is the same tests as in CMFEditions, but it's run for
     dexterity Document and dexterity Folder.
     """
+
+    layer = VERSIONING_INTEGRATION_TESTING
 
     def afterSetUp(self):
         # get some tools
@@ -46,7 +49,8 @@ class TestDexterityIntegration(test_IntegrationTests.TestIntegration):
                 </schema>
             </model>
         """)
-        types_tool._delObject('Document')
+        if 'Document' in types_tool.objectIds():
+            types_tool._delObject('Document')
         types_tool._setObject('Document', document_fti)
 
         # ... and a folder
@@ -61,7 +65,8 @@ class TestDexterityIntegration(test_IntegrationTests.TestIntegration):
                 'plone.app.dexterity.behaviors.metadata.IBasic',
                 'plone.app.dexterity.behaviors.metadata.IRelatedItems',
             ))
-        types_tool._delObject('Folder')
+        if 'Folder' in types_tool.objectIds():
+            types_tool._delObject('Folder')
         types_tool._setObject('Folder', folder_fti)
 
         # lets disable versioning while creating, otherwise we'd have to
@@ -85,6 +90,10 @@ class TestDexterityIntegration(test_IntegrationTests.TestIntegration):
         # re-enable versioning
         vtypes.append('Dpcument')
         repo_tool.setVersionableContentTypes(vtypes)
+
+        # We have a test that fails without workflow.
+        wf_tool = getToolByName(self.portal, 'portal_workflow')
+        wf_tool.setChainForPortalTypes(('Document',), ('simple_publication_workflow',))
 
     def test13_revertUpdatesCatalog(self):
         # This test in CMFEditions uses doc.edit, but we have no archetypes
