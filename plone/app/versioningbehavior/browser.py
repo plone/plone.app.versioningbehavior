@@ -24,22 +24,20 @@ class VersionView(object):
         self.request = request
 
     _download_url_patterns = (
-        # Behavior name before field name, like "LeadImage.image"
-        # Example: /++widget++form.widgets.my_field/@@download/my_file.txt
-        # Example: /++widget++form.widgets.my_interface.my_field/@@download/my_file.txt
-        # Example: /versions_history_form/++widget++form.widgets.my_field/@@download/my_file.txt
-        re.compile(
-            r'/'
-            r'(versions_history_form/)?'
+        # Example: ++widget++form.widgets.my_field/@@download/my_file.txt
+        # Example: ++widget++form.widgets.my_interface.my_field/@@download/my_file.txt
+        # Example: view-name/++widget++form.widgets.my_field/@@download/my_file.txt
+        (
+            r'([@a-zA-Z0-9_-]+/)?'
             r'\+\+widget\+\+form\.widgets\.([a-zA-Z0-9_-]+\.)?(?P<field_id>[a-zA-Z0-9_-]+)'
             r'/@@download/(?P<filename>[^"\']+)'
         ),
 
-        # Example: /@@download/my_field/my_file.txt
-        re.compile(r'/@@download/(?P<field_id>[a-zA-Z0-9_-]+)/(?P<filename>[^"\']+)'),
+        # Example: @@download/my_field/my_file.txt
+        r'@@download/(?P<field_id>[a-zA-Z0-9_-]+)/(?P<filename>[^"\']+)',
 
-        # Example: /@@images/aedf-0123.png
-        re.compile(r'/@@images/[0-9a-f\-]+\.[a-z]+'),
+        # Example: @@images/aedf-0123.png
+        r'@@images/[0-9a-f\-]+\.[a-z]+',
     )
 
     def __call__(self):
@@ -62,8 +60,10 @@ class VersionView(object):
                 filename=groups.get('filename'),
             )
 
+        context_url = self.context.absolute_url()
         for pattern in self._download_url_patterns:
-            transformed_html = pattern.sub(repl, transformed_html)
+            compiled_pattern = re.compile(context_url + '/' + pattern)
+            transformed_html = compiled_pattern.sub(repl, transformed_html)
 
         return transformed_html
 
@@ -77,7 +77,7 @@ class VersionView(object):
             parameters.append(('filename', filename))
 
         query_string = urlencode(parameters)
-        return '/@@download-version?{}'.format(query_string)
+        return '{}/@@download-version?{}'.format(self.context.absolute_url(), query_string)
 
 
 class DownloadVersion(object):

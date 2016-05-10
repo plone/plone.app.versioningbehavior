@@ -4,10 +4,10 @@ from .. import browser
 from ..testing import VERSIONING_INTEGRATION_TESTING
 from plone.app.testing import TEST_USER_ID, TEST_USER_ROLES, setRoles
 from plone.app.versioningbehavior.testing import TEST_CONTENT_TYPE_ID
-from zope.component import getMultiAdapter
-import unittest
 from plone.namedfile import NamedBlobFile
-
+from zope.component import getMultiAdapter
+import re
+import unittest
 
 class BaseViewTestCase(unittest.TestCase):
 
@@ -55,7 +55,7 @@ class VersionViewTestCase(BaseViewTestCase):
             old_url = obj.absolute_url() + old_path
             old = href_template.format(old_url)
             new = view._convert_download_links(old, version)
-            correct_url = obj.absolute_url() + view._get_download_version_link(
+            correct_url = view._get_download_version_link(
                 version_id=version,
                 field_id=field,
                 filename=filename,
@@ -111,6 +111,26 @@ class VersionViewTestCase(BaseViewTestCase):
         )
 
         _assert(
+            (
+                '/my-view/++widget++form.widgets.my_field'
+                '/@@download/my_file.txt'
+            ),
+            version='my_version',
+            field='my_field',
+            filename='my_file.txt',
+        )
+
+        _assert(
+            (
+                '/@@my-view/++widget++form.widgets.my_field'
+                '/@@download/my_file.txt'
+            ),
+            version='my_version',
+            field='my_field',
+            filename='my_file.txt',
+        )
+
+        _assert(
             '/@@images/abde-01fa.png',
             version='my_version',
         )
@@ -120,36 +140,37 @@ class VersionViewTestCase(BaseViewTestCase):
         obj = self.obj1
         view = browser.VersionView(obj, self.request)
 
-        def _assert(version, correct_url, field=None, filename=None):
+        def _assert(version, correct_path, field=None, filename=None):
             actual = view._get_download_version_link(
                 version_id=version,
                 field_id=field,
                 filename=filename,
             )
+            correct_url = obj.absolute_url() + '/' + correct_path
             self.assertEqual(actual, correct_url)
 
         _assert(
             version='my_version',
             field='my_field',
             filename='my_file.txt',
-            correct_url=(
-                '/@@download-version?'
+            correct_path=(
+                '@@download-version?'
                 'version_id=my_version&field_id=my_field&filename=my_file.txt'
             ),
         )
         _assert(
             version='my_version',
             filename='my_file.txt',
-            correct_url='/@@download-version?version_id=my_version&filename=my_file.txt',
+            correct_path='@@download-version?version_id=my_version&filename=my_file.txt',
         )
         _assert(
             version='my_version',
             field='my_field',
-            correct_url='/@@download-version?version_id=my_version&field_id=my_field',
+            correct_path='@@download-version?version_id=my_version&field_id=my_field',
         )
         _assert(
             version='my_version',
-            correct_url='/@@download-version?version_id=my_version',
+            correct_path='@@download-version?version_id=my_version',
         )
 
     def test_call(self):
@@ -158,11 +179,13 @@ class VersionViewTestCase(BaseViewTestCase):
         view = browser.VersionView(obj, self.request)
 
         html = self._render_view(view=obj, url=obj.absolute_url())
-        download_url = '{}/++widget++form.widgets.file/@@download/{}'.format(
-            obj.absolute_url(),
-            obj.file.filename,
+        download_url_pattern = re.compile(
+            obj.absolute_url() +
+            r'(/[@A-Za-z0-9-_]+)?/' +  # View name can be present or not.
+            r'\+\+widget\+\+form\.widgets\.file/@@download/' +
+            obj.file.filename
         )
-        self.assertTrue(download_url in html)
+        self.assertTrue(download_url_pattern.search(html))
 
         html = self._render_view(view=view, url=obj.absolute_url(), params={'version_id': '0'})
         download_url = '{}/@@download-version?version_id=0&field_id=file&filename={}'.format(
