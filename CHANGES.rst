@@ -4,10 +4,6 @@ Changelog
 1.2.8 (unreleased)
 ------------------
 
-New:
-
-- *add item here*
-
 Fixes:
 
 - Fixes #25: URLs like `${absolute_url}/@@images/${uuid}.png` are not converted
