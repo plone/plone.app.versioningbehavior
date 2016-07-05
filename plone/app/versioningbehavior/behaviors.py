@@ -10,7 +10,7 @@ from zope import schema
 from zope.annotation.interfaces import IAnnotations
 from zope.component import adapts
 from zope.interface import alsoProvides
-from zope.interface import implements
+from zope.interface import implementer
 from zope.interface import Interface
 
 
@@ -41,13 +41,12 @@ class IVersioningSupport(Interface):
     """
 
 
+@implementer(IVersionable)
 class Versionable(object):
     """ The Versionable adapter prohibits dexterity from saving the changeNote
     on the context. It stores it in a request-annotation for later use in
     event-handlers
     """
-
-    implements(IVersionable)
     adapts(IDexterityContent)
 
     def __init__(self, context):

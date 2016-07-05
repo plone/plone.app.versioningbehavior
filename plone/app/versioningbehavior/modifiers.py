@@ -14,7 +14,7 @@ from Products.CMFEditions.interfaces.IModifier import ISaveRetrieveModifier
 from Products.CMFEditions.Modifiers import ConditionalTalesModifier
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from ZODB.blob import Blob
-from zope.interface import implements
+from zope.interface import implementer
 from zope.schema import getFields
 from z3c.relationfield.interfaces import IRelationChoice, IRelationList
 
@@ -91,12 +91,11 @@ def manage_addSkipRelations(self, id, title=None, REQUEST=None):
         REQUEST['RESPONSE'].redirect(self.absolute_url() + '/manage_main')
 
 
+@implementer(IAttributeModifier, ICloneModifier)
 class CloneNamedFileBlobs:
     """Modifier to save an un-cloned reference to the blob to avoid it being
     packed away.
     """
-
-    implements(IAttributeModifier, ICloneModifier)
 
     def __init__(self, id_, title):
         self.id = str(id_)
@@ -188,12 +187,11 @@ class CloneNamedFileBlobs:
 InitializeClass(CloneNamedFileBlobs)
 
 
+@implementer(ICloneModifier, ISaveRetrieveModifier)
 class SkipRelations:
     """Standard modifier to avoid cloning of relations and
     restore them from the working copy.
     """
-
-    implements(ICloneModifier, ISaveRetrieveModifier)
 
     def __init__(self, id_, title):
         self.id = str(id_)
