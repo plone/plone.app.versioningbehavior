@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from five.intid import site
 from plone.app.versioningbehavior.modifiers import CloneNamedFileBlobs
 from plone.app.versioningbehavior.modifiers import SkipRelations
 from plone.autoform.interfaces import IFormFieldProvider
@@ -13,6 +14,7 @@ from unittest import TestSuite, makeSuite
 from z3c.relationfield.relation import RelationValue
 from z3c.relationfield.schema import RelationChoice, RelationList
 from ZODB.interfaces import IBlob
+from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility
 from zope.configuration import xmlconfig
 from zope.interface import alsoProvides, Interface
@@ -245,33 +247,36 @@ class TestModifiers(CMFEditionsBaseTestCase):
         self.assertTrue(repo_clone.single is source.single)
         self.assertTrue(repo_clone.multiple is source.multiple)
 
-    def testRelationsInBehaviors(self):
-        configuration = """\
-        <configure
-             package="plone.behavior"
-             xmlns="http://namespaces.zope.org/zope"
-             xmlns:plone="http://namespaces.plone.org/plone"
-             i18n_domain="plone.behavior.tests">
+    def register_RelationsType(self):
+        xmlconfig.xmlconfig(StringIO(
+            '''
+            <configure
+                 package="plone.behavior"
+                 xmlns="http://namespaces.zope.org/zope"
+                 xmlns:plone="http://namespaces.plone.org/plone"
+                 i18n_domain="plone.behavior.tests">
 
-             <include package="plone.behavior" file="meta.zcml" />
+                 <include package="plone.behavior" file="meta.zcml" />
 
-            <plone:behavior
-                title="Relations behavior"
-                description="A behavior"
-                provides="plone.app.versioningbehavior.tests.test_modifiers.IRelationsBehavior"
-                />
-        </configure>
-        """
-        xmlconfig.xmlconfig(StringIO(configuration))
+                <plone:behavior
+                    title="Relations behavior"
+                    description="A behavior"
+                    provides="plone.app.versioningbehavior.tests.test_modifiers.IRelationsBehavior"
+                    />
+            </configure>
+            '''
+        ))
         rel_fti = DexterityFTI(
             'RelationsType',
-            behaviors=[IRelationsBehavior.__identifier__])
+            behaviors=[IRelationsBehavior.__identifier__]
+        )
         self.portal.portal_types._setObject('RelationsType', rel_fti)
 
         # Setup IIntIds utility which is required for relations to work
-        from five.intid import site
-        from zope.app.intid.interfaces import IIntIds
         site.add_intids(self.portal)
+
+    def testRelationsInBehaviors(self):
+        self.register_RelationsType()
         intids = getUtility(IIntIds)
 
         source = createContentInContainer(self.portal, 'RelationsType')
@@ -322,6 +327,26 @@ class TestModifiers(CMFEditionsBaseTestCase):
                         is IRelationsBehavior(source).single)
         self.assertTrue(IRelationsBehavior(repo_clone).multiple
                         is IRelationsBehavior(source).multiple)
+
+    def testRelationsInBehaviorsForMigratedDXObjects(self):
+        ''' Do not break in the case of
+        dexterity objects with relations migrated from something else
+        (e.g. Archetypes)
+        '''
+        self.register_RelationsType()
+        source = createContentInContainer(self.portal, 'RelationsType')
+
+        # Test modifier when no relations are set
+        class Dummy(object):
+            pass
+
+        repo_clone = Dummy()
+
+        modifier = SkipRelations('modifier', 'Modifier')
+        modifier.afterRetrieveModifier(source, repo_clone)
+
+        self.assertFalse(hasattr(repo_clone, 'single'))
+        self.assertFalse(hasattr(repo_clone, 'multiple'))
 
 
 def test_suite():

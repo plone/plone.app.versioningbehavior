@@ -14,7 +14,9 @@ New features:
 
 Bug fixes:
 
-- *add item here*
+- Do not break in the case of dexterity objects with relations
+  migrated from something else (usually Archetypes).
+  [ale-rt]
 
 
 1.2.9 (2016-08-18)

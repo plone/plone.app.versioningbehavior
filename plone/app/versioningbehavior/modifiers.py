@@ -214,7 +214,10 @@ class SkipRelations:
 
     def afterRetrieveModifier(self, obj, repo_clone, preserve=()):
         """Restore relations from the working copy."""
-        if IDexterityContent.providedBy(obj):
+        if (
+            IDexterityContent.providedBy(obj) and
+            IDexterityContent.providedBy(repo_clone)
+        ):
             for schemata in iterSchemata(obj):
                 for name, field in getFields(schemata).items():
                     if (IRelationChoice.providedBy(field) or
