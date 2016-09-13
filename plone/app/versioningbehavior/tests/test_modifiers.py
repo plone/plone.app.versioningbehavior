@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from five.intid import site
 from plone.app.versioningbehavior.modifiers import CloneNamedFileBlobs
 from plone.app.versioningbehavior.modifiers import SkipRelations
 from plone.autoform.interfaces import IFormFieldProvider
@@ -13,6 +14,7 @@ from unittest import TestSuite, makeSuite
 from z3c.relationfield.relation import RelationValue
 from z3c.relationfield.schema import RelationChoice, RelationList
 from ZODB.interfaces import IBlob
+from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility
 from zope.configuration import xmlconfig
 from zope.interface import alsoProvides, Interface
@@ -54,7 +56,8 @@ class TestModifiers(CMFEditionsBaseTestCase):
             model_source="""
             <model xmlns="http://namespaces.plone.org/supermodel/schema">
                 <schema>
-                    <field name="file" type="plone.namedfile.field.NamedBlobFile">
+                    <field name="file"
+                           type="plone.namedfile.field.NamedBlobFile">
                         <title>File</title>
                         <required>True</required>
                     </field>
@@ -126,7 +129,8 @@ class TestModifiers(CMFEditionsBaseTestCase):
             model_source="""
             <model xmlns="http://namespaces.plone.org/supermodel/schema">
                 <schema>
-                    <field name="file" type="plone.namedfile.field.NamedBlobFile">
+                    <field name="file"
+                           type="plone.namedfile.field.NamedBlobFile">
                         <title>File</title>
                         <required>True</required>
                     </field>
@@ -138,7 +142,8 @@ class TestModifiers(CMFEditionsBaseTestCase):
         file1 = createContentInContainer(self.portal, 'BlobFile')
         file1.file = NamedBlobFile('dummy test data', filename=u'test.txt')
         modifier = CloneNamedFileBlobs('modifier', 'Modifier')
-        pers_id, pers_load, empty1, empty2 = modifier.getOnCloneModifiers(file1)
+        on_clone_modifiers = modifier.getOnCloneModifiers(file1)
+        pers_id, pers_load, empty1, empty2 = on_clone_modifiers
         self.assertTrue(pers_id(file1.file._blob))
         self.assertTrue(pers_load(file1.file._blob) is None)
         self.assertTrue(empty1 == [])
@@ -150,7 +155,8 @@ class TestModifiers(CMFEditionsBaseTestCase):
             model_source="""
             <model xmlns="http://namespaces.plone.org/supermodel/schema">
                 <schema>
-                    <field name="file" type="plone.namedfile.field.NamedBlobFile">
+                    <field name="file"
+                           type="plone.namedfile.field.NamedBlobFile">
                         <title>File</title>
                         <required>True</required>
                     </field>
@@ -162,7 +168,8 @@ class TestModifiers(CMFEditionsBaseTestCase):
         modifier = CloneNamedFileBlobs('modifier', 'Modifier')
         attrs_dict = modifier.getReferencedAttributes(file1)
         self.assertTrue(attrs_dict == {})
-        pers_id, pers_load, empty1, empty2 = modifier.getOnCloneModifiers(file1)
+        on_clone_modifiers = modifier.getOnCloneModifiers(file1)
+        pers_id, pers_load, empty1, empty2 = on_clone_modifiers
         self.assertTrue(pers_id(None) is None)
         self.assertTrue(pers_load(None) is None)
         self.assertTrue(empty1 == [])
@@ -177,7 +184,8 @@ class TestModifiers(CMFEditionsBaseTestCase):
             in attrs_dict)
         blob = attrs_dict.values()[0]
         self.assertTrue(IBlob.providedBy(blob))
-        pers_id, pers_load, empty1, empty2 = modifier.getOnCloneModifiers(file1)
+        on_clone_modifiers = modifier.getOnCloneModifiers(file1)
+        pers_id, pers_load, empty1, empty2 = on_clone_modifiers
         self.assertTrue(pers_id(file1.file._blob))
         self.assertTrue(pers_load(file1.file._blob) is None)
         self.assertTrue(empty1 == [])
@@ -186,7 +194,8 @@ class TestModifiers(CMFEditionsBaseTestCase):
     def testRelations(self):
         rel_fti = DexterityFTI(
             'RelationsType',
-            schema='plone.app.versioningbehavior.tests.test_modifiers.IRelationsType')
+            schema=IRelationsType.__identifier__
+        )
         self.portal.portal_types._setObject('RelationsType', rel_fti)
 
         # Setup IIntIds utility which is required for relations to work
@@ -200,7 +209,8 @@ class TestModifiers(CMFEditionsBaseTestCase):
 
         # Test modifier when no relations are set
         modifier = SkipRelations('modifier', 'Modifier')
-        pers_id, pers_load, empty1, empty2 = modifier.getOnCloneModifiers(source)
+        on_clone_modifiers = modifier.getOnCloneModifiers(source)
+        pers_id, pers_load, empty1, empty2 = on_clone_modifiers
         self.assertTrue(pers_id(None) is None)
         self.assertTrue(pers_id(None) is None)
         self.assertTrue(pers_load(None) is None)
@@ -223,7 +233,8 @@ class TestModifiers(CMFEditionsBaseTestCase):
         notify(ObjectModifiedEvent(source))
 
         modifier = SkipRelations('modifier', 'Modifier')
-        pers_id, pers_load, empty1, empty2 = modifier.getOnCloneModifiers(source)
+        on_clone_modifiers = modifier.getOnCloneModifiers(source)
+        pers_id, pers_load, empty1, empty2 = on_clone_modifiers
         self.assertTrue(pers_id(source.single))
         self.assertTrue(pers_id(source.multiple))
         self.assertTrue(pers_load(source.single) is None)
@@ -236,33 +247,36 @@ class TestModifiers(CMFEditionsBaseTestCase):
         self.assertTrue(repo_clone.single is source.single)
         self.assertTrue(repo_clone.multiple is source.multiple)
 
-    def testRelationsInBehaviors(self):
-        configuration = """\
-        <configure
-             package="plone.behavior"
-             xmlns="http://namespaces.zope.org/zope"
-             xmlns:plone="http://namespaces.plone.org/plone"
-             i18n_domain="plone.behavior.tests">
+    def register_RelationsType(self):
+        xmlconfig.xmlconfig(StringIO(
+            '''
+            <configure
+                 package="plone.behavior"
+                 xmlns="http://namespaces.zope.org/zope"
+                 xmlns:plone="http://namespaces.plone.org/plone"
+                 i18n_domain="plone.behavior.tests">
 
-             <include package="plone.behavior" file="meta.zcml" />
+                 <include package="plone.behavior" file="meta.zcml" />
 
-            <plone:behavior
-                title="Relations behavior"
-                description="A behavior"
-                provides="plone.app.versioningbehavior.tests.test_modifiers.IRelationsBehavior"
-                />
-        </configure>
-        """
-        xmlconfig.xmlconfig(StringIO(configuration))
+                <plone:behavior
+                    title="Relations behavior"
+                    description="A behavior"
+                    provides="plone.app.versioningbehavior.tests.test_modifiers.IRelationsBehavior"
+                    />
+            </configure>
+            '''
+        ))
         rel_fti = DexterityFTI(
             'RelationsType',
-            behaviors=[IRelationsBehavior.__identifier__])
+            behaviors=[IRelationsBehavior.__identifier__]
+        )
         self.portal.portal_types._setObject('RelationsType', rel_fti)
 
         # Setup IIntIds utility which is required for relations to work
-        from five.intid import site
-        from zope.app.intid.interfaces import IIntIds
         site.add_intids(self.portal)
+
+    def testRelationsInBehaviors(self):
+        self.register_RelationsType()
         intids = getUtility(IIntIds)
 
         source = createContentInContainer(self.portal, 'RelationsType')
@@ -270,7 +284,8 @@ class TestModifiers(CMFEditionsBaseTestCase):
 
         # Test modifier when no relations are set
         modifier = SkipRelations('modifier', 'Modifier')
-        pers_id, pers_load, empty1, empty2 = modifier.getOnCloneModifiers(source)
+        on_clone_modifiers = modifier.getOnCloneModifiers(source)
+        pers_id, pers_load, empty1, empty2 = on_clone_modifiers
         self.assertTrue(pers_id(None) is None)
         self.assertTrue(pers_id(None) is None)
         self.assertTrue(pers_load(None) is None)
@@ -284,8 +299,12 @@ class TestModifiers(CMFEditionsBaseTestCase):
         self.assertTrue(repo_clone.multiple is None)
 
         # Add some relations
-        IRelationsBehavior(source).single = RelationValue(intids.getId(target))
-        IRelationsBehavior(source).multiple = [RelationValue(intids.getId(target))]
+        IRelationsBehavior(source).single = RelationValue(
+            intids.getId(target)
+        )
+        IRelationsBehavior(source).multiple = [
+            RelationValue(intids.getId(target))
+        ]
 
         # Update relations
         from zope.lifecycleevent import ObjectModifiedEvent
@@ -293,7 +312,8 @@ class TestModifiers(CMFEditionsBaseTestCase):
         notify(ObjectModifiedEvent(source))
 
         modifier = SkipRelations('modifier', 'Modifier')
-        pers_id, pers_load, empty1, empty2 = modifier.getOnCloneModifiers(source)
+        on_clone_modifiers = modifier.getOnCloneModifiers(source)
+        pers_id, pers_load, empty1, empty2 = on_clone_modifiers
         self.assertTrue(pers_id(IRelationsBehavior(source).single))
         self.assertTrue(pers_id(IRelationsBehavior(source).multiple))
         self.assertTrue(pers_load(IRelationsBehavior(source).single) is None)
@@ -307,6 +327,26 @@ class TestModifiers(CMFEditionsBaseTestCase):
                         is IRelationsBehavior(source).single)
         self.assertTrue(IRelationsBehavior(repo_clone).multiple
                         is IRelationsBehavior(source).multiple)
+
+    def testRelationsInBehaviorsForMigratedDXObjects(self):
+        ''' Do not break in the case of
+        dexterity objects with relations migrated from something else
+        (e.g. Archetypes)
+        '''
+        self.register_RelationsType()
+        source = createContentInContainer(self.portal, 'RelationsType')
+
+        # Test modifier when no relations are set
+        class Dummy(object):
+            pass
+
+        repo_clone = Dummy()
+
+        modifier = SkipRelations('modifier', 'Modifier')
+        modifier.afterRetrieveModifier(source, repo_clone)
+
+        self.assertFalse(hasattr(repo_clone, 'single'))
+        self.assertFalse(hasattr(repo_clone, 'multiple'))
 
 
 def test_suite():
