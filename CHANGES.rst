@@ -4,14 +4,6 @@ Changelog
 1.2.10 (unreleased)
 -------------------
 
-Breaking changes:
-
-- *add item here*
-
-New features:
-
-- *add item here*
-
 Bug fixes:
 
 - Do not break in the case of dexterity objects with relations
