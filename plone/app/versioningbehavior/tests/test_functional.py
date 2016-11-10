@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
+from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import TEST_USER_NAME
 from plone.app.testing import TEST_USER_PASSWORD
-from plone.app.testing import setRoles
 from plone.app.versioningbehavior.testing import TEST_CONTENT_TYPE_ID
 from plone.app.versioningbehavior.testing import VERSIONING_FUNCTIONAL_TESTING
 from plone.testing.z2 import Browser
+
 import transaction
 import unittest
 
@@ -21,7 +22,9 @@ class FunctionalTestCase(unittest.TestCase):
         self.browser = Browser(self.layer['app'])
         self.browser.handleErrors = False
         self.browser.addHeader(
-            'Authorization', 'Basic %s:%s' % (TEST_USER_NAME, TEST_USER_PASSWORD,))
+            'Authorization',
+            'Basic %s:%s' % (TEST_USER_NAME, TEST_USER_PASSWORD,)
+        )
 
         setRoles(self.portal, TEST_USER_ID, ['Manager', 'Member'])
         self.portal.invokeFactory(
@@ -76,12 +79,18 @@ class FunctionalTestCase(unittest.TestCase):
 
         if version_id == 0:
             self.assertIn(
-                '/%s/versions_history_form?version_id=%s' % (obj_id, version_id),
-                self.browser.contents)
+                '/{0}/versions_history_form?version_id={1}'.format(
+                    obj_id,
+                    version_id
+                ),
+                self.browser.contents
+            )
         self.assertIn('Working Copy', self.browser.contents)
         self.assertIn('Revert to this revision', self.browser.contents)
         self.assertIn(
-            '/%s/@@history?one' % obj_id, self.browser.contents)
+            '/%s/@@history?one' % obj_id,
+            self.browser.contents
+        )
         self.assertIn('Preview of Revision %s' % version_id,
                       self.browser.contents)
         self.assertIn('<h1 class="documentFirstHeading">%s</h1>' % str(title),

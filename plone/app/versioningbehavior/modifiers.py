@@ -2,8 +2,9 @@
 from Acquisition import aq_base
 from App.class_init import InitializeClass
 from itertools import izip
-from plone.dexterity.utils import iterSchemata, resolveDottedName
 from plone.dexterity.interfaces import IDexterityContent
+from plone.dexterity.utils import iterSchemata
+from plone.dexterity.utils import resolveDottedName
 from plone.namedfile.interfaces import INamedBlobFileField
 from plone.namedfile.interfaces import INamedBlobImageField
 from Products.CMFCore.utils import getToolByName
@@ -13,10 +14,11 @@ from Products.CMFEditions.interfaces.IModifier import ICloneModifier
 from Products.CMFEditions.interfaces.IModifier import ISaveRetrieveModifier
 from Products.CMFEditions.Modifiers import ConditionalTalesModifier
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
+from z3c.relationfield.interfaces import IRelationChoice
+from z3c.relationfield.interfaces import IRelationList
 from ZODB.blob import Blob
 from zope.interface import implementer
 from zope.schema import getFields
-from z3c.relationfield.interfaces import IRelationChoice, IRelationList
 
 import os
 
@@ -225,6 +227,7 @@ class SkipRelations:
                         field.set(field.interface(repo_clone),
                                   field.query(field.interface(obj)))
         return [], [], {}
+
 
 InitializeClass(SkipRelations)
 

@@ -1,20 +1,22 @@
 Changelog
 =========
 
-1.2.11 (unreleased)
--------------------
+2.0.0 (unreleased)
+------------------
 
 Breaking changes:
 
-- *add item here*
+- Drop support for Dexterity 1.x
+  [jensens]
 
 New features:
 
-- *add item here*
+- Register behavior with shortname `plone.versioning`.
 
 Bug fixes:
 
-- *add item here*
+- Cleanup: pep8, isort, uth8headers, ...
+  [jensens]
 
 
 1.2.10 (2016-09-23)

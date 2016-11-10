@@ -8,12 +8,13 @@ from z3c.form.interfaces import IAddForm
 from z3c.form.interfaces import IEditForm
 from zope import schema
 from zope.annotation.interfaces import IAnnotations
-from zope.component import adapts
-from zope.interface import alsoProvides
+from zope.component import adapter
 from zope.interface import implementer
 from zope.interface import Interface
+from zope.interface import provider
 
 
+@provider(IFormFieldProvider)
 class IVersionable(model.Schema):
     """ Behavior for enabling CMFEditions's versioning for dexterity
     content types. Be shure to enable versioning in the plone types
@@ -22,17 +23,17 @@ class IVersionable(model.Schema):
 
     changeNote = schema.TextLine(
         title=_(u'label_change_note', default=u'Change Note'),
-        description=_(u'help_change_note',
-                      default=u'Enter a comment that describes the changes you made. '
-                              u'If versioning is manual, you must set a change note '
-                              u'to create the new version.'),
+        description=_(
+            u'help_change_note',
+            default=u'Enter a comment that describes the changes you made. '
+                    u'If versioning is manual, you must set a change note '
+                    u'to create the new version.'
+        ),
         required=False)
 
     form.omitted('changeNote')
     form.no_omit(IEditForm, 'changeNote')
     form.no_omit(IAddForm, 'changeNote')
-
-alsoProvides(IVersionable, IFormFieldProvider)
 
 
 class IVersioningSupport(Interface):
@@ -42,12 +43,12 @@ class IVersioningSupport(Interface):
 
 
 @implementer(IVersionable)
+@adapter(IDexterityContent)
 class Versionable(object):
     """ The Versionable adapter prohibits dexterity from saving the changeNote
     on the context. It stores it in a request-annotation for later use in
     event-handlers
     """
-    adapts(IDexterityContent)
 
     def __init__(self, context):
         self.context = context

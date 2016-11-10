@@ -1,3 +1,4 @@
+::
 
     >>> from plone.app.testing import TEST_USER_ID
     >>> from plone.app.testing import TEST_USER_NAME

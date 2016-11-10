@@ -10,7 +10,7 @@ def test_suite():
     suite = unittest.TestSuite()
     suite.addTests([
         layered(
-            doctest.DocFileSuite('doctest_behavior.txt'),
+            doctest.DocFileSuite('doctest_behavior.rst'),
             layer=VERSIONING_FUNCTIONAL_TESTING,
         ),
     ])
