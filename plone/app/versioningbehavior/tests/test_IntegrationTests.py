@@ -93,7 +93,10 @@ class TestDexterityIntegration(test_IntegrationTests.TestIntegration):
 
         # We have a test that fails without workflow.
         wf_tool = getToolByName(self.portal, 'portal_workflow')
-        wf_tool.setChainForPortalTypes(('Document',), ('simple_publication_workflow',))
+        wf_tool.setChainForPortalTypes(
+            ('Document',),
+            ('simple_publication_workflow',)
+        )
 
     def test13_revertUpdatesCatalog(self):
         # This test in CMFEditions uses doc.edit, but we have no archetypes

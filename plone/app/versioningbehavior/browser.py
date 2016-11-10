@@ -1,18 +1,21 @@
 # -*- coding: utf-8 -*-
-from plone.namedfile.utils import set_headers, stream_data
+from plone.namedfile.utils import set_headers
+from plone.namedfile.utils import stream_data
+from plone.rfc822.interfaces import IPrimaryFieldInfo
 from Products.CMFCore.utils import getToolByName
+from urllib import urlencode
 from zope.component import getMultiAdapter
 from zope.publisher.interfaces import NotFound
+
 import re
-from plone.rfc822.interfaces import IPrimaryFieldInfo
-from urllib import urlencode
 
 
 class VersionView(object):
     """Renders the content-core slot of a version of a content item.
 
-    Currently it works by rendering the @@content-core view of the item and then converting the
-    links that points to files and images to use the @@download-version view.
+    Currently it works by rendering the @@content-core view of the item and
+    then converting the links that points to files and images to use the
+    @@download-version view.
 
     Request parameters:
 
@@ -24,12 +27,14 @@ class VersionView(object):
         self.request = request
 
     _download_url_patterns = (
-        # Example: ++widget++form.widgets.my_field/@@download/my_file.txt
-        # Example: ++widget++form.widgets.my_interface.my_field/@@download/my_file.txt
-        # Example: view-name/++widget++form.widgets.my_field/@@download/my_file.txt
+        # Examples:
+        # ++widget++form.widgets.my_field/@@download/my_file.txt
+        # ++widget++form.widgets.my_interface.my_field/@@download/my_file.txt
+        # view-name/++widget++form.widgets.my_field/@@download/my_file.txt
         (
             r'([@a-zA-Z0-9_-]+/)?'
-            r'\+\+widget\+\+form\.widgets\.([a-zA-Z0-9_-]+\.)?(?P<field_id>[a-zA-Z0-9_-]+)'
+            r'\+\+widget\+\+form\.widgets\.([a-zA-Z0-9_-]+\.)'
+            r'?(?P<field_id>[a-zA-Z0-9_-]+)'
             r'/@@download/(?P<filename>[^"\']+)'
         ),
 
@@ -45,7 +50,10 @@ class VersionView(object):
         if not version_id:
             raise ValueError(u'Missing parameter on the request: version_id')
 
-        content_core_view = getMultiAdapter((self.context, self.request), name='content-core')
+        content_core_view = getMultiAdapter(
+            (self.context, self.request),
+            name='content-core'
+        )
         html = content_core_view()
         return self._convert_download_links(html, version_id)
 
@@ -67,7 +75,12 @@ class VersionView(object):
 
         return transformed_html
 
-    def _get_download_version_link(self, version_id, field_id=None, filename=None):
+    def _get_download_version_link(
+        self,
+        version_id,
+        field_id=None,
+        filename=None
+    ):
         parameters = [('version_id', version_id)]
 
         if field_id:
@@ -77,7 +90,10 @@ class VersionView(object):
             parameters.append(('filename', filename))
 
         query_string = urlencode(parameters)
-        return '{}/@@download-version?{}'.format(self.context.absolute_url(), query_string)
+        return '{0}/@@download-version?{1}'.format(
+            self.context.absolute_url(),
+            query_string
+        )
 
 
 class DownloadVersion(object):
@@ -86,12 +102,17 @@ class DownloadVersion(object):
 
     Request parameters:
 
-    version_id -- Version ID.
-    field_id -- (optional) ID of the field (eg.: "file" or "image"). If ommited then the
-                primary field will be used.
-    filename -- (optional) Filename. If ommited then the filename HTTP header won't be set on the
-                response, but the download will occur normally.
-    do_not_stream -- (optional) Do not stream the file.
+    version_id
+        Version ID.
+    field_id (optional)
+        ID of the field (eg.: "file" or "image").
+        If ommited then the primary field will be used.
+    filename (optional)
+        Filename.
+        If ommited then the filename HTTP header won't be set on the response,
+        but the download will occur normally.
+    do_not_stream (optional)
+        Do not stream the file.
     """
 
     def __init__(self, context, request):
@@ -103,7 +124,10 @@ class DownloadVersion(object):
         if not version_id:
             raise ValueError(u'Missing parameter on the request: version_id')
 
-        field_id = self.request.get('field_id', IPrimaryFieldInfo(self.context).fieldname)
+        field_id = self.request.get(
+            'field_id',
+            IPrimaryFieldInfo(self.context).fieldname
+        )
         filename = self.request.get('filename')
         do_not_stream = self.request.get('do_not_stream')
 

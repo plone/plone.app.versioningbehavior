@@ -2,12 +2,16 @@
 """Tests for the `browser` module."""
 from .. import browser
 from ..testing import VERSIONING_INTEGRATION_TESTING
-from plone.app.testing import TEST_USER_ID, TEST_USER_ROLES, setRoles
+from plone.app.testing import setRoles
+from plone.app.testing import TEST_USER_ID
+from plone.app.testing import TEST_USER_ROLES
 from plone.app.versioningbehavior.testing import TEST_CONTENT_TYPE_ID
 from plone.namedfile import NamedBlobFile
 from zope.component import getMultiAdapter
+
 import re
 import unittest
+
 
 class BaseViewTestCase(unittest.TestCase):
 
@@ -23,7 +27,10 @@ class BaseViewTestCase(unittest.TestCase):
             title=u'Object 1 Title',
             description=u'Description of obect number 1',
             text=u'Object 1 some footext.',
-            file=NamedBlobFile(filename=u'object_1_file.txt', data='Object 1 Data'),
+            file=NamedBlobFile(
+                filename=u'object_1_file.txt',
+                data='Object 1 Data'
+            ),
         )
         self.obj1 = self.portal['obj1']
 

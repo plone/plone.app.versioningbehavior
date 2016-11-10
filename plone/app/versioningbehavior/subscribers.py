@@ -2,8 +2,8 @@
 from plone.app.versioningbehavior import _
 from plone.app.versioningbehavior.utils import get_change_note
 from Products.CMFCore.utils import getToolByName
-from Products.CMFEditions.interfaces.IArchivist import ArchivistUnregisteredError
-from Products.CMFEditions.interfaces.IModifier import FileTooLargeToVersionError
+from Products.CMFEditions.interfaces.IArchivist import ArchivistUnregisteredError  # noqa
+from Products.CMFEditions.interfaces.IModifier import FileTooLargeToVersionError  # noqa
 from Products.CMFPlone.utils import base_hasattr
 from zope.container.interfaces import IContainerModifiedEvent
 

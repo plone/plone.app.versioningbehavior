@@ -6,19 +6,19 @@ from Products.CMFEditions.interfaces.IModifier import IConditionalTalesModifier
 
 def install_modifiers(context, logger):
     portal_modifier = getToolByName(context, 'portal_modifier')
-    for m in modifiers:
-        id_ = m['id']
-        if id_ in portal_modifier.objectIds():
+    for entry in modifiers:
+        eid = entry['id']
+        if eid in portal_modifier.objectIds():
             continue
-        title = m['title']
-        modifier = m['modifier'](id_, title)
-        wrapper = m['wrapper'](id_, modifier, title)
-        enabled = m['enabled']
+        title = entry['title']
+        modifier = entry['modifier'](eid, title)
+        wrapper = eid['wrapper'](eid, modifier, title)
+        enabled = eid['enabled']
         if IConditionalTalesModifier.providedBy(wrapper):
-            wrapper.edit(enabled, m['condition'])
+            wrapper.edit(enabled, entry['condition'])
         else:
             wrapper.edit(enabled)
-        portal_modifier.register(m['id'], wrapper)
+        portal_modifier.register(entry['id'], wrapper)
 
 
 def disable_skip_z3c_blobfile(context, logger):

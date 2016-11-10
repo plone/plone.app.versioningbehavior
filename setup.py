@@ -1,16 +1,19 @@
-from setuptools import setup, find_packages
+# -*- coding: utf-8 -*-
+from setuptools import find_packages
+from setuptools import setup
+
 import os
 
-version = '1.2.11.dev0'
+version = '2.0.0.dev0'
 
 tests_require = [
+    'plone.app.dexterity',
     'plone.app.testing',
+    'plone.app.testing',
+    'plone.namedfile[blobs]',
     'Products.CMFDiffTool',
     'Products.CMFEditions [test]',
     'Products.CMFPlone',
-    'plone.app.dexterity',
-    'plone.app.testing',
-    'plone.namedfile[blobs]',
     'zope.app.intid',
 ]
 
@@ -24,22 +27,20 @@ setup(
     # Get more strings from
     # https://pypi.python.org/pypi?%3Aaction=list_classifiers
     classifiers=[
-        "Environment :: Web Environment",
-        "Framework :: Plone",
-        "Framework :: Plone :: 4.3",
-        "Framework :: Plone :: 5.0",
-        "Framework :: Plone :: 5.1",
-        "Framework :: Zope2",
-        "License :: OSI Approved :: GNU General Public License (GPL)",
-        "Operating System :: OS Independent",
-        "Programming Language :: Python",
-        "Programming Language :: Python :: 2.7",
-        "Topic :: Software Development :: Libraries :: Python Modules",
+        'Environment :: Web Environment',
+        'Framework :: Plone',
+        'Framework :: Plone :: 5.1',
+        'Framework :: Zope2',
+        'License :: OSI Approved :: GNU General Public License (GPL)',
+        'Operating System :: OS Independent',
+        'Programming Language :: Python',
+        'Programming Language :: Python :: 2.7',
+        'Topic :: Software Development :: Libraries :: Python Modules',
     ],
     keywords='plone dexterity behavior versioning CMFEditions',
     author='Jonas Baumann, 4teamwork GmbH',
     author_email='mailto:dexterity-development@googlegroups.com',
-    url='http://plone.org/products/dexterity',
+    url='https://pypi.org/project/plone.app.versioningbehavior',
     license='GPL version 2',
     packages=find_packages(exclude=['ez_setup']),
     namespace_packages=['plone', 'plone.app'],
@@ -48,8 +49,8 @@ setup(
     install_requires=[
         'plone.app.dexterity[relations]',
         'plone.autoform',
-        'plone.dexterity',
-        'plone.namedfile[blobs]',
+        'plone.dexterity>=2.0',
+        'plone.namedfile',
         'plone.rfc822',
         'Products.CMFEditions>2.2.9',
         'setuptools',
