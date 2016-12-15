@@ -1,8 +1,8 @@
 Changelog
 =========
 
-1.2.11 (unreleased)
--------------------
+1.3.0 (unreleased)
+------------------
 
 Breaking changes:
 
@@ -10,7 +10,8 @@ Breaking changes:
 
 New features:
 
-- *add item here*
+- Add shortname ``plone.versioning`` for behavior.
+  [jensens]
 
 Bug fixes:
 

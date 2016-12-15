@@ -1,7 +1,11 @@
-from setuptools import setup, find_packages
+# -*- coding: utf-8 -*-
+from setuptools import find_packages
+from setuptools import setup
+
 import os
 
-version = '1.2.11.dev0'
+
+version = '1.3.0.dev0'
 
 tests_require = [
     'plone.app.testing',
@@ -19,22 +23,22 @@ setup(
     version=version,
     description=('Provides a behavior for using CMFEditions with '
                  'dexterity content types'),
-    long_description=(open("README.rst").read() + "\n" +
-                      open(os.path.join("CHANGES.rst")).read()),
+    long_description=(open('README.rst').read() + '\n' +
+                      open(os.path.join('CHANGES.rst')).read()),
     # Get more strings from
     # https://pypi.python.org/pypi?%3Aaction=list_classifiers
     classifiers=[
-        "Environment :: Web Environment",
-        "Framework :: Plone",
-        "Framework :: Plone :: 4.3",
-        "Framework :: Plone :: 5.0",
-        "Framework :: Plone :: 5.1",
-        "Framework :: Zope2",
-        "License :: OSI Approved :: GNU General Public License (GPL)",
-        "Operating System :: OS Independent",
-        "Programming Language :: Python",
-        "Programming Language :: Python :: 2.7",
-        "Topic :: Software Development :: Libraries :: Python Modules",
+        'Environment :: Web Environment',
+        'Framework :: Plone',
+        'Framework :: Plone :: 4.3',
+        'Framework :: Plone :: 5.0',
+        'Framework :: Plone :: 5.1',
+        'Framework :: Zope2',
+        'License :: OSI Approved :: GNU General Public License (GPL)',
+        'Operating System :: OS Independent',
+        'Programming Language :: Python',
+        'Programming Language :: Python :: 2.7',
+        'Topic :: Software Development :: Libraries :: Python Modules',
     ],
     keywords='plone dexterity behavior versioning CMFEditions',
     author='Jonas Baumann, 4teamwork GmbH',
@@ -48,6 +52,7 @@ setup(
     install_requires=[
         'plone.app.dexterity[relations]',
         'plone.autoform',
+        'plone.behavior>=1.1',
         'plone.dexterity',
         'plone.namedfile[blobs]',
         'plone.rfc822',
