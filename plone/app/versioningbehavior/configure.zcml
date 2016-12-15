@@ -28,6 +28,7 @@
     </configure>
 
     <plone:behavior
+        name="plone.versioning"
         title="Versioning"
         description="Versioning support with CMFEditions"
         provides=".behaviors.IVersionable"
