@@ -4,18 +4,10 @@ Changelog
 1.3.0 (unreleased)
 ------------------
 
-Breaking changes:
-
-- *add item here*
-
 New features:
 
 - Add shortname ``plone.versioning`` for behavior.
   [jensens]
-
-Bug fixes:
-
-- *add item here*
 
 
 1.2.10 (2016-09-23)
