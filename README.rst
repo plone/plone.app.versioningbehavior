@@ -1,7 +1,7 @@
 Introduction
 ============
 
-The ``IVersionable`` behavior is used for enabling the CMFEditions functionality for dexterity contents.
+The ``plone.versioning`` (``IVersionable``) behavior is used for enabling the CMFEditions functionality for dexterity contents.
 It adds a changeNote-field to the edit- and add-forms and creates a new version when the content is edited, if enabled for the content type.
 
 It's based on *Products.CMFEditions*.
@@ -11,9 +11,9 @@ For listing the versions of an object use CMFEdtions' view ``versions_history_fo
 Usage
 -----
 
-Just use the behavior ``plone.app.versioningbehavior.behaviors.IVersionable`` in your dexterity content type.
+Just use the behavior ``plone.versioning`` (``plone.app.versioningbehavior.behaviors.IVersionable``) in your dexterity content type.
 
-In your *profiles/default/types/YOURTYPE.xml* add the behavior ``plone.versionable``::
+In your *profiles/default/types/YOURTYPE.xml* add the behavior ``plone.versioning``::
 
     <?xml version="1.0"?>
     <object name="example.conference.presenter" meta_type="Dexterity FTI"
@@ -27,8 +27,8 @@ In your *profiles/default/types/YOURTYPE.xml* add the behavior ``plone.versionab
     </object>
 
 
-The ``IVersionable`` behavior just adds versioning support to your content type,
-but it does not enable it.
+**The ``plone.versioning`` behavior just adds versioning support to your content type,
+but it does not enable it.**
 
 You have to set the "versioning" option in the Plone types control panel (/@@types-controlpanel) to either "Manual" or "Automatic" for activating versioning.
 
