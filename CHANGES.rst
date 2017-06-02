@@ -14,7 +14,8 @@ New features:
 
 Bug fixes:
 
-- *add item here*
+- Added a missing TTW edit form.
+  [Rotonen]
 
 
 1.3 (2016-12-30)
