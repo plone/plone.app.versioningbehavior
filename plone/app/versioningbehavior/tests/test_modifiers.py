@@ -1,24 +1,28 @@
 # -*- coding: utf-8 -*-
 from five.intid import site
+from plone.app.versioningbehavior._compat import StringIO
 from plone.app.versioningbehavior.modifiers import CloneNamedFileBlobs
 from plone.app.versioningbehavior.modifiers import SkipRelations
+from plone.app.versioningbehavior.testing import VERSIONING_INTEGRATION_TESTING
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.dexterity.fti import DexterityFTI
-from plone.dexterity.utils import createContentInContainer, createContent
+from plone.dexterity.utils import createContent
+from plone.dexterity.utils import createContentInContainer
 from plone.namedfile import field
 from plone.namedfile.file import NamedBlobFile
 from plone.supermodel import model
 from Products.CMFEditions.tests.base import CMFEditionsBaseTestCase
-from StringIO import StringIO
-from unittest import TestSuite, makeSuite
+from unittest import makeSuite
+from unittest import TestSuite
 from z3c.relationfield.relation import RelationValue
-from z3c.relationfield.schema import RelationChoice, RelationList
+from z3c.relationfield.schema import RelationChoice
+from z3c.relationfield.schema import RelationList
 from ZODB.interfaces import IBlob
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility
 from zope.configuration import xmlconfig
-from zope.interface import alsoProvides, Interface
-from ..testing import VERSIONING_INTEGRATION_TESTING
+from zope.interface import alsoProvides
+from zope.interface import Interface
 
 
 class IBlobFile(model.Schema):
