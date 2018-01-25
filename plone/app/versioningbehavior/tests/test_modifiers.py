@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from five.intid import site
-from plone.app.versioningbehavior._compat import StringIO
 from plone.app.versioningbehavior.modifiers import CloneNamedFileBlobs
 from plone.app.versioningbehavior.modifiers import SkipRelations
 from plone.app.versioningbehavior.testing import VERSIONING_INTEGRATION_TESTING
@@ -12,6 +11,7 @@ from plone.namedfile import field
 from plone.namedfile.file import NamedBlobFile
 from plone.supermodel import model
 from Products.CMFEditions.tests.base import CMFEditionsBaseTestCase
+from six import StringIO
 from unittest import makeSuite
 from unittest import TestSuite
 from z3c.relationfield.relation import RelationValue
@@ -26,7 +26,9 @@ from zope.interface import Interface
 
 
 class IBlobFile(model.Schema):
-        file = field.NamedBlobFile(title=u'File')
+    file = field.NamedBlobFile(title=u'File')
+
+
 alsoProvides(IBlobFile, IFormFieldProvider)
 
 
@@ -42,6 +44,8 @@ class IRelationsBehavior(model.Schema):
                             required=False, values=[])
     multiple = RelationList(title=u'Multiple (Relations field)',
                             required=False)
+
+
 alsoProvides(IRelationsBehavior, IFormFieldProvider)
 
 
@@ -77,7 +81,7 @@ class TestModifiers(CMFEditionsBaseTestCase):
         self.assertTrue(
             'plone.dexterity.schema.generated.plone_0_BlobFile.file'
             in attrs_dict)
-        blob = attrs_dict.values()[0]
+        blob = list(attrs_dict.values())[0]
         self.assertTrue(IBlob.providedBy(blob))
 
         file2 = createContentInContainer(self.portal, 'BlobFile')
@@ -118,7 +122,7 @@ class TestModifiers(CMFEditionsBaseTestCase):
         self.assertTrue(
             'plone.app.versioningbehavior.tests.test_modifiers.IBlobFile.file'
             in attrs_dict)
-        blob = attrs_dict.values()[0]
+        blob = list(attrs_dict.values())[0]
         self.assertTrue(IBlob.providedBy(blob))
 
         file2 = createContentInContainer(self.portal, 'BlobFile')
@@ -186,7 +190,7 @@ class TestModifiers(CMFEditionsBaseTestCase):
         self.assertTrue(
             'plone.dexterity.schema.generated.plone_0_BlobFile.file'
             in attrs_dict)
-        blob = attrs_dict.values()[0]
+        blob = list(attrs_dict.values())[0]
         self.assertTrue(IBlob.providedBy(blob))
         on_clone_modifiers = modifier.getOnCloneModifiers(file1)
         pers_id, pers_load, empty1, empty2 = on_clone_modifiers

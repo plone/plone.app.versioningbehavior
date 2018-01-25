@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from Acquisition import aq_base
 from App.class_init import InitializeClass
-from itertools import izip
 from plone.dexterity.utils import iterSchemata, resolveDottedName
 from plone.dexterity.interfaces import IDexterityContent
 from plone.namedfile.interfaces import INamedBlobFileField
@@ -19,6 +18,7 @@ from zope.schema import getFields
 from z3c.relationfield.interfaces import IRelationChoice, IRelationList
 
 import os
+import six
 
 
 manage_CloneNamedFileBlobsAddForm =  \
@@ -141,8 +141,8 @@ class CloneNamedFileBlobs:
                             if (os.fstat(prior_file.fileno()).st_size ==
                                     os.fstat(blob_file.fileno()).st_size):
                                 # Files are the same size, compare line by line
-                                for line, prior_line in izip(blob_file,
-                                                             prior_file):
+                                for line, prior_line in six.moves.zip(
+                                        blob_file, prior_file):
                                     if line != prior_line:
                                         break
                                 else:
@@ -166,7 +166,7 @@ class CloneNamedFileBlobs:
 
     def reattachReferencedAttributes(self, obj, attrs_dict):
         obj = aq_base(obj)
-        for name, blob in attrs_dict.iteritems():
+        for name, blob in six.iteritems(attrs_dict):
             iface = resolveDottedName('.'.join(name.split('.')[:-1]))
             fname = name.split('.')[-1]
             field = iface.get(fname)
@@ -183,6 +183,7 @@ class CloneNamedFileBlobs:
         )
 
         return persistent_id, persistent_load, [], []
+
 
 InitializeClass(CloneNamedFileBlobs)
 
@@ -225,6 +226,7 @@ class SkipRelations:
                         field.set(field.interface(repo_clone),
                                   field.query(field.interface(obj)))
         return [], [], {}
+
 
 InitializeClass(SkipRelations)
 

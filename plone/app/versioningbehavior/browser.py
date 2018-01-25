@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 from plone.namedfile.utils import set_headers, stream_data
+from plone.rfc822.interfaces import IPrimaryFieldInfo
 from Products.CMFCore.utils import getToolByName
+from six.moves.urllib.parse import urlencode
 from zope.component import getMultiAdapter
 from zope.publisher.interfaces import NotFound
+
 import re
-from plone.rfc822.interfaces import IPrimaryFieldInfo
-from urllib import urlencode
 
 
 class VersionView(object):
