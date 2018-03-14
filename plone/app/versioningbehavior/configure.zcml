@@ -10,6 +10,7 @@
     xmlns:zcml="http://namespaces.zope.org/zcml"
     i18n_domain="plone">
 
+    <include package="zope.security" />
     <include package="plone.behavior" file="meta.zcml" />
 
     <include package="plone.rfc822" />
@@ -17,15 +18,6 @@
     <five:registerPackage package="." initialize=".initialize" />
 
     <include package="plone.app.dexterity" />
-
-    <!-- Dexterity 1.x uses grok / martian based directive.
-         Newer dexterity versions do not use grok anymore.
-         For supporting the old versions we grok the package if
-         grok is installed. /-->
-    <configure zcml:condition="installed five.grok">
-        <include package="five.grok" />
-        <grok:grok package="." />
-    </configure>
 
     <plone:behavior
         name="plone.versioning"

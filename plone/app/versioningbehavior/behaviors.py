@@ -8,7 +8,7 @@ from z3c.form.interfaces import IAddForm
 from z3c.form.interfaces import IEditForm
 from zope import schema
 from zope.annotation.interfaces import IAnnotations
-from zope.component import adapts
+from zope.component import adapter
 from zope.interface import alsoProvides
 from zope.interface import implementer
 from zope.interface import Interface
@@ -20,12 +20,24 @@ class IVersionable(model.Schema):
     control-panel for your content type.
     """
 
+    model.fieldset(
+        'settings',
+        label=_(u'Settings'),
+        fields=['versioning_enabled']
+    )
     changeNote = schema.TextLine(
         title=_(u'label_change_note', default=u'Change Note'),
         description=_(u'help_change_note',
                       default=u'Enter a comment that describes the changes you made. '
                               u'If versioning is manual, you must set a change note '
                               u'to create the new version.'),
+        required=False)
+
+    versioning_enabled = schema.Bool(
+        title=_(u'label_versioning_enabled', default=u'Versioning enabled'),
+        description=_(u'help_versioning_enabled',
+                      default=u'Enable/disable versioning for this document.'),
+        default=True,
         required=False)
 
     form.omitted('changeNote')
@@ -42,12 +54,14 @@ class IVersioningSupport(Interface):
 
 
 @implementer(IVersionable)
+@adapter(IDexterityContent)
 class Versionable(object):
     """ The Versionable adapter prohibits dexterity from saving the changeNote
     on the context. It stores it in a request-annotation for later use in
     event-handlers
+
+    The versioning_enabled flag is stored at the context itself.
     """
-    adapts(IDexterityContent)
 
     def __init__(self, context):
         self.context = context
@@ -61,3 +75,11 @@ class Versionable(object):
         # store the value for later use (see events.py)
         annotation = IAnnotations(self.context.REQUEST)
         annotation['plone.app.versioningbehavior-changeNote'] = value
+
+    @property
+    def versioning_enabled(self):
+        return self.context.versioning_enabled
+
+    @versioning_enabled.setter
+    def versioning_enabled(self, value):
+        setattr(self.context, 'versioning_enabled', value)
