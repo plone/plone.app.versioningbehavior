@@ -10,11 +10,14 @@ Breaking changes:
 
 New features:
 
-- *add item here*
+- Add a field for disabling versions per content item
+  https://github.com/plone/Products.CMFPlone/issues/2341
+  [tomgross]
 
 Bug fixes:
 
-- *add item here*
+- Remove obsolete grok usage
+  [tomgross]
 
 
 1.3.2 (2018-02-02)
