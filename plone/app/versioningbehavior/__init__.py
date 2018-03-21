@@ -11,7 +11,7 @@ def initialize(context):
     """Registers modifiers with zope (on zope startup).
     """
     if HAVE_BLOBS:
-        from modifiers import modifiers
+        from .modifiers import modifiers
 
         for m in modifiers:
             context.registerClass(
