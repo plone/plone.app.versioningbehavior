@@ -1,17 +1,21 @@
 # -*- coding: utf-8 -*-
 """Tests for the `browser` module."""
-from .. import browser
-from ..testing import VERSIONING_INTEGRATION_TESTING
-from plone.app.testing import TEST_USER_ID, TEST_USER_ROLES, setRoles
+from plone.app.testing import setRoles
+from plone.app.testing import TEST_USER_ID
+from plone.app.testing import TEST_USER_ROLES
+from plone.app.versioningbehavior import browser
+from plone.app.versioningbehavior.testing import PLONE_APP_VERSIONINGBEHAVIOR_INTEGRATION_TESTING
 from plone.app.versioningbehavior.testing import TEST_CONTENT_TYPE_ID
 from plone.namedfile import NamedBlobFile
 from zope.component import getMultiAdapter
+
 import re
 import unittest
 
+
 class BaseViewTestCase(unittest.TestCase):
 
-    layer = VERSIONING_INTEGRATION_TESTING
+    layer = PLONE_APP_VERSIONINGBEHAVIOR_INTEGRATION_TESTING
 
     def setUp(self):
         self.portal = self.layer['portal']

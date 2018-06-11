@@ -1,35 +1,32 @@
 # -*- coding: utf-8 -*-
-from Products.CMFCore.utils import getToolByName
-from Products.CMFDiffTool.TextDiff import TextDiff
+from plone.app.contenttypes.testing import PLONE_APP_CONTENTTYPES_FIXTURE
+from plone.app.robotframework.testing import REMOTE_LIBRARY_BUNDLE_FIXTURE
+from plone.app.testing import applyProfile
 from plone.app.testing import FunctionalTesting
 from plone.app.testing import IntegrationTesting
-from plone.app.testing import PLONE_FIXTURE
 from plone.app.testing import PloneSandboxLayer
-from plone.app.testing import applyProfile
 from plone.dexterity.fti import DexterityFTI
-from zope.configuration import xmlconfig
+from plone.protect import auto as protect_auto
+from plone.testing import z2
+from Products.CMFCore.utils import getToolByName
+from Products.CMFDiffTool.TextDiff import TextDiff
 
-# Make it work with plone.protect < 3.0.0 where the `auto` module is not available.
-# This is necessary for Plone 4.3.x compatibility.
-try:
-    from plone.protect import auto as protect_auto
-except ImportError:
-    class DummyAuto(object):
-        CSRF_DISABLED = True
-    protect_auto = DummyAuto()
+import plone.app.versioningbehavior
 
 
 TEST_CONTENT_TYPE_ID = 'TestContentType'
 DEFAULT_POLICIES = ('at_edit_autoversion', 'version_on_revert',)
 
 
-class VersioningLayer(PloneSandboxLayer):
-    defaultBases = (PLONE_FIXTURE,)
+class PloneAppVersioningbehaviorLayer(PloneSandboxLayer):
+
+    defaultBases = (PLONE_APP_CONTENTTYPES_FIXTURE,)
 
     def setUpZope(self, app, configurationContext):
-        import plone.app.versioningbehavior
-        xmlconfig.file('configure.zcml', plone.app.versioningbehavior,
-                       context=configurationContext)
+        # Load any other ZCML that is required for your tests.
+        # The z3c.autoinclude feature is disabled in the Plone fixture base
+        # layer.
+        self.loadZCML(package=plone.app.versioningbehavior)
 
     def setUpPloneSite(self, portal):
         applyProfile(portal, 'plone.app.versioningbehavior:default')
@@ -81,11 +78,26 @@ class VersioningLayer(PloneSandboxLayer):
     def testTearDown(self):
         protect_auto.CSRF_DISABLED = self.CSRF_DISABLED_ORIGINAL
 
+PLONE_APP_VERSIONINGBEHAVIOR_FIXTURE = PloneAppVersioningbehaviorLayer()
 
-VERSIONING_FIXTURE = VersioningLayer()
-VERSIONING_FUNCTIONAL_TESTING = FunctionalTesting(
-    bases=(VERSIONING_FIXTURE,),
-    name='plone.app.versioningbehavior:functional')
-VERSIONING_INTEGRATION_TESTING = IntegrationTesting(
-    bases=(VERSIONING_FIXTURE,),
-    name='plone.app.versioningbehavior:integration')
+
+PLONE_APP_VERSIONINGBEHAVIOR_INTEGRATION_TESTING = IntegrationTesting(
+    bases=(PLONE_APP_VERSIONINGBEHAVIOR_FIXTURE,),
+    name='PloneAppVersioningbehaviorLayer:IntegrationTesting',
+)
+
+
+PLONE_APP_VERSIONINGBEHAVIOR_FUNCTIONAL_TESTING = FunctionalTesting(
+    bases=(PLONE_APP_VERSIONINGBEHAVIOR_FIXTURE,),
+    name='PloneAppVersioningbehaviorLayer:FunctionalTesting',
+)
+
+
+PLONE_APP_VERSIONINGBEHAVIOR_ACCEPTANCE_TESTING = FunctionalTesting(
+    bases=(
+        PLONE_APP_VERSIONINGBEHAVIOR_FIXTURE,
+        REMOTE_LIBRARY_BUNDLE_FIXTURE,
+        z2.ZSERVER_FIXTURE,
+    ),
+    name='PloneAppVersioningbehaviorLayer:AcceptanceTesting',
+)

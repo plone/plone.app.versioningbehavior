@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 from five.intid import site
+from plone.app.testing import setRoles
+from plone.app.testing import TEST_USER_ID
+from plone.app.testing import TEST_USER_ROLES
 from plone.app.versioningbehavior.modifiers import CloneNamedFileBlobs
 from plone.app.versioningbehavior.modifiers import SkipRelations
-from plone.app.versioningbehavior.testing import VERSIONING_INTEGRATION_TESTING
+from plone.app.versioningbehavior.testing import PLONE_APP_VERSIONINGBEHAVIOR_INTEGRATION_TESTING
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.dexterity.fti import DexterityFTI
 from plone.dexterity.utils import createContent
@@ -10,10 +13,7 @@ from plone.dexterity.utils import createContentInContainer
 from plone.namedfile import field
 from plone.namedfile.file import NamedBlobFile
 from plone.supermodel import model
-from Products.CMFEditions.tests.base import CMFEditionsBaseTestCase
 from six import StringIO
-from unittest import makeSuite
-from unittest import TestSuite
 from z3c.relationfield.relation import RelationValue
 from z3c.relationfield.schema import RelationChoice
 from z3c.relationfield.schema import RelationList
@@ -23,6 +23,8 @@ from zope.component import getUtility
 from zope.configuration import xmlconfig
 from zope.interface import alsoProvides
 from zope.interface import Interface
+
+import unittest
 
 
 class IBlobFile(model.Schema):
@@ -49,14 +51,16 @@ class IRelationsBehavior(model.Schema):
 alsoProvides(IRelationsBehavior, IFormFieldProvider)
 
 
-class TestModifiers(CMFEditionsBaseTestCase):
+class TestModifiers(unittest.TestCase):
 
-    layer = VERSIONING_INTEGRATION_TESTING
+    layer = PLONE_APP_VERSIONINGBEHAVIOR_INTEGRATION_TESTING
 
-    def afterSetUp(self):
+    def setUp(self):
+        self.portal = self.layer['portal']
+        self.request = self.layer['request']
         # we need to have the Manager role to be able to add things
         # to the portal root
-        self.setRoles(['Manager', ])
+        setRoles(self.portal, TEST_USER_ID, ['Manager'])
 
     def testCloneNamedFileBlobsInSchema(self):
         file_fti = DexterityFTI(
@@ -355,9 +359,3 @@ class TestModifiers(CMFEditionsBaseTestCase):
 
         self.assertFalse(hasattr(repo_clone, 'single'))
         self.assertFalse(hasattr(repo_clone, 'multiple'))
-
-
-def test_suite():
-    suite = TestSuite()
-    suite.addTest(makeSuite(TestModifiers))
-    return suite
