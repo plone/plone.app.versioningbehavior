@@ -14,7 +14,11 @@ New features:
 
 Bug fixes:
 
-- *add item here*
+- Migrate tests away from PloneTestCase
+  [pbauer]
+
+- Fix imports for py3
+  [pbauer]
 
 
 1.3.3 (2018-04-03)

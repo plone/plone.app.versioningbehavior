@@ -1,18 +1,19 @@
 # -*- coding: utf-8 -*-
+from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import TEST_USER_NAME
 from plone.app.testing import TEST_USER_PASSWORD
-from plone.app.testing import setRoles
+from plone.app.versioningbehavior.testing import PLONE_APP_VERSIONINGBEHAVIOR_FUNCTIONAL_TESTING
 from plone.app.versioningbehavior.testing import TEST_CONTENT_TYPE_ID
-from plone.app.versioningbehavior.testing import VERSIONING_FUNCTIONAL_TESTING
 from plone.testing.z2 import Browser
+
 import transaction
 import unittest
 
 
 class FunctionalTestCase(unittest.TestCase):
 
-    layer = VERSIONING_FUNCTIONAL_TESTING
+    layer = PLONE_APP_VERSIONINGBEHAVIOR_FUNCTIONAL_TESTING
 
     def setUp(self):
         self.portal = self.layer['portal']

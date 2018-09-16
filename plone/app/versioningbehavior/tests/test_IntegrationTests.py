@@ -1,20 +1,23 @@
 # -*- coding: utf-8 -*-
-from ..testing import VERSIONING_INTEGRATION_TESTING
+from plone.app.testing import setRoles
+from plone.app.testing import TEST_USER_ID
+from plone.app.versioningbehavior.testing import PLONE_APP_VERSIONINGBEHAVIOR_FUNCTIONAL_TESTING
 from plone.dexterity.fti import DexterityFTI
 from Products.CMFCore.utils import getToolByName
-from Products.CMFEditions.tests import test_IntegrationTests
-from unittest import makeSuite
-from unittest import TestSuite
+
+import unittest
 
 
-class TestDexterityIntegration(test_IntegrationTests.TestIntegration):
+class TestDexterityIntegration(unittest.TestCase):
     """This tests is the same tests as in CMFEditions, but it's run for
     dexterity Document and dexterity Folder.
     """
 
-    layer = VERSIONING_INTEGRATION_TESTING
+    layer = PLONE_APP_VERSIONINGBEHAVIOR_FUNCTIONAL_TESTING
 
-    def afterSetUp(self):
+    def setUp(self):
+        self.portal = self.layer['portal']
+
         # get some tools
         types_tool = getToolByName(self.portal, 'portal_types')
         repo_tool = getToolByName(self.portal, 'portal_repository')
@@ -22,7 +25,7 @@ class TestDexterityIntegration(test_IntegrationTests.TestIntegration):
 
         # we need to have the Manager role to be able to add things
         # to the portal root
-        self.setRoles(['Manager', ])
+        setRoles(self.portal, TEST_USER_ID, ['Manager', ])
 
         # add an additional user
         acl_users.userFolderAddUser('reviewer', 'reviewer',
@@ -99,9 +102,3 @@ class TestDexterityIntegration(test_IntegrationTests.TestIntegration):
         # This test in CMFEditions uses doc.edit, but we have no archetypes
         # objects so doc.edit is portal.edit (acquisition), which is wrong...
         pass
-
-
-def test_suite():
-    suite = TestSuite()
-    suite.addTest(makeSuite(TestDexterityIntegration))
-    return suite

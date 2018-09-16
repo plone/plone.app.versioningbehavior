@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from plone.app.versioningbehavior.testing import VERSIONING_FUNCTIONAL_TESTING
+from plone.app.versioningbehavior.testing import PLONE_APP_VERSIONINGBEHAVIOR_FUNCTIONAL_TESTING
 from plone.testing import layered
 
 import doctest
@@ -11,7 +11,7 @@ def test_suite():
     suite.addTests([
         layered(
             doctest.DocFileSuite('doctest_behavior.txt'),
-            layer=VERSIONING_FUNCTIONAL_TESTING,
+            layer=PLONE_APP_VERSIONINGBEHAVIOR_FUNCTIONAL_TESTING,
         ),
     ])
     return suite
