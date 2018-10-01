@@ -15,7 +15,6 @@ tests_require = [
     'plone.app.dexterity',
     'plone.app.testing',
     'plone.namedfile[blobs]',
-    'zope.app.intid',
 ]
 
 setup(

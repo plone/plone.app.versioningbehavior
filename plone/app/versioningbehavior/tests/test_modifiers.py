@@ -18,11 +18,11 @@ from z3c.relationfield.relation import RelationValue
 from z3c.relationfield.schema import RelationChoice
 from z3c.relationfield.schema import RelationList
 from ZODB.interfaces import IBlob
-from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility
 from zope.configuration import xmlconfig
 from zope.interface import alsoProvides
 from zope.interface import Interface
+from zope.intid.interfaces import IIntIds
 
 import unittest
 
@@ -210,10 +210,6 @@ class TestModifiers(unittest.TestCase):
         )
         self.portal.portal_types._setObject('RelationsType', rel_fti)
 
-        # Setup IIntIds utility which is required for relations to work
-        from five.intid import site
-        from zope.app.intid.interfaces import IIntIds
-        site.add_intids(self.portal)
         intids = getUtility(IIntIds)
 
         source = createContentInContainer(self.portal, 'RelationsType')
@@ -283,9 +279,6 @@ class TestModifiers(unittest.TestCase):
             behaviors=[IRelationsBehavior.__identifier__]
         )
         self.portal.portal_types._setObject('RelationsType', rel_fti)
-
-        # Setup IIntIds utility which is required for relations to work
-        site.add_intids(self.portal)
 
     def testRelationsInBehaviors(self):
         self.register_RelationsType()

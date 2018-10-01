@@ -14,8 +14,8 @@ New features:
 
 Bug fixes:
 
-- *add item here*
-
+- Remove (testing) dependency on zope.app.intid.
+  [gforcada]
 
 1.3.4 (2018-09-25)
 ------------------
