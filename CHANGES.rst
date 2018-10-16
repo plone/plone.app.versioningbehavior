@@ -14,6 +14,9 @@ New features:
 
 Bug fixes:
 
+- Made writing Blob less aggressive.(issue #42)
+  [iham]
+
 - Remove (testing) dependency on zope.app.intid.
   [gforcada]
 
