@@ -171,7 +171,9 @@ class CloneNamedFileBlobs:
             fname = name.split('.')[-1]
             field = iface.get(fname)
             if field is not None:  # Field may have been removed from schema
-                field.get(iface(obj))._blob = blob
+                adapted_field = field.get(iface(obj))
+                if adapted_field:
+                    adapted_field._blob = blob
 
     def getOnCloneModifiers(self, obj):
         """Removes references to blobs.
