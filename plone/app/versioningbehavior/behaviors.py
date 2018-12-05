@@ -40,6 +40,7 @@ class IVersionable(model.Schema):
         default=True,
         required=False)
 
+    form.order_after(changeNote='*')
     form.omitted('changeNote')
     form.no_omit(IEditForm, 'changeNote')
     form.no_omit(IAddForm, 'changeNote')

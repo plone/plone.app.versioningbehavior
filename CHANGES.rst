@@ -14,8 +14,9 @@ New features:
 
 Bug fixes:
 
-- *add item here*
-
+- Move change notes field to be the last field of the form (just above the buttons).
+  https://github.com/plone/Products.CMFPlone/issues/2640
+  [gforcada]
 
 1.3.5 (2018-11-02)
 ------------------
