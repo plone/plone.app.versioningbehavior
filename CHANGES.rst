@@ -4,14 +4,6 @@ Changelog
 1.3.6 (unreleased)
 ------------------
 
-Breaking changes:
-
-- *add item here*
-
-New features:
-
-- *add item here*
-
 Bug fixes:
 
 - Move change notes field to be the last field of the form (just above the buttons).
