@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 from AccessControl.class_init import InitializeClass
 from Acquisition import aq_base
+from plone.behavior.registration import BehaviorRegistrationNotFound
+from plone.behavior.registration import lookup_behavior_registration
 from plone.dexterity.interfaces import IDexterityContent
-from plone.dexterity.utils import iterSchemata, resolveDottedName
+from plone.dexterity.utils import iterSchemata
 from plone.namedfile.interfaces import INamedBlobFileField
 from plone.namedfile.interfaces import INamedBlobImageField
 from Products.CMFCore.utils import getToolByName
@@ -11,23 +13,14 @@ from Products.CMFEditions.interfaces.IModifier import IAttributeModifier
 from Products.CMFEditions.interfaces.IModifier import ICloneModifier
 from Products.CMFEditions.interfaces.IModifier import ISaveRetrieveModifier
 from Products.CMFEditions.Modifiers import ConditionalTalesModifier
-from Products.CMFEditions.utilities import dereference
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from z3c.relationfield.interfaces import IRelationChoice, IRelationList
 from ZODB.blob import Blob
 from zope.interface import implementer
 from zope.schema import getFields
 
-
 import os
 import six
-
-# XXX needs to become some kind of util lookup...
-BEHAVIOR_LOOKUP = {
-    'plone.app.contenttypes.behaviors.leadimage.ILeadImage':
-        'plone.app.contenttypes.behaviors.leadimage.ILeadImageBehavior'
-
-}
 
 
 manage_CloneNamedFileBlobsAddForm =  \
@@ -100,33 +93,6 @@ def manage_addSkipRelations(self, id, title=None, REQUEST=None):
         REQUEST['RESPONSE'].redirect(self.absolute_url() + '/manage_main')
 
 
-def fetch_blob_from_history(obj, field_name, version_id=None):
-    # For some reason, the blob cannot be retrieved from the actual
-    # object any more. A common reason can be that the behavior that provides
-    # the field was renamed.
-    # In this case, take the appropriate version from the history storage and
-    # try to retrieve the blob directly.
-    archivist_tool = getToolByName(obj, 'portal_archivist')
-    item, history_id = dereference(obj, zodb_hook=archivist_tool)
-    storage = getToolByName(obj, 'portal_historiesstorage')
-    version_data = storage.retrieve(history_id, version_id)
-    # We know that the blob will be stored under a key that starts with our
-    # class name, and that ends with the field name.
-    # Now look up the (XXX utility) mapping of changed behavior names.
-    # If the interface name of the key is found in the mapping, meaning we
-    # know that it was an interface that has now been renamed,
-    # return the blob stored under that key.
-    for key in version_data.referenced_data.keys():
-        if not key.startswith('CloneNamedFileBlobs'):
-            continue
-        name = key.split('/')[-1]
-        iface_name, f_name = name.rsplit('.', 1)
-        if f_name == field_name and iface_name in BEHAVIOR_LOOKUP:
-            blob = version_data.referenced_data[key]
-            if blob:
-                return blob
-
-
 @implementer(IAttributeModifier, ICloneModifier)
 class CloneNamedFileBlobs:
     """Modifier to save an un-cloned reference to the blob to avoid it being
@@ -163,18 +129,7 @@ class CloneNamedFileBlobs:
                         field_value = None
                     if field_value is None:
                         continue
-
-                    if not field_value._blob:
-                        # Get the current version, don't pass version_id
-                        actual_field_blob = fetch_blob_from_history(obj, name)
-                    else:
-                        actual_field_blob = field_value._blob
-
-                    # The blob is simply not there. We can't do anything more.
-                    if not actual_field_blob:
-                        continue
-
-                    blob_file = actual_field_blob.open()
+                    blob_file = field_value.open()
                     save_new = True
                     dotted_name = '.'.join([schemata.__identifier__, name])
 
@@ -182,19 +137,7 @@ class CloneNamedFileBlobs:
                         prior_obj = prior_rev.object
                         prior_blob = field.get(field.interface(prior_obj))
                         if prior_blob is not None:
-
-                            if not prior_blob._blob:
-                                # Get the appropriate older version
-                                actual_prior_blob = fetch_blob_from_history(
-                                    obj, name, prior_rev.version_id)
-                            else:
-                                actual_prior_blob = prior_blob._blob
-
-                            # The blob is simply not there. Continue...
-                            if not actual_prior_blob:
-                                continue
-
-                            prior_file = actual_prior_blob.open()
+                            prior_file = prior_blob.open()
 
                             # Check for file size differences
                             if (os.fstat(prior_file.fileno()).st_size ==
@@ -227,11 +170,17 @@ class CloneNamedFileBlobs:
         obj = aq_base(obj)
         for name, blob in six.iteritems(attrs_dict):
             iface_name, f_name = name.rsplit('.', 1)
-            # Look up if the interface might have changed
-            # XXX make this a utility lookup...
-            if iface_name in BEHAVIOR_LOOKUP:
-                iface_name = BEHAVIOR_LOOKUP[iface_name]
-            iface = resolveDottedName(iface_name)
+            # Look up the behavior via dotted name.
+            # If the behavior's dotted name was changed, we might still have
+            # the old name in our attrs_dict.
+            # Use the fallback of plone.behavior, provided via the field
+            # former_dotted_names, so that the correct behavior can still
+            # be found.
+            try:
+                behavior = lookup_behavior_registration(iface_name)
+            except BehaviorRegistrationNotFound:
+                return
+            iface = behavior.interface
             field = iface.get(f_name)
             if field is not None:  # Field may have been removed from schema
                 adapted_field = field.get(iface(obj))

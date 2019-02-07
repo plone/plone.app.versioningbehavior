@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-from plone.app.versioningbehavior.modifiers import fetch_blob_from_history
-from plone.namedfile.interfaces import INamedBlobFile
-from plone.namedfile.interfaces import INamedBlobImage
 from plone.namedfile.utils import set_headers, stream_data
 from plone.rfc822.interfaces import IPrimaryFieldInfo
 from Products.CMFCore.utils import getToolByName
@@ -120,19 +117,6 @@ class DownloadVersion(object):
 
         if file_ is None:
             raise NotFound(self, filename, self.request)
-
-        # Make sure that we are really dealing with a file
-        if not (
-            INamedBlobFile.providedBy(file_) or
-            INamedBlobImage.providedBy(file_)
-        ):
-            return
-
-        if not file_._blob:
-            blob = fetch_blob_from_history(old_obj, field_id, version_id)
-            if not blob:
-                raise NotFound(self, filename, self.request)
-            file_._blob = blob
 
         set_headers(file_, self.request.response, filename=filename)
 
