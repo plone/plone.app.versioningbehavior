@@ -14,7 +14,10 @@ New features:
 
 Bug fixes:
 
-- *add item here*
+- If a behavior that provides a NamedBlobFile was renamed, we can now still find the
+  blob file, provided that the old behavior's dotted name was properly registered.
+  Refs: #45
+  [pysailor]
 
 
 1.3.6 (2018-12-10)
