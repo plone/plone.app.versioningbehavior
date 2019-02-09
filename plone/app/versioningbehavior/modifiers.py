@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
-from Acquisition import aq_base
 from AccessControl.class_init import InitializeClass
-from plone.dexterity.utils import iterSchemata, resolveDottedName
+from Acquisition import aq_base
+from plone.behavior.registration import BehaviorRegistrationNotFound
+from plone.behavior.registration import lookup_behavior_registration
 from plone.dexterity.interfaces import IDexterityContent
+from plone.dexterity.utils import iterSchemata
+from plone.dexterity.utils import resolveDottedName
 from plone.namedfile.interfaces import INamedBlobFileField
 from plone.namedfile.interfaces import INamedBlobImageField
 from Products.CMFCore.utils import getToolByName
@@ -12,10 +15,10 @@ from Products.CMFEditions.interfaces.IModifier import ICloneModifier
 from Products.CMFEditions.interfaces.IModifier import ISaveRetrieveModifier
 from Products.CMFEditions.Modifiers import ConditionalTalesModifier
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
+from z3c.relationfield.interfaces import IRelationChoice, IRelationList
 from ZODB.blob import Blob
 from zope.interface import implementer
 from zope.schema import getFields
-from z3c.relationfield.interfaces import IRelationChoice, IRelationList
 
 import os
 import six
@@ -167,9 +170,21 @@ class CloneNamedFileBlobs:
     def reattachReferencedAttributes(self, obj, attrs_dict):
         obj = aq_base(obj)
         for name, blob in six.iteritems(attrs_dict):
-            iface = resolveDottedName('.'.join(name.split('.')[:-1]))
-            fname = name.split('.')[-1]
-            field = iface.get(fname)
+            iface_name, f_name = name.rsplit('.', 1)
+            # In case the field is provided via a behavior:
+            # Look up the behavior via dotted name.
+            # If the behavior's dotted name was changed, we might still have
+            # the old name in our attrs_dict.
+            # Use the fallback of plone.behavior, provided via the field
+            # former_dotted_names, so that the correct behavior can still
+            # be found.
+            try:
+                behavior = lookup_behavior_registration(iface_name)
+                iface = behavior.interface
+            except BehaviorRegistrationNotFound:
+                # Not a behavior - fetch the interface directly
+                iface = resolveDottedName(iface_name)
+            field = iface.get(f_name)
             if field is not None:  # Field may have been removed from schema
                 adapted_field = field.get(iface(obj))
                 if adapted_field:
