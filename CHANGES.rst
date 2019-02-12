@@ -8,6 +8,17 @@ Changelog
 
 .. towncrier release notes start
 
+1.3.7 (2019-02-13)
+------------------
+
+Bug fixes:
+
+
+- If a behavior that provides a NamedBlobFile was renamed, we can now still
+  find the blob file, provided that the old behavior's dotted name was properly
+  registered. [pysailor] (#45)
+
+
 1.3.6 (2018-12-10)
 ------------------
 

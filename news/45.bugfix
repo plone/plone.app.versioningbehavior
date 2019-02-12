@@ -1,4 +1,0 @@
-If a behavior that provides a NamedBlobFile was renamed, we can now still find the
-blob file, provided that the old behavior's dotted name was properly registered.
-[pysailor]
-
