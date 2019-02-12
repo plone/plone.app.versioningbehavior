@@ -1,24 +1,12 @@
 Changelog
 =========
 
-1.3.7 (unreleased)
-------------------
+.. You should *NOT* be adding new change log entries to this file.
+   You should create a file in the news directory instead.
+   For helpful instructions, please see:
+   https://github.com/plone/plone.releaser/blob/master/ADD-A-NEWS-ITEM.rst
 
-Breaking changes:
-
-- *add item here*
-
-New features:
-
-- *add item here*
-
-Bug fixes:
-
-- If a behavior that provides a NamedBlobFile was renamed, we can now still find the
-  blob file, provided that the old behavior's dotted name was properly registered.
-  Refs: #45
-  [pysailor]
-
+.. towncrier release notes start
 
 1.3.6 (2018-12-10)
 ------------------

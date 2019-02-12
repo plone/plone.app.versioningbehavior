@@ -1,6 +1,12 @@
-recursive-include plone *
-recursive-include docs *
 include *.txt
 include *.rst
-exclude .gitignore
+include pyproject.toml
+
+recursive-include docs *
+recursive-include plone *
+
 global-exclude *.pyc
+exclude .gitignore
+
+recursive-exclude news *
+exclude news
