@@ -33,7 +33,7 @@
     <subscriber
         for="plone.app.versioningbehavior.behaviors.IVersioningSupport
              zope.lifecycleevent.interfaces.IObjectAddedEvent"
-        handler=".subscribers.create_version_on_save"
+        handler=".subscribers.create_initial_version_after_adding"
         />
 
     <browser:page
