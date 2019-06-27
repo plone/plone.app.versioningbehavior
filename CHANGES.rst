@@ -8,6 +8,15 @@ Changelog
 
 .. towncrier release notes start
 
+1.3.8 (2019-06-27)
+------------------
+
+Bug fixes:
+
+
+- Initial version for versionable objects is properly created [ale-rt] (#47)
+
+
 1.3.7 (2019-02-13)
 ------------------
 
