@@ -30,7 +30,7 @@ In your *profiles/default/types/YOURTYPE.xml* add the behavior ``plone.versionin
 **The ``plone.versioning`` behavior just adds versioning support to your content type,
 but it does not enable it.**
 
-You have to set the "versioning" option in the Plone types control panel (/@@types-controlpanel) to either "Manual" or "Automatic" for activating versioning.
+You have to set the "versioning" option in the Plone types control panel (/@@content-controlpanel) to either "Manual" or "Automatic" for activating versioning.
 
 If you want to automatically enable versioning for your custom content types through generic setup you have to create a file "repositorytool.xml" in your gs profile (e.g. "profiles/default") with the following content::
 
@@ -58,4 +58,3 @@ For more information about how the versioning works see the documentation of Pro
 
  * http://pypi.python.org/pypi/Products.CMFEditions
  * http://plone.org/products/cmfeditions/
-

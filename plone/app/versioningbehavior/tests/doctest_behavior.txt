@@ -30,7 +30,7 @@ in your dexterity content type::
 
 
 We have to setup versioning for this content type by visiting the plone
-configuration panel for content types (/@@types-controlpanel) and enable
+configuration panel for content types (/@@content-controlpanel) and enable
 automatic versioning for our content type.
 For this test we set this configuration manually::
 
