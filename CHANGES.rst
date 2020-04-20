@@ -8,6 +8,15 @@ Changelog
 
 .. towncrier release notes start
 
+1.3.9 (2020-04-20)
+------------------
+
+Bug fixes:
+
+
+- Update the documentation that was pointing to the obsolete @@types-controlpanel (it is @@content-controlpanel instead) (#33)
+
+
 1.3.8 (2019-06-27)
 ------------------
 
