@@ -20,6 +20,7 @@ from ZODB.blob import Blob
 from zope.interface import implementer
 from zope.schema import getFields
 
+import filecmp
 import os
 import six
 
@@ -140,20 +141,16 @@ class CloneNamedFileBlobs:
                         if prior_blob is not None:
                             prior_file = prior_blob.open()
 
-                            # Check for file size differences
-                            if (os.fstat(prior_file.fileno()).st_size ==
-                                    os.fstat(blob_file.fileno()).st_size):
-                                # Files are the same size, compare line by line
-                                for line, prior_line in six.moves.zip(
-                                        blob_file, prior_file):
-                                    if line != prior_line:
-                                        break
-                                else:
-                                    # The files are the same, save a reference
-                                    # to the prior versions blob on this
-                                    # version
-                                    file_data[dotted_name] = prior_blob._blob
-                                    save_new = False
+                            # Check for file differences
+                            if filecmp.cmp(prior_file.name, blob_file.name,
+                                           shallow=False):
+                                # The files are the same, save a reference
+                                # to the prior versions blob on this
+                                # version
+                                file_data[dotted_name] = prior_blob._blob
+                                save_new = False
+
+                            prior_file.close()
 
                     if save_new:
                         new_blob = file_data[dotted_name] = Blob()
@@ -164,6 +161,8 @@ class CloneNamedFileBlobs:
                         finally:
                             blob_file.close()
                             new_blob_file.close()
+                    else:
+                        blob_file.close()
 
         return file_data
 
