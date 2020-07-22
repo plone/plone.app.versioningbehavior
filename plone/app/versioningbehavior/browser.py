@@ -104,7 +104,7 @@ class DownloadVersion(object):
         if not version_id:
             raise ValueError(u'Missing parameter on the request: version_id')
 
-        field_id = self.request.get('field_id', IPrimaryFieldInfo(self.context).fieldname)
+        field_id = self.request.get('field_id') or IPrimaryFieldInfo(self.context).fieldname
         filename = self.request.get('filename')
         do_not_stream = self.request.get('do_not_stream')
 
