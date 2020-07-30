@@ -8,6 +8,16 @@ Changelog
 
 .. towncrier release notes start
 
+1.4.1 (2020-07-30)
+------------------
+
+Bug fixes:
+
+
+- Avoid traceback when transforming links on content type with no primary field
+  [laulaz] (#51)
+
+
 1.4.0 (2020-04-30)
 ------------------
 
