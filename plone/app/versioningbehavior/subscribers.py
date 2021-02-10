@@ -70,7 +70,12 @@ def create_initial_version_after_adding(context, event):
     version. If a changeNote was entered it's used as comment.
     """
 
-    pr = getToolByName(context, 'portal_repository')
+    pr = getToolByName(context, 'portal_repository', None)
+    if pr is None:
+        # This can happen, e.g., when adding a Plone Site with versioning
+        # and portal_repository is not yet created
+        return
+
     if not pr.isVersionable(context):
         # object is not versionable
         return
