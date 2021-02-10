@@ -72,9 +72,10 @@ def create_initial_version_after_adding(context, event):
 
     pr = getToolByName(context, 'portal_repository', None)
     if pr is None:
-        # This happens when adding a Plone Site with versioning.
-        # The required tooling is not yet available.
+        # This can happen, e.g., when adding a Plone Site with versioning
+        # and portal_repository is not yet created
         return
+
     if not pr.isVersionable(context):
         # object is not versionable
         return
