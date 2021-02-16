@@ -8,6 +8,15 @@ Changelog
 
 .. towncrier release notes start
 
+1.4.2 (2021-02-16)
+------------------
+
+Bug fixes:
+
+
+- Do not break if the portal_repository tool cannot be found (#53)
+
+
 1.4.1 (2020-07-30)
 ------------------
 
