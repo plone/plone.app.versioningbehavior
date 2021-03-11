@@ -84,7 +84,7 @@ After creating the object we wan't to create a new version by simply editing it:
 
     >>> browser.open('http://nohost/plone/testingtype/edit')
     >>> browser.getControl('Title').value = 'Blubb2'
-    >>> field = browser.getControl(name='form.widgets.IVersionable.changeNote')
+    >>> field = browser.getControl(name='form.widgets.changeNote')
     >>> field.value = 'just a test'
     >>> browser.getControl(name='form.buttons.save').click()
     >>> browser.url
@@ -111,7 +111,7 @@ A freshly created object should have a initial version::
 
     >>> browser.open('http://nohost/plone/++add++TestingType')
     >>> browser.getControl('Title').value = 'Init test'
-    >>> browser.getControl(name='form.widgets.IVersionable.changeNote') \
+    >>> browser.getControl(name='form.widgets.changeNote') \
     ...     .value = 'initial change note'
     >>> browser.getControl(name='form.buttons.save').click()
     >>> browser.url
@@ -148,7 +148,7 @@ After pasting, we can create a new version by simply editing it::
 
     >>> browser.open('http://nohost/plone/copy_of_testingtype/edit')
     >>> browser.getControl('Title').value = 'Dup'
-    >>> field = browser.getControl(name='form.widgets.IVersionable.changeNote')
+    >>> field = browser.getControl(name='form.widgets.changeNote')
     >>> field.value = 'Edited the duplicate'
     >>> browser.getControl(name='form.buttons.save').click()
     >>> browser.url
@@ -189,7 +189,7 @@ Now we add a versioned object to the container::
 
     >>> browser.open('http://nohost/plone/democontainer/++add++TestingType')
     >>> browser.getControl('Title').value = 'My versioned object'
-    >>> browser.getControl(name='form.widgets.IVersionable.changeNote').value = 'created a object'
+    >>> browser.getControl(name='form.widgets.changeNote').value = 'created a object'
     >>> browser.getControl(name='form.buttons.save').click()
     >>> browser.url
     'http://nohost/plone/democontainer/testingtype/view'
@@ -243,7 +243,7 @@ Let's Create a versioned container object on the portal::
 
     >>> browser.open('http://nohost/plone/++add++VersionedContainer')
     >>> browser.getControl('Title').value = 'Versioned container one'
-    >>> browser.getControl(name='form.widgets.IVersionable.changeNote').value = 'my change note'
+    >>> browser.getControl(name='form.widgets.changeNote').value = 'my change note'
     >>> browser.getControl(name='form.buttons.save').click()
     >>> browser.url
     'http://nohost/plone/versionedcontainer/view'
@@ -273,7 +273,7 @@ Another versioned container should be addable::
 Now we try to add another versioned container in the previously created versioned container::
     >>> browser.open('http://nohost/plone/versionedcontainer/++add++VersionedContainer')
     >>> browser.getControl('Title').value = 'Versioned container two'
-    >>> browser.getControl(name='form.widgets.IVersionable.changeNote').value = 'another change note'
+    >>> browser.getControl(name='form.widgets.changeNote').value = 'another change note'
     >>> browser.getControl(name='form.buttons.save').click()
 
 
