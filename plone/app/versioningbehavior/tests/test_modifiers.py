@@ -5,9 +5,11 @@ from plone.app.testing import TEST_USER_ID
 from plone.app.testing import TEST_USER_ROLES
 from plone.app.versioningbehavior.modifiers import CloneNamedFileBlobs
 from plone.app.versioningbehavior.modifiers import SkipRelations
+from plone.app.versioningbehavior.testing import PLONE_APP_VERSIONINGBEHAVIOR_FUNCTIONAL_TESTING
 from plone.app.versioningbehavior.testing import PLONE_APP_VERSIONINGBEHAVIOR_INTEGRATION_TESTING
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.dexterity.fti import DexterityFTI
+from plone.dexterity.schema import portalTypeToSchemaName
 from plone.dexterity.utils import createContent
 from plone.dexterity.utils import createContentInContainer
 from plone.namedfile import field
@@ -24,6 +26,7 @@ from zope.interface import alsoProvides
 from zope.interface import Interface
 from zope.intid.interfaces import IIntIds
 
+import transaction
 import unittest
 
 
@@ -352,3 +355,54 @@ class TestModifiers(unittest.TestCase):
 
         self.assertFalse(hasattr(repo_clone, 'single'))
         self.assertFalse(hasattr(repo_clone, 'multiple'))
+
+
+class TestModifiersFunctional(unittest.TestCase):
+
+    layer = PLONE_APP_VERSIONINGBEHAVIOR_FUNCTIONAL_TESTING
+
+    def setUp(self):
+        self.portal = self.layer['portal']
+        self.request = self.layer['request']
+        # we need to have the Manager role to be able to add things
+        # to the portal root
+        setRoles(self.portal, TEST_USER_ID, ['Manager'])
+
+    def testCloneNamedFileBlobsInUpdatedSchema(self):
+        file_fti = DexterityFTI(
+            'BlobFile',
+            model_source="""
+            <model xmlns="http://namespaces.plone.org/supermodel/schema">
+                <schema>
+                    <field name="file"
+                           type="plone.namedfile.field.NamedBlobFile">
+                        <title>File</title>
+                        <required>True</required>
+                    </field>
+                </schema>
+            </model>
+        """)
+        self.portal.portal_types._setObject('BlobFile', file_fti)
+
+        # Sets _p_mtime on FTI used in schema suffix in p.dexterity >= 2.10.0
+        transaction.commit()
+
+        file1 = createContentInContainer(self.portal, 'BlobFile')
+        file1.file = NamedBlobFile('dummy test data', filename=u'test.txt')
+        modifier = CloneNamedFileBlobs('modifier', 'Modifier')
+        attrs_dict = modifier.getReferencedAttributes(file1)
+        schema_name = portalTypeToSchemaName(
+            'BlobFile',
+            suffix=str(self.portal.portal_types.BlobFile._p_mtime)
+        )
+        attr = "plone.dexterity.schema.generated." + schema_name + ".file"
+        self.assertTrue(attr in attrs_dict)
+        blob = list(attrs_dict.values())[0]
+        self.assertTrue(IBlob.providedBy(blob))
+
+        # Update _p_mtime on FTI
+        self.portal.portal_types.BlobFile._p_changed = True
+        transaction.commit()
+
+        # Test that modifier can attach after schema suffix has changed
+        modifier.reattachReferencedAttributes(file1, attrs_dict)
