@@ -8,6 +8,16 @@ Changelog
 
 .. towncrier release notes start
 
+1.4.3 (2021-05-03)
+------------------
+
+Bug fixes:
+
+
+- Fix issue where versioning dynamic content types with blob fields broke after a schema update due to change in dynamic schema identifiers since plone.dexterity >= 2.10.0
+  [datakurre] (#57)
+
+
 1.4.2 (2021-02-16)
 ------------------
 

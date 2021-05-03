@@ -1,2 +1,0 @@
-Fix issue where versioning dynamic content types with blob fields broke after a schema update due to change in dynamic schema identifiers since plone.dexterity >= 2.10.0
-[datakurre]
