@@ -4,6 +4,8 @@ from Acquisition import aq_base
 from plone.behavior.registration import BehaviorRegistrationNotFound
 from plone.behavior.registration import lookup_behavior_registration
 from plone.dexterity.interfaces import IDexterityContent
+from plone.dexterity.schema import SCHEMA_CACHE
+from plone.dexterity.schema import schemaNameToPortalType
 from plone.dexterity.utils import iterSchemata
 from plone.dexterity.utils import resolveDottedName
 from plone.namedfile.interfaces import INamedBlobFileField
@@ -170,6 +172,7 @@ class CloneNamedFileBlobs:
         obj = aq_base(obj)
         for name, blob in six.iteritems(attrs_dict):
             iface_name, f_name = name.rsplit('.', 1)
+            generated_prefix = 'plone.dexterity.schema.generated.'
             # In case the field is provided via a behavior:
             # Look up the behavior via dotted name.
             # If the behavior's dotted name was changed, we might still have
@@ -182,7 +185,11 @@ class CloneNamedFileBlobs:
                 iface = behavior.interface
             except BehaviorRegistrationNotFound:
                 # Not a behavior - fetch the interface directly
-                iface = resolveDottedName(iface_name)
+                if iface_name.startswith(generated_prefix):
+                    portal_type = schemaNameToPortalType(iface_name)
+                    iface = SCHEMA_CACHE.get(portal_type)
+                else:
+                    iface = resolveDottedName(iface_name)
             field = iface.get(f_name)
             if field is not None:  # Field may have been removed from schema
                 adapted_field = field.get(iface(obj))
