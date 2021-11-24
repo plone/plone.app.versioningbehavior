@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
-from five.intid import site
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
-from plone.app.testing import TEST_USER_ROLES
 from plone.app.versioningbehavior.modifiers import CloneNamedFileBlobs
 from plone.app.versioningbehavior.modifiers import SkipRelations
 from plone.app.versioningbehavior.testing import PLONE_APP_VERSIONINGBEHAVIOR_FUNCTIONAL_TESTING
@@ -393,7 +391,7 @@ class TestModifiersFunctional(unittest.TestCase):
         attrs_dict = modifier.getReferencedAttributes(file1)
         schema_name = portalTypeToSchemaName(
             'BlobFile',
-            suffix=str(self.portal.portal_types.BlobFile._p_mtime)
+            suffix=repr(self.portal.portal_types.BlobFile._p_mtime)
         )
         attr = "plone.dexterity.schema.generated." + schema_name + ".file"
         self.assertTrue(attr in attrs_dict)
