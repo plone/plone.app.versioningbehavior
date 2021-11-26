@@ -8,6 +8,16 @@ Changelog
 
 .. towncrier release notes start
 
+1.4.4 (2021-11-26)
+------------------
+
+Bug fixes:
+
+
+- Fix tests on Python 2 with newer plone.dexterity using repr for the schema.
+  [wesleybl] (#60)
+
+
 1.4.3 (2021-05-03)
 ------------------
 
