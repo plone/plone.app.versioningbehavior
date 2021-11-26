@@ -1,0 +1,2 @@
+Fix tests on Python 2 with newer plone.dexterity using repr for the schema.
+[wesleybl]
