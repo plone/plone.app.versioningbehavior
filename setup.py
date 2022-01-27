@@ -58,7 +58,7 @@ setup(
         'plone.autoform',
         'plone.behavior>=1.1',
         'plone.dexterity',
-        'plone.namedfile[blobs]',
+        'plone.namedfile',
         'plone.rfc822',
         'Products.CMFEditions>2.2.9',
         'setuptools',
