@@ -8,6 +8,16 @@ Changelog
 
 .. towncrier release notes start
 
+1.4.5 (2022-01-28)
+------------------
+
+Bug fixes:
+
+
+- Depend on `plone.namedfile` core instead of its empty `[blobs]` extra.
+  [maurits] (#106)
+
+
 1.4.4 (2021-11-26)
 ------------------
 
