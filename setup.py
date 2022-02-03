@@ -12,9 +12,6 @@ tests_require = [
     'Products.CMFDiffTool',
     'Products.CMFEditions [test]',
     'Products.CMFPlone',
-    'plone.app.dexterity',
-    'plone.app.testing',
-    'plone.namedfile[blobs]',
 ]
 
 setup(
