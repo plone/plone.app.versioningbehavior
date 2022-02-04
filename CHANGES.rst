@@ -8,6 +8,16 @@ Changelog
 
 .. towncrier release notes start
 
+1.4.6 (2022-02-04)
+------------------
+
+Bug fixes:
+
+
+- Removed deprecated `plone.namedfile[blobs]` from the test requirements.
+  [maurits] (#106)
+
+
 1.4.5 (2022-01-28)
 ------------------
 
