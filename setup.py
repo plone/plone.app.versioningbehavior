@@ -5,7 +5,7 @@ from setuptools import setup
 import os
 
 
-version = '1.4.6.dev0'
+version = '1.4.7.dev0'
 
 tests_require = [
     'plone.app.testing',
@@ -29,9 +29,11 @@ setup(
         'Framework :: Plone',
         'Framework :: Plone :: 5.1',
         'Framework :: Plone :: 5.2',
+        'Framework :: Plone :: 6.0',
         'Framework :: Plone :: Core',
         'Framework :: Zope2',
         'Framework :: Zope :: 4',
+        'Framework :: Zope :: 5',
         'License :: OSI Approved :: GNU General Public License v2 (GPLv2)',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
@@ -39,6 +41,7 @@ setup(
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
         'Topic :: Software Development :: Libraries :: Python Modules',
     ],
     keywords='plone dexterity behavior versioning CMFEditions',
