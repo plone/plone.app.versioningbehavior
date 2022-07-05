@@ -73,13 +73,13 @@ class FunctionalTestCase(unittest.TestCase):
         self.browser.open(
             '%s/%s/versions_history_form?version_id=%s'
             % (self.portal_url, obj_id, version_id))
-        self.assertIn('Working Copy', self.browser.contents)
+        self.assertIn('Current revision', self.browser.contents)
 
         if version_id == 0:
             self.assertIn(
                 '/%s/versions_history_form?version_id=%s' % (obj_id, version_id),
                 self.browser.contents)
-        self.assertIn('Working Copy', self.browser.contents)
+        self.assertIn('Current revision', self.browser.contents)
         self.assertIn('Revert to this revision', self.browser.contents)
         self.assertIn(
             '/%s/@@history?one' % obj_id, self.browser.contents)
