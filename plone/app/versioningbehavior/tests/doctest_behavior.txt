@@ -80,7 +80,7 @@ interface ``plone.app.versioningbehavior.behaviors.IVersioningSupport``::
     True
 
 
-After creating the object we wan't to create a new version by simply editing it::
+After creating the object we want to create a new version by simply editing it::
 
     >>> browser.open('http://nohost/plone/testingtype/edit')
     >>> browser.getControl('Title').value = 'Blubb2'
