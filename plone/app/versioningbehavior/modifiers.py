@@ -10,21 +10,14 @@ from plone.dexterity.utils import iterSchemata
 from plone.dexterity.utils import resolveDottedName
 from plone.namedfile.interfaces import INamedBlobFileField
 from plone.namedfile.interfaces import INamedBlobImageField
-from Products.CMFCore.utils import getToolByName
-from Products.CMFEditions.interfaces.IArchivist import ArchivistRetrieveError
 from Products.CMFEditions.interfaces.IModifier import IAttributeModifier
 from Products.CMFEditions.interfaces.IModifier import ICloneModifier
 from Products.CMFEditions.interfaces.IModifier import ISaveRetrieveModifier
 from Products.CMFEditions.Modifiers import ConditionalTalesModifier
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from z3c.relationfield.interfaces import IRelationChoice, IRelationList
-from ZODB.blob import Blob
 from zope.interface import implementer
 from zope.schema import getFields
-
-import filecmp
-import os
-import six
 
 
 manage_CloneNamedFileBlobsAddForm =  \
@@ -99,8 +92,16 @@ def manage_addSkipRelations(self, id, title=None, REQUEST=None):
 
 @implementer(IAttributeModifier, ICloneModifier)
 class CloneNamedFileBlobs:
-    """Modifier to save an un-cloned reference to the blob to avoid it being
-    packed away.
+    """Modifier to store an un-cloned reference to blobs.
+
+    Without this, the Blob instance is cloned
+    without also copying its connected file.
+
+    (The name of the class is misleading; it remains for backwards
+    compatibility with persistent objects but it's left over from
+    a time when the implementation cloned the Blob. Now the whole
+    point of this modifier is to avoid cloning the Blob,
+    because it's unnecessary and slow.)
     """
 
     def __init__(self, id_, title):
@@ -109,17 +110,6 @@ class CloneNamedFileBlobs:
 
     def getReferencedAttributes(self, obj):
         file_data = {}
-        # Try to get last revision, only store a new blob if the
-        # contents differ from the prior one, otherwise store a
-        # reference to the prior one.
-        # The implementation is mostly based on CMFEditions's CloneBlobs
-        # modifier.
-        repo = getToolByName(obj, 'portal_repository')
-        try:
-            prior_rev = repo.retrieve(obj)
-        except ArchivistRetrieveError:
-            prior_rev = None
-
         for schemata in iterSchemata(obj):
             for name, field in getFields(schemata).items():
                 if (INamedBlobFileField.providedBy(field) or
@@ -133,44 +123,13 @@ class CloneNamedFileBlobs:
                         field_value = None
                     if field_value is None:
                         continue
-                    blob_file = field_value.open()
-                    save_new = True
                     dotted_name = '.'.join([schemata.__identifier__, name])
-
-                    if prior_rev is not None:
-                        prior_obj = prior_rev.object
-                        prior_blob = field.get(field.interface(prior_obj))
-                        if prior_blob is not None:
-                            prior_file = prior_blob.open()
-
-                            # Check for file differences
-                            if filecmp.cmp(prior_file.name, blob_file.name,
-                                           shallow=False):
-                                # The files are the same, save a reference
-                                # to the prior versions blob on this
-                                # version
-                                file_data[dotted_name] = prior_blob._blob
-                                save_new = False
-
-                            prior_file.close()
-
-                    if save_new:
-                        new_blob = file_data[dotted_name] = Blob()
-                        new_blob_file = new_blob.open('w')
-                        try:
-                            blob_file.seek(0)
-                            new_blob_file.writelines(blob_file)
-                        finally:
-                            blob_file.close()
-                            new_blob_file.close()
-                    else:
-                        blob_file.close()
-
+                    file_data[dotted_name] = field_value._blob
         return file_data
 
     def reattachReferencedAttributes(self, obj, attrs_dict):
         obj = aq_base(obj)
-        for name, blob in six.iteritems(attrs_dict):
+        for name, blob in attrs_dict.items():
             iface_name, f_name = name.rsplit('.', 1)
             generated_prefix = 'plone.dexterity.schema.generated.'
             # In case the field is provided via a behavior:
@@ -197,7 +156,7 @@ class CloneNamedFileBlobs:
                     adapted_field._blob = blob
 
     def getOnCloneModifiers(self, obj):
-        """Removes references to blobs.
+        """Removes references to blobs in the cloned object.
         """
 
         persistent_id, persistent_load = getCallbacks(
