@@ -8,6 +8,24 @@ Changelog
 
 .. towncrier release notes start
 
+2.0.0b1 (2022-07-21)
+--------------------
+
+Bug fixes:
+
+
+- Fix test for changed label in `Products.CMFEditions`.
+  [petschki] (#64)
+- Improve performance of the CloneNamedFileBlobs modifier
+  which is used to handle Dexterity NamedBlobFile and NamedBlobImage fields
+  while creating and retrieving versions. Previously the contents of the Blob
+  were copied to a new Blob, but that is unnecessary and slow. Now the modifier
+  simply ensures that the version retains a reference to the existing Blob.
+  This also reduces use of data storage since only one copy of the Blob is needed
+  rather than two.
+  [davisagli] (#66)
+
+
 1.4.6 (2022-02-04)
 ------------------
 
