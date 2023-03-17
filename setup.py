@@ -7,10 +7,14 @@ import os
 version = "2.0.1.dev0"
 
 tests_require = [
+    "plone.app.contenttypes[test]",
+    "plone.app.robotframework",
     "plone.app.testing",
+    "plone.protect",
+    "plone.testing",
     "Products.CMFDiffTool",
     "Products.CMFEditions [test]",
-    "Products.CMFPlone",
+    "zope.intid",
 ]
 
 setup(
@@ -53,12 +57,18 @@ setup(
     install_requires=[
         "plone.app.dexterity[relations]",
         "plone.autoform",
+        "plone.base",
         "plone.behavior>=1.1",
         "plone.dexterity",
         "plone.namedfile",
         "plone.rfc822",
+        "plone.supermodel",
         "Products.CMFEditions>2.2.9",
+        "Products.GenericSetup",
         "setuptools",
+        "z3c.form",
+        "z3c.relationfield",
+        "zope.annotation",
         "zope.container",
     ],
     tests_require=tests_require,
