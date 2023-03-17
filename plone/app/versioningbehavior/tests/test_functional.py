@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import TEST_USER_NAME
@@ -22,15 +21,15 @@ class FunctionalTestCase(unittest.TestCase):
         self.browser = Browser(self.layer['app'])
         self.browser.handleErrors = False
         self.browser.addHeader(
-            'Authorization', 'Basic %s:%s' % (TEST_USER_NAME, TEST_USER_PASSWORD,))
+            'Authorization', f'Basic {TEST_USER_NAME}:{TEST_USER_PASSWORD}')
 
         setRoles(self.portal, TEST_USER_ID, ['Manager', 'Member'])
         self.portal.invokeFactory(
             type_name=TEST_CONTENT_TYPE_ID,
             id='obj1',
-            title=u'Object 1 Title',
-            description=u'Description of obect number 1',
-            text=u'Object 1 some footext.',
+            title='Object 1 Title',
+            description='Description of obect number 1',
+            text='Object 1 some footext.',
         )
         self.obj1 = self.portal['obj1']
         transaction.commit()
@@ -77,7 +76,7 @@ class FunctionalTestCase(unittest.TestCase):
 
         if version_id == 0:
             self.assertIn(
-                '/%s/versions_history_form?version_id=%s' % (obj_id, version_id),
+                f'/{obj_id}/versions_history_form?version_id={version_id}',
                 self.browser.contents)
         self.assertIn('Current revision', self.browser.contents)
         self.assertIn('Revert to this revision', self.browser.contents)

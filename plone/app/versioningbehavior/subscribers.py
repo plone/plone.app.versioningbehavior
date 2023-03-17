@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from plone.app.versioningbehavior import _
 from plone.app.versioningbehavior.utils import get_change_note
 from Products.CMFCore.utils import getToolByName
@@ -86,8 +85,8 @@ def create_initial_version_after_adding(context, event):
         return
 
     # get the change not
-    default_changeNote = _(u'initial_version_changeNote',
-                           default=u'Initial version')
+    default_changeNote = _('initial_version_changeNote',
+                           default='Initial version')
     if getattr(context, 'REQUEST', None):
         changeNote = get_change_note(context.REQUEST, default_changeNote)
     else:

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from plone.app.versioningbehavior import _
 from plone.autoform import directives as form
 from plone.autoform.interfaces import IFormFieldProvider
@@ -22,21 +21,21 @@ class IVersionable(model.Schema):
 
     model.fieldset(
         'settings',
-        label=_(u'Settings'),
+        label=_('Settings'),
         fields=['versioning_enabled']
     )
     changeNote = schema.TextLine(
-        title=_(u'label_change_note', default=u'Change Note'),
-        description=_(u'help_change_note',
-                      default=u'Enter a comment that describes the changes you made. '
-                              u'If versioning is manual, you must set a change note '
-                              u'to create the new version.'),
+        title=_('label_change_note', default='Change Note'),
+        description=_('help_change_note',
+                      default='Enter a comment that describes the changes you made. '
+                              'If versioning is manual, you must set a change note '
+                              'to create the new version.'),
         required=False)
 
     versioning_enabled = schema.Bool(
-        title=_(u'label_versioning_enabled', default=u'Versioning enabled'),
-        description=_(u'help_versioning_enabled',
-                      default=u'Enable/disable versioning for this document.'),
+        title=_('label_versioning_enabled', default='Versioning enabled'),
+        description=_('help_versioning_enabled',
+                      default='Enable/disable versioning for this document.'),
         default=True,
         required=False)
 
@@ -56,7 +55,7 @@ class IVersioningSupport(Interface):
 
 @implementer(IVersionable)
 @adapter(IDexterityContent)
-class Versionable(object):
+class Versionable:
     """ The Versionable adapter prohibits dexterity from saving the changeNote
     on the context. It stores it in a request-annotation for later use in
     event-handlers

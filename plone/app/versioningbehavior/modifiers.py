@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from AccessControl.class_init import InitializeClass
 from Acquisition import aq_base
 from plone.behavior.registration import BehaviorRegistrationNotFound
@@ -40,7 +39,7 @@ def getCallbacks(values):
     # field value here because it may be a newly
     # created object and we want to ensure that
     # it's not garbage collected and "reused".
-    mapping = dict((id(value), value) for value in values)
+    mapping = {id(value): value for value in values}
 
     def persistent_id(obj):
         return mapping.get(id(obj), None)

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from plone.app.versioningbehavior.modifiers import modifiers
 from Products.CMFCore.utils import getToolByName
 from Products.CMFEditions.interfaces.IModifier import IConditionalTalesModifier

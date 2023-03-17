@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from plone.namedfile.interfaces import HAVE_BLOBS
 from Products.CMFCore.permissions import ManagePortal
 

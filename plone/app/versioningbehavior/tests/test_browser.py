@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Tests for the `browser` module."""
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
@@ -24,10 +23,10 @@ class BaseViewTestCase(unittest.TestCase):
         self.portal.invokeFactory(
             type_name=TEST_CONTENT_TYPE_ID,
             id='obj1',
-            title=u'Object 1 Title',
-            description=u'Description of obect number 1',
-            text=u'Object 1 some footext.',
-            file=NamedBlobFile(filename=u'object_1_file.txt', data='Object 1 Data'),
+            title='Object 1 Title',
+            description='Description of obect number 1',
+            text='Object 1 some footext.',
+            file=NamedBlobFile(filename='object_1_file.txt', data='Object 1 Data'),
         )
         self.obj1 = self.portal['obj1']
 
@@ -53,7 +52,7 @@ class VersionViewTestCase(BaseViewTestCase):
         """Tests for the `_get_download_version_link` method."""
         obj = self.obj1
         view = browser.VersionView(obj, self.request)
-        href_template = u'<a href="{}" />'
+        href_template = '<a href="{}" />'
 
         def _assert(old_path, version, field=None, filename=None):
             old_url = obj.absolute_url() + old_path

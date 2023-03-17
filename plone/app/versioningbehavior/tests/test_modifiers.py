@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 from plone.app.versioningbehavior.modifiers import CloneNamedFileBlobs
@@ -13,7 +12,7 @@ from plone.dexterity.utils import createContentInContainer
 from plone.namedfile import field
 from plone.namedfile.file import NamedBlobFile
 from plone.supermodel import model
-from six import StringIO
+from io import StringIO
 from z3c.relationfield.relation import RelationValue
 from z3c.relationfield.schema import RelationChoice
 from z3c.relationfield.schema import RelationList
@@ -29,23 +28,23 @@ import unittest
 
 
 class IBlobFile(model.Schema):
-    file = field.NamedBlobFile(title=u'File')
+    file = field.NamedBlobFile(title='File')
 
 
 alsoProvides(IBlobFile, IFormFieldProvider)
 
 
 class IRelationsType(Interface):
-    single = RelationChoice(title=u'Single',
+    single = RelationChoice(title='Single',
                             required=False, values=[])
-    multiple = RelationList(title=u'Multiple (Relations field)',
+    multiple = RelationList(title='Multiple (Relations field)',
                             required=False)
 
 
 class IRelationsBehavior(model.Schema):
-    single = RelationChoice(title=u'Single',
+    single = RelationChoice(title='Single',
                             required=False, values=[])
-    multiple = RelationList(title=u'Multiple (Relations field)',
+    multiple = RelationList(title='Multiple (Relations field)',
                             required=False)
 
 
@@ -80,7 +79,7 @@ class TestModifiers(unittest.TestCase):
         self.portal.portal_types._setObject('BlobFile', file_fti)
 
         file1 = createContentInContainer(self.portal, 'BlobFile')
-        file1.file = NamedBlobFile('dummy test data', filename=u'test.txt')
+        file1.file = NamedBlobFile('dummy test data', filename='test.txt')
         modifier = CloneNamedFileBlobs('modifier', 'Modifier')
         attrs_dict = modifier.getReferencedAttributes(file1)
         self.assertTrue(
@@ -90,7 +89,7 @@ class TestModifiers(unittest.TestCase):
         self.assertTrue(IBlob.providedBy(blob))
 
         file2 = createContentInContainer(self.portal, 'BlobFile')
-        file2.file = NamedBlobFile('dummy test data', filename=u'test.txt')
+        file2.file = NamedBlobFile('dummy test data', filename='test.txt')
         modifier.reattachReferencedAttributes(file2, attrs_dict)
         self.assertTrue(file2.file._blob is blob)
 
@@ -121,7 +120,7 @@ class TestModifiers(unittest.TestCase):
 
         file1 = createContentInContainer(self.portal, 'BlobFile')
         IBlobFile(file1).file = NamedBlobFile('dummy test data',
-                                              filename=u'test.txt')
+                                              filename='test.txt')
         modifier = CloneNamedFileBlobs('modifier', 'Modifier')
         attrs_dict = modifier.getReferencedAttributes(file1)
         self.assertTrue(
@@ -132,7 +131,7 @@ class TestModifiers(unittest.TestCase):
 
         file2 = createContentInContainer(self.portal, 'BlobFile')
         IBlobFile(file2).file = NamedBlobFile('dummy test data',
-                                              filename=u'test.txt')
+                                              filename='test.txt')
         modifier.reattachReferencedAttributes(file2, attrs_dict)
         self.assertTrue(IBlobFile(file2).file._blob is blob)
 
@@ -153,7 +152,7 @@ class TestModifiers(unittest.TestCase):
         self.portal.portal_types._setObject('BlobFile', file_fti)
 
         file1 = createContentInContainer(self.portal, 'BlobFile')
-        file1.file = NamedBlobFile('dummy test data', filename=u'test.txt')
+        file1.file = NamedBlobFile('dummy test data', filename='test.txt')
         modifier = CloneNamedFileBlobs('modifier', 'Modifier')
         on_clone_modifiers = modifier.getOnCloneModifiers(file1)
         pers_id, pers_load, empty1, empty2 = on_clone_modifiers
@@ -190,7 +189,7 @@ class TestModifiers(unittest.TestCase):
 
         # Previous version without file but working copy has a file.
         self.portal.portal_repository.save(file1)
-        file1.file = NamedBlobFile('dummy test data', filename=u'test.txt')
+        file1.file = NamedBlobFile('dummy test data', filename='test.txt')
         attrs_dict = modifier.getReferencedAttributes(file1)
         self.assertTrue(
             'plone.dexterity.schema.generated.plone_0_BlobFile.file'
@@ -343,7 +342,7 @@ class TestModifiers(unittest.TestCase):
         source = createContentInContainer(self.portal, 'RelationsType')
 
         # Test modifier when no relations are set
-        class Dummy(object):
+        class Dummy:
             pass
 
         repo_clone = Dummy()
@@ -386,7 +385,7 @@ class TestModifiersFunctional(unittest.TestCase):
         transaction.commit()
 
         file1 = createContentInContainer(self.portal, 'BlobFile')
-        file1.file = NamedBlobFile('dummy test data', filename=u'test.txt')
+        file1.file = NamedBlobFile('dummy test data', filename='test.txt')
         modifier = CloneNamedFileBlobs('modifier', 'Modifier')
         attrs_dict = modifier.getReferencedAttributes(file1)
         schema_name = portalTypeToSchemaName(

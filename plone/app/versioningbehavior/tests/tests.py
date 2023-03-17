@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from plone.app.versioningbehavior.testing import PLONE_APP_VERSIONINGBEHAVIOR_FUNCTIONAL_TESTING
 from plone.testing import layered
 

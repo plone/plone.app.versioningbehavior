@@ -1,15 +1,14 @@
-# -*- coding: utf-8 -*-
 from plone.namedfile.utils import set_headers, stream_data
 from plone.rfc822.interfaces import IPrimaryFieldInfo
 from Products.CMFCore.utils import getToolByName
-from six.moves.urllib.parse import urlencode
+from urllib.parse import urlencode
 from zope.component import getMultiAdapter
 from zope.publisher.interfaces import NotFound
 
 import re
 
 
-class VersionView(object):
+class VersionView:
     """Renders the content-core slot of a version of a content item.
 
     Currently it works by rendering the @@content-core view of the item and then converting the
@@ -44,7 +43,7 @@ class VersionView(object):
     def __call__(self):
         version_id = self.request.get('version_id', None)
         if not version_id:
-            raise ValueError(u'Missing parameter on the request: version_id')
+            raise ValueError('Missing parameter on the request: version_id')
 
         content_core_view = getMultiAdapter((self.context, self.request), name='content-core')
         html = content_core_view()
@@ -78,10 +77,10 @@ class VersionView(object):
             parameters.append(('filename', filename))
 
         query_string = urlencode(parameters)
-        return '{}/@@download-version?{}'.format(self.context.absolute_url(), query_string)
+        return f'{self.context.absolute_url()}/@@download-version?{query_string}'
 
 
-class DownloadVersion(object):
+class DownloadVersion:
     """Downloads a file in a field of a content item at an specific version.
 
 
@@ -102,7 +101,7 @@ class DownloadVersion(object):
     def __call__(self):
         version_id = self.request.get('version_id', None)
         if not version_id:
-            raise ValueError(u'Missing parameter on the request: version_id')
+            raise ValueError('Missing parameter on the request: version_id')
 
         field_id = self.request.get('field_id') or IPrimaryFieldInfo(self.context).fieldname
         filename = self.request.get('filename')

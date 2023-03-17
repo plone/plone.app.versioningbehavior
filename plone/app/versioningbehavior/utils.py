@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from zope.annotation.interfaces import IAnnotations
 from zope.publisher.interfaces.browser import IBrowserRequest
 
