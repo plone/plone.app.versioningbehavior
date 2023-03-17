@@ -25,7 +25,7 @@ class BaseViewTestCase(unittest.TestCase):
             type_name=TEST_CONTENT_TYPE_ID,
             id="obj1",
             title="Object 1 Title",
-            description="Description of obect number 1",
+            description="Description of object number 1",
             text="Object 1 some footext.",
             file=NamedBlobFile(filename="object_1_file.txt", data="Object 1 Data"),
         )

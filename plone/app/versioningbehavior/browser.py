@@ -88,9 +88,9 @@ class DownloadVersion:
     Request parameters:
 
     version_id -- Version ID.
-    field_id -- (optional) ID of the field (eg.: "file" or "image"). If ommited then the
+    field_id -- (optional) ID of the field (eg.: "file" or "image"). If omitted then the
                 primary field will be used.
-    filename -- (optional) Filename. If ommited then the filename HTTP header won't be set on the
+    filename -- (optional) Filename. If omitted then the filename HTTP header won't be set on the
                 response, but the download will occur normally.
     do_not_stream -- (optional) Do not stream the file.
     """

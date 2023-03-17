@@ -15,7 +15,7 @@ from zope.interface import Interface
 
 class IVersionable(model.Schema):
     """Behavior for enabling CMFEditions's versioning for dexterity
-    content types. Be shure to enable versioning in the plone types
+    content types. Be sure to enable versioning in the plone types
     control-panel for your content type.
     """
 

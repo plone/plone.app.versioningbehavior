@@ -76,7 +76,7 @@ class TestDexterityIntegration(unittest.TestCase):
 
         # lets disable versioning while creating, otherwise we'd have to
         # change all tests because we'd have an initial versions and the
-        # archetypes tests wouldnt have one after just calling
+        # archetypes tests wouldn't have one after just calling
         # invokeFactory - that's the difference between archetypes and
         # zope events..
 

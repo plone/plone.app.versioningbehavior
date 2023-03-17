@@ -30,7 +30,7 @@ class FunctionalTestCase(unittest.TestCase):
             type_name=TEST_CONTENT_TYPE_ID,
             id="obj1",
             title="Object 1 Title",
-            description="Description of obect number 1",
+            description="Description of object number 1",
             text="Object 1 some footext.",
         )
         self.obj1 = self.portal["obj1"]
