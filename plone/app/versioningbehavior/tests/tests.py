@@ -9,10 +9,12 @@ import unittest
 
 def test_suite():
     suite = unittest.TestSuite()
-    suite.addTests([
-        layered(
-            doctest.DocFileSuite('doctest_behavior.txt'),
-            layer=PLONE_APP_VERSIONINGBEHAVIOR_FUNCTIONAL_TESTING,
-        ),
-    ])
+    suite.addTests(
+        [
+            layered(
+                doctest.DocFileSuite("doctest_behavior.txt"),
+                layer=PLONE_APP_VERSIONINGBEHAVIOR_FUNCTIONAL_TESTING,
+            ),
+        ]
+    )
     return suite

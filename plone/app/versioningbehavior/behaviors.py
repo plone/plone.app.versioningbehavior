@@ -14,35 +14,38 @@ from zope.interface import Interface
 
 
 class IVersionable(model.Schema):
-    """ Behavior for enabling CMFEditions's versioning for dexterity
+    """Behavior for enabling CMFEditions's versioning for dexterity
     content types. Be shure to enable versioning in the plone types
     control-panel for your content type.
     """
 
-    model.fieldset(
-        'settings',
-        label=_('Settings'),
-        fields=['versioning_enabled']
-    )
+    model.fieldset("settings", label=_("Settings"), fields=["versioning_enabled"])
     changeNote = schema.TextLine(
-        title=_('label_change_note', default='Change Note'),
-        description=_('help_change_note',
-                      default='Enter a comment that describes the changes you made. '
-                              'If versioning is manual, you must set a change note '
-                              'to create the new version.'),
-        required=False)
+        title=_("label_change_note", default="Change Note"),
+        description=_(
+            "help_change_note",
+            default="Enter a comment that describes the changes you made. "
+            "If versioning is manual, you must set a change note "
+            "to create the new version.",
+        ),
+        required=False,
+    )
 
     versioning_enabled = schema.Bool(
-        title=_('label_versioning_enabled', default='Versioning enabled'),
-        description=_('help_versioning_enabled',
-                      default='Enable/disable versioning for this document.'),
+        title=_("label_versioning_enabled", default="Versioning enabled"),
+        description=_(
+            "help_versioning_enabled",
+            default="Enable/disable versioning for this document.",
+        ),
         default=True,
-        required=False)
+        required=False,
+    )
 
-    form.order_after(changeNote='*')
-    form.omitted('changeNote')
-    form.no_omit(IEditForm, 'changeNote')
-    form.no_omit(IAddForm, 'changeNote')
+    form.order_after(changeNote="*")
+    form.omitted("changeNote")
+    form.no_omit(IEditForm, "changeNote")
+    form.no_omit(IAddForm, "changeNote")
+
 
 alsoProvides(IVersionable, IFormFieldProvider)
 
@@ -56,7 +59,7 @@ class IVersioningSupport(Interface):
 @implementer(IVersionable)
 @adapter(IDexterityContent)
 class Versionable:
-    """ The Versionable adapter prohibits dexterity from saving the changeNote
+    """The Versionable adapter prohibits dexterity from saving the changeNote
     on the context. It stores it in a request-annotation for later use in
     event-handlers
 
@@ -68,13 +71,13 @@ class Versionable:
 
     @property
     def changeNote(self):
-        return ''
+        return ""
 
     @changeNote.setter
     def changeNote(self, value):
         # store the value for later use (see events.py)
         annotation = IAnnotations(self.context.REQUEST)
-        annotation['plone.app.versioningbehavior-changeNote'] = value
+        annotation["plone.app.versioningbehavior-changeNote"] = value
 
     @property
     def versioning_enabled(self):
@@ -82,4 +85,4 @@ class Versionable:
 
     @versioning_enabled.setter
     def versioning_enabled(self, value):
-        setattr(self.context, 'versioning_enabled', value)
+        setattr(self.context, "versioning_enabled", value)

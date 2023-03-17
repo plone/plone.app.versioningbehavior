@@ -29,24 +29,24 @@ class VersionView:
         # Example: ++widget++form.widgets.my_interface.my_field/@@download/my_file.txt
         # Example: view-name/++widget++form.widgets.my_field/@@download/my_file.txt
         (
-            r'([@a-zA-Z0-9_-]+/)?'
-            r'\+\+widget\+\+form\.widgets\.([a-zA-Z0-9_-]+\.)?(?P<field_id>[a-zA-Z0-9_-]+)'
+            r"([@a-zA-Z0-9_-]+/)?"
+            r"\+\+widget\+\+form\.widgets\.([a-zA-Z0-9_-]+\.)?(?P<field_id>[a-zA-Z0-9_-]+)"
             r'/@@download/(?P<filename>[^"\']+)'
         ),
-
         # Example: @@download/my_field/my_file.txt
         r'@@download/(?P<field_id>[a-zA-Z0-9_-]+)/(?P<filename>[^"\']+)',
-
         # Example: @@images/aedf-0123.png
-        r'@@images/[0-9a-f\-]+\.[a-z]+',
+        r"@@images/[0-9a-f\-]+\.[a-z]+",
     )
 
     def __call__(self):
-        version_id = self.request.get('version_id', None)
+        version_id = self.request.get("version_id", None)
         if not version_id:
-            raise ValueError('Missing parameter on the request: version_id')
+            raise ValueError("Missing parameter on the request: version_id")
 
-        content_core_view = getMultiAdapter((self.context, self.request), name='content-core')
+        content_core_view = getMultiAdapter(
+            (self.context, self.request), name="content-core"
+        )
         html = content_core_view()
         return self._convert_download_links(html, version_id)
 
@@ -57,28 +57,28 @@ class VersionView:
             groups = match.groupdict()
             return self._get_download_version_link(
                 version_id=version_id,
-                field_id=groups.get('field_id'),
-                filename=groups.get('filename'),
+                field_id=groups.get("field_id"),
+                filename=groups.get("filename"),
             )
 
         context_url = self.context.absolute_url()
         for pattern in self._download_url_patterns:
-            compiled_pattern = re.compile(context_url + '/' + pattern)
+            compiled_pattern = re.compile(context_url + "/" + pattern)
             transformed_html = compiled_pattern.sub(repl, transformed_html)
 
         return transformed_html
 
     def _get_download_version_link(self, version_id, field_id=None, filename=None):
-        parameters = [('version_id', version_id)]
+        parameters = [("version_id", version_id)]
 
         if field_id:
-            parameters.append(('field_id', field_id))
+            parameters.append(("field_id", field_id))
 
         if filename:
-            parameters.append(('filename', filename))
+            parameters.append(("filename", filename))
 
         query_string = urlencode(parameters)
-        return f'{self.context.absolute_url()}/@@download-version?{query_string}'
+        return f"{self.context.absolute_url()}/@@download-version?{query_string}"
 
 
 class DownloadVersion:
@@ -100,15 +100,17 @@ class DownloadVersion:
         self.request = request
 
     def __call__(self):
-        version_id = self.request.get('version_id', None)
+        version_id = self.request.get("version_id", None)
         if not version_id:
-            raise ValueError('Missing parameter on the request: version_id')
+            raise ValueError("Missing parameter on the request: version_id")
 
-        field_id = self.request.get('field_id') or IPrimaryFieldInfo(self.context).fieldname
-        filename = self.request.get('filename')
-        do_not_stream = self.request.get('do_not_stream')
+        field_id = (
+            self.request.get("field_id") or IPrimaryFieldInfo(self.context).fieldname
+        )
+        filename = self.request.get("filename")
+        do_not_stream = self.request.get("do_not_stream")
 
-        repository = getToolByName(self.context, 'portal_repository')
+        repository = getToolByName(self.context, "portal_repository")
         old_obj = repository.retrieve(self.context, version_id).object
 
         # Will only work if the file is stored as an attribute with the same

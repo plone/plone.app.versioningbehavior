@@ -17,31 +17,30 @@ class TestDexterityIntegration(unittest.TestCase):
     layer = PLONE_APP_VERSIONINGBEHAVIOR_FUNCTIONAL_TESTING
 
     def setUp(self):
-        self.portal = self.layer['portal']
+        self.portal = self.layer["portal"]
 
         # get some tools
-        types_tool = getToolByName(self.portal, 'portal_types')
-        repo_tool = getToolByName(self.portal, 'portal_repository')
-        acl_users = getToolByName(self.portal, 'acl_users')
+        types_tool = getToolByName(self.portal, "portal_types")
+        repo_tool = getToolByName(self.portal, "portal_repository")
+        acl_users = getToolByName(self.portal, "acl_users")
 
         # we need to have the Manager role to be able to add things
         # to the portal root
-        setRoles(self.portal, TEST_USER_ID, ['Manager', ])
+        setRoles(self.portal, TEST_USER_ID, ["Manager"])
 
         # add an additional user
-        acl_users.userFolderAddUser('reviewer', 'reviewer',
-                                    ['Manager'], '')
+        acl_users.userFolderAddUser("reviewer", "reviewer", ["Manager"], "")
 
         # now create some dexterity FTIs...
         # ... a document
         document_fti = DexterityFTI(
-            'Document',
-            factory='Document',
+            "Document",
+            factory="Document",
             global_allow=True,
             behaviors=(
-                'plone.app.versioningbehavior.behaviors.IVersionable',
-                'plone.app.dexterity.behaviors.metadata.IBasic',
-                'plone.app.dexterity.behaviors.metadata.IRelatedItems',
+                "plone.app.versioningbehavior.behaviors.IVersionable",
+                "plone.app.dexterity.behaviors.metadata.IBasic",
+                "plone.app.dexterity.behaviors.metadata.IRelatedItems",
             ),
             model_source="""
             <model xmlns="http://namespaces.plone.org/supermodel/schema">
@@ -52,26 +51,28 @@ class TestDexterityIntegration(unittest.TestCase):
                     </field>
                 </schema>
             </model>
-        """)
-        if 'Document' in types_tool.objectIds():
-            types_tool._delObject('Document')
-        types_tool._setObject('Document', document_fti)
+        """,
+        )
+        if "Document" in types_tool.objectIds():
+            types_tool._delObject("Document")
+        types_tool._setObject("Document", document_fti)
 
         # ... and a folder
         folder_fti = DexterityFTI(
-            'Folder',
-            factory='Folder',
-            klass='plone.dexterity.content.Container',
+            "Folder",
+            factory="Folder",
+            klass="plone.dexterity.content.Container",
             global_allow=True,
-            allowed_content_types=('Document',),
+            allowed_content_types=("Document",),
             behaviors=(
-                'plone.app.versioningbehavior.behaviors.IVersionable',
-                'plone.app.dexterity.behaviors.metadata.IBasic',
-                'plone.app.dexterity.behaviors.metadata.IRelatedItems',
-            ))
-        if 'Folder' in types_tool.objectIds():
-            types_tool._delObject('Folder')
-        types_tool._setObject('Folder', folder_fti)
+                "plone.app.versioningbehavior.behaviors.IVersionable",
+                "plone.app.dexterity.behaviors.metadata.IBasic",
+                "plone.app.dexterity.behaviors.metadata.IRelatedItems",
+            ),
+        )
+        if "Folder" in types_tool.objectIds():
+            types_tool._delObject("Folder")
+        types_tool._setObject("Folder", folder_fti)
 
         # lets disable versioning while creating, otherwise we'd have to
         # change all tests because we'd have an initial versions and the
@@ -80,24 +81,24 @@ class TestDexterityIntegration(unittest.TestCase):
         # zope events..
 
         vtypes = repo_tool.getVersionableContentTypes()
-        vtypes.remove('Document')
+        vtypes.remove("Document")
         repo_tool.setVersionableContentTypes(vtypes)
 
         # now add a document
-        self.portal.invokeFactory('Document', 'doc')
+        self.portal.invokeFactory("Document", "doc")
 
         # and add a folder with two documents in it
-        self.portal.invokeFactory('Folder', 'fol')
-        self.portal.fol.invokeFactory('Document', 'doc1')
-        self.portal.fol.invokeFactory('Document', 'doc2')
+        self.portal.invokeFactory("Folder", "fol")
+        self.portal.fol.invokeFactory("Document", "doc1")
+        self.portal.fol.invokeFactory("Document", "doc2")
 
         # re-enable versioning
-        vtypes.append('Dpcument')
+        vtypes.append("Dpcument")
         repo_tool.setVersionableContentTypes(vtypes)
 
         # We have a test that fails without workflow.
-        wf_tool = getToolByName(self.portal, 'portal_workflow')
-        wf_tool.setChainForPortalTypes(('Document',), ('simple_publication_workflow',))
+        wf_tool = getToolByName(self.portal, "portal_workflow")
+        wf_tool.setChainForPortalTypes(("Document",), ("simple_publication_workflow",))
 
     def test13_revertUpdatesCatalog(self):
         # This test in CMFEditions uses doc.edit, but we have no archetypes

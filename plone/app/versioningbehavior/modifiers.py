@@ -20,12 +20,11 @@ from zope.interface import implementer
 from zope.schema import getFields
 
 
-manage_CloneNamedFileBlobsAddForm =  \
-    PageTemplateFile(
-        'www/CloneNamedFileBlobs.pt',
-        globals(),
-        __name__='manage_CloneNamedFileBlobs',
-    )
+manage_CloneNamedFileBlobsAddForm = PageTemplateFile(
+    "www/CloneNamedFileBlobs.pt",
+    globals(),
+    __name__="manage_CloneNamedFileBlobs",
+)
 
 
 def getCallbacks(values):
@@ -63,31 +62,28 @@ def getFieldValues(obj, *ifaces):
 
 
 def manage_addCloneNamedFileBlobs(self, id, title=None, REQUEST=None):
-    """Add a clone namedfile blobs modifier.
-    """
+    """Add a clone namedfile blobs modifier."""
     modifier = CloneNamedFileBlobs(id, title)
     self._setObject(id, modifier)
 
     if REQUEST is not None:
-        REQUEST['RESPONSE'].redirect(self.absolute_url() + '/manage_main')
+        REQUEST["RESPONSE"].redirect(self.absolute_url() + "/manage_main")
 
 
-manage_SkipRelationsAddForm =  \
-    PageTemplateFile(
-        'www/SkipRelations.pt',
-        globals(),
-        __name__='manage_SkipRelationsAddForm',
-    )
+manage_SkipRelationsAddForm = PageTemplateFile(
+    "www/SkipRelations.pt",
+    globals(),
+    __name__="manage_SkipRelationsAddForm",
+)
 
 
 def manage_addSkipRelations(self, id, title=None, REQUEST=None):
-    """Add a skip relations modifier.
-    """
+    """Add a skip relations modifier."""
     modifier = SkipRelations(id, title)
     self._setObject(id, modifier)
 
     if REQUEST is not None:
-        REQUEST['RESPONSE'].redirect(self.absolute_url() + '/manage_main')
+        REQUEST["RESPONSE"].redirect(self.absolute_url() + "/manage_main")
 
 
 @implementer(IAttributeModifier, ICloneModifier)
@@ -112,8 +108,9 @@ class CloneNamedFileBlobs:
         file_data = {}
         for schemata in iterSchemata(obj):
             for name, field in getFields(schemata).items():
-                if (INamedBlobFileField.providedBy(field) or
-                        INamedBlobImageField.providedBy(field)):
+                if INamedBlobFileField.providedBy(
+                    field
+                ) or INamedBlobImageField.providedBy(field):
                     try:
                         # field.get may raise an AttributeError if the field
                         # is provided by a behavior and hasn't been
@@ -123,15 +120,15 @@ class CloneNamedFileBlobs:
                         field_value = None
                     if field_value is None:
                         continue
-                    dotted_name = '.'.join([schemata.__identifier__, name])
+                    dotted_name = ".".join([schemata.__identifier__, name])
                     file_data[dotted_name] = field_value._blob
         return file_data
 
     def reattachReferencedAttributes(self, obj, attrs_dict):
         obj = aq_base(obj)
         for name, blob in attrs_dict.items():
-            iface_name, f_name = name.rsplit('.', 1)
-            generated_prefix = 'plone.dexterity.schema.generated.'
+            iface_name, f_name = name.rsplit(".", 1)
+            generated_prefix = "plone.dexterity.schema.generated."
             # In case the field is provided via a behavior:
             # Look up the behavior via dotted name.
             # If the behavior's dotted name was changed, we might still have
@@ -156,12 +153,11 @@ class CloneNamedFileBlobs:
                     adapted_field._blob = blob
 
     def getOnCloneModifiers(self, obj):
-        """Removes references to blobs in the cloned object.
-        """
+        """Removes references to blobs in the cloned object."""
 
         persistent_id, persistent_load = getCallbacks(
-            aq_base(value._blob) for value
-            in getFieldValues(obj, INamedBlobFileField, INamedBlobImageField)
+            aq_base(value._blob)
+            for value in getFieldValues(obj, INamedBlobFileField, INamedBlobImageField)
         )
 
         return persistent_id, persistent_load, [], []
@@ -181,12 +177,11 @@ class SkipRelations:
         self.title = str(title)
 
     def getOnCloneModifiers(self, obj):
-        """Removes relations.
-        """
+        """Removes relations."""
 
         persistent_id, persistent_load = getCallbacks(
-            aq_base(value) for value
-            in getFieldValues(obj, IRelationChoice, IRelationList)
+            aq_base(value)
+            for value in getFieldValues(obj, IRelationChoice, IRelationList)
         )
 
         return persistent_id, persistent_load, [], []
@@ -197,16 +192,18 @@ class SkipRelations:
 
     def afterRetrieveModifier(self, obj, repo_clone, preserve=()):
         """Restore relations from the working copy."""
-        if (
-            IDexterityContent.providedBy(obj) and
-            IDexterityContent.providedBy(repo_clone)
+        if IDexterityContent.providedBy(obj) and IDexterityContent.providedBy(
+            repo_clone
         ):
             for schemata in iterSchemata(obj):
                 for name, field in getFields(schemata).items():
-                    if (IRelationChoice.providedBy(field) or
-                            IRelationList.providedBy(field)):
-                        field.set(field.interface(repo_clone),
-                                  field.query(field.interface(obj)))
+                    if IRelationChoice.providedBy(field) or IRelationList.providedBy(
+                        field
+                    ):
+                        field.set(
+                            field.interface(repo_clone),
+                            field.query(field.interface(obj)),
+                        )
         return [], [], {}
 
 
@@ -215,25 +212,25 @@ InitializeClass(SkipRelations)
 
 modifiers = (
     {
-        'id': 'CloneNamedFileBlobs',
-        'title': "Store blobs by reference on content",
-        'enabled': True,
-        'condition': "python:True",
-        'wrapper': ConditionalTalesModifier,
-        'modifier': CloneNamedFileBlobs,
-        'form': manage_CloneNamedFileBlobsAddForm,
-        'factory': manage_addCloneNamedFileBlobs,
-        'icon': 'www/modifier.gif',
+        "id": "CloneNamedFileBlobs",
+        "title": "Store blobs by reference on content",
+        "enabled": True,
+        "condition": "python:True",
+        "wrapper": ConditionalTalesModifier,
+        "modifier": CloneNamedFileBlobs,
+        "form": manage_CloneNamedFileBlobsAddForm,
+        "factory": manage_addCloneNamedFileBlobs,
+        "icon": "www/modifier.gif",
     },
     {
-        'id': 'SkipRelations',
-        'title': "Skip saving of relations",
-        'enabled': True,
-        'condition': "python:True",
-        'wrapper': ConditionalTalesModifier,
-        'modifier': SkipRelations,
-        'form': manage_SkipRelationsAddForm,
-        'factory': manage_addSkipRelations,
-        'icon': 'www/modifier.gif',
+        "id": "SkipRelations",
+        "title": "Skip saving of relations",
+        "enabled": True,
+        "condition": "python:True",
+        "wrapper": ConditionalTalesModifier,
+        "modifier": SkipRelations,
+        "form": manage_SkipRelationsAddForm,
+        "factory": manage_addSkipRelations,
+        "icon": "www/modifier.gif",
     },
 )

@@ -11,7 +11,6 @@ import unittest
 
 
 class TestSubscribers(unittest.TestCase):
-
     layer = PLONE_APP_VERSIONINGBEHAVIOR_INTEGRATION_TESTING
 
     def setUp(self):

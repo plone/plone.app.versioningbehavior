@@ -31,7 +31,7 @@ def create_version_on_save(context, event):
 
     create_version = False
 
-    if getattr(context, 'REQUEST', None):
+    if getattr(context, "REQUEST", None):
         changeNote = get_change_note(context.REQUEST, None)
     else:
         changeNote = None
@@ -41,10 +41,10 @@ def create_version_on_save(context, event):
         # has changed.
         create_version = True
 
-    elif pr.supportsPolicy(context, 'at_edit_autoversion'):
+    elif pr.supportsPolicy(context, "at_edit_autoversion"):
         # automatic versioning is enabled for this portal type
 
-        if not base_hasattr(context, 'version_id'):
+        if not base_hasattr(context, "version_id"):
             # we do not have a initial version
             create_version = True
         else:
@@ -69,7 +69,7 @@ def create_initial_version_after_adding(context, event):
     version. If a changeNote was entered it's used as comment.
     """
 
-    pr = getToolByName(context, 'portal_repository', None)
+    pr = getToolByName(context, "portal_repository", None)
     if pr is None:
         # This can happen, e.g., when adding a Plone Site with versioning
         # and portal_repository is not yet created
@@ -79,21 +79,20 @@ def create_initial_version_after_adding(context, event):
         # object is not versionable
         return
 
-    if not pr.supportsPolicy(context, 'at_edit_autoversion'):
+    if not pr.supportsPolicy(context, "at_edit_autoversion"):
         # automatic versioning disabled for this portal type, so we don't
         # need to create an initial version
         return
 
     # get the change not
-    default_changeNote = _('initial_version_changeNote',
-                           default='Initial version')
-    if getattr(context, 'REQUEST', None):
+    default_changeNote = _("initial_version_changeNote", default="Initial version")
+    if getattr(context, "REQUEST", None):
         changeNote = get_change_note(context.REQUEST, default_changeNote)
     else:
         changeNote = None
 
     changed = False
-    if not base_hasattr(context, 'version_id'):
+    if not base_hasattr(context, "version_id"):
         # no initial version, let's create one..
         changed = True
 

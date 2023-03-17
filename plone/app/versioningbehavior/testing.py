@@ -13,12 +13,14 @@ from Products.CMFDiffTool.TextDiff import TextDiff
 import plone.app.versioningbehavior
 
 
-TEST_CONTENT_TYPE_ID = 'TestContentType'
-DEFAULT_POLICIES = ('at_edit_autoversion', 'version_on_revert',)
+TEST_CONTENT_TYPE_ID = "TestContentType"
+DEFAULT_POLICIES = (
+    "at_edit_autoversion",
+    "version_on_revert",
+)
 
 
 class PloneAppVersioningbehaviorLayer(PloneSandboxLayer):
-
     defaultBases = (PLONE_APP_CONTENTTYPES_FIXTURE,)
 
     def setUpZope(self, app, configurationContext):
@@ -28,17 +30,17 @@ class PloneAppVersioningbehaviorLayer(PloneSandboxLayer):
         self.loadZCML(package=plone.app.versioningbehavior)
 
     def setUpPloneSite(self, portal):
-        applyProfile(portal, 'plone.app.versioningbehavior:default')
+        applyProfile(portal, "plone.app.versioningbehavior:default")
         self.registerVersionedDocumentFTI(portal)
 
     def registerVersionedDocumentFTI(self, portal):
-        types_tool = getToolByName(portal, 'portal_types')
+        types_tool = getToolByName(portal, "portal_types")
         fti = DexterityFTI(
             TEST_CONTENT_TYPE_ID,
             global_allow=True,
             behaviors=(
-                'plone.app.versioningbehavior.behaviors.IVersionable',
-                'plone.app.dexterity.behaviors.metadata.IBasic',
+                "plone.app.versioningbehavior.behaviors.IVersionable",
+                "plone.app.dexterity.behaviors.metadata.IBasic",
             ),
             model_source="""
                 <model xmlns="http://namespaces.plone.org/supermodel/schema"
@@ -55,20 +57,22 @@ class PloneAppVersioningbehaviorLayer(PloneSandboxLayer):
                         </field>
                     </schema>
                 </model>
-                """)
+                """,
+        )
         types_tool._setObject(TEST_CONTENT_TYPE_ID, fti)
 
-        diff_tool = getToolByName(portal, 'portal_diff')
+        diff_tool = getToolByName(portal, "portal_diff")
         diff_tool.setDiffForPortalType(
-            TEST_CONTENT_TYPE_ID, {'text': TextDiff.meta_type})
+            TEST_CONTENT_TYPE_ID, {"text": TextDiff.meta_type}
+        )
 
-        portal_repository = getToolByName(portal, 'portal_repository')
+        portal_repository = getToolByName(portal, "portal_repository")
         portal_repository.setVersionableContentTypes(
-            list(portal_repository.getVersionableContentTypes()) +
-            [TEST_CONTENT_TYPE_ID])
+            list(portal_repository.getVersionableContentTypes())
+            + [TEST_CONTENT_TYPE_ID]
+        )
         for policy_id in DEFAULT_POLICIES:
-            portal_repository.addPolicyForContentType(
-                TEST_CONTENT_TYPE_ID, policy_id)
+            portal_repository.addPolicyForContentType(TEST_CONTENT_TYPE_ID, policy_id)
 
     def testSetUp(self):
         self.CSRF_DISABLED_ORIGINAL = protect_auto.CSRF_DISABLED
@@ -77,18 +81,19 @@ class PloneAppVersioningbehaviorLayer(PloneSandboxLayer):
     def testTearDown(self):
         protect_auto.CSRF_DISABLED = self.CSRF_DISABLED_ORIGINAL
 
+
 PLONE_APP_VERSIONINGBEHAVIOR_FIXTURE = PloneAppVersioningbehaviorLayer()
 
 
 PLONE_APP_VERSIONINGBEHAVIOR_INTEGRATION_TESTING = IntegrationTesting(
     bases=(PLONE_APP_VERSIONINGBEHAVIOR_FIXTURE,),
-    name='PloneAppVersioningbehaviorLayer:IntegrationTesting',
+    name="PloneAppVersioningbehaviorLayer:IntegrationTesting",
 )
 
 
 PLONE_APP_VERSIONINGBEHAVIOR_FUNCTIONAL_TESTING = FunctionalTesting(
     bases=(PLONE_APP_VERSIONINGBEHAVIOR_FIXTURE,),
-    name='PloneAppVersioningbehaviorLayer:FunctionalTesting',
+    name="PloneAppVersioningbehaviorLayer:FunctionalTesting",
 )
 
 
@@ -98,5 +103,5 @@ PLONE_APP_VERSIONINGBEHAVIOR_ACCEPTANCE_TESTING = FunctionalTesting(
         REMOTE_LIBRARY_BUNDLE_FIXTURE,
         z2.ZSERVER_FIXTURE,
     ),
-    name='PloneAppVersioningbehaviorLayer:AcceptanceTesting',
+    name="PloneAppVersioningbehaviorLayer:AcceptanceTesting",
 )
