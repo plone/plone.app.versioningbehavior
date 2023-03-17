@@ -1,4 +1,5 @@
-from plone.namedfile.utils import set_headers, stream_data
+from plone.namedfile.utils import set_headers
+from plone.namedfile.utils import stream_data
 from plone.rfc822.interfaces import IPrimaryFieldInfo
 from Products.CMFCore.utils import getToolByName
 from urllib.parse import urlencode

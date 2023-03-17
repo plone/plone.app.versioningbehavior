@@ -1,6 +1,8 @@
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
-from plone.app.versioningbehavior.testing import PLONE_APP_VERSIONINGBEHAVIOR_FUNCTIONAL_TESTING
+from plone.app.versioningbehavior.testing import (
+    PLONE_APP_VERSIONINGBEHAVIOR_FUNCTIONAL_TESTING,
+)
 from plone.dexterity.fti import DexterityFTI
 from Products.CMFCore.utils import getToolByName
 

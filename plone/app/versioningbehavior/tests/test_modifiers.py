@@ -1,9 +1,14 @@
+from io import StringIO
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 from plone.app.versioningbehavior.modifiers import CloneNamedFileBlobs
 from plone.app.versioningbehavior.modifiers import SkipRelations
-from plone.app.versioningbehavior.testing import PLONE_APP_VERSIONINGBEHAVIOR_FUNCTIONAL_TESTING
-from plone.app.versioningbehavior.testing import PLONE_APP_VERSIONINGBEHAVIOR_INTEGRATION_TESTING
+from plone.app.versioningbehavior.testing import (
+    PLONE_APP_VERSIONINGBEHAVIOR_FUNCTIONAL_TESTING,
+)
+from plone.app.versioningbehavior.testing import (
+    PLONE_APP_VERSIONINGBEHAVIOR_INTEGRATION_TESTING,
+)
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.dexterity.fti import DexterityFTI
 from plone.dexterity.schema import portalTypeToSchemaName
@@ -12,7 +17,6 @@ from plone.dexterity.utils import createContentInContainer
 from plone.namedfile import field
 from plone.namedfile.file import NamedBlobFile
 from plone.supermodel import model
-from io import StringIO
 from z3c.relationfield.relation import RelationValue
 from z3c.relationfield.schema import RelationChoice
 from z3c.relationfield.schema import RelationList
@@ -236,8 +240,8 @@ class TestModifiers(unittest.TestCase):
         source.multiple = [RelationValue(intids.getId(target))]
 
         # Update relations
-        from zope.lifecycleevent import ObjectModifiedEvent
         from zope.event import notify
+        from zope.lifecycleevent import ObjectModifiedEvent
         notify(ObjectModifiedEvent(source))
 
         modifier = SkipRelations('modifier', 'Modifier')
@@ -312,8 +316,8 @@ class TestModifiers(unittest.TestCase):
         ]
 
         # Update relations
-        from zope.lifecycleevent import ObjectModifiedEvent
         from zope.event import notify
+        from zope.lifecycleevent import ObjectModifiedEvent
         notify(ObjectModifiedEvent(source))
 
         modifier = SkipRelations('modifier', 'Modifier')

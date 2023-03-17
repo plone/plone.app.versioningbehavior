@@ -3,7 +3,9 @@ from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import TEST_USER_ROLES
 from plone.app.versioningbehavior import browser
-from plone.app.versioningbehavior.testing import PLONE_APP_VERSIONINGBEHAVIOR_INTEGRATION_TESTING
+from plone.app.versioningbehavior.testing import (
+    PLONE_APP_VERSIONINGBEHAVIOR_INTEGRATION_TESTING,
+)
 from plone.app.versioningbehavior.testing import TEST_CONTENT_TYPE_ID
 from plone.namedfile import NamedBlobFile
 from zope.component import getMultiAdapter
