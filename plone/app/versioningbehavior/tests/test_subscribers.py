@@ -1,8 +1,8 @@
-# -*- coding: utf-8 -*-
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
-from plone.app.versioningbehavior.testing import \
-    PLONE_APP_VERSIONINGBEHAVIOR_INTEGRATION_TESTING
+from plone.app.versioningbehavior.testing import (
+    PLONE_APP_VERSIONINGBEHAVIOR_INTEGRATION_TESTING,
+)
 from Products.CMFCore.utils import getToolByName
 from zope.event import notify
 from zope.lifecycleevent import ObjectModifiedEvent
@@ -11,7 +11,6 @@ import unittest
 
 
 class TestSubscribers(unittest.TestCase):
-
     layer = PLONE_APP_VERSIONINGBEHAVIOR_INTEGRATION_TESTING
 
     def setUp(self):

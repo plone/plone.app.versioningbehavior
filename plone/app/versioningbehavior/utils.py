@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from zope.annotation.interfaces import IAnnotations
 from zope.publisher.interfaces.browser import IBrowserRequest
 
@@ -13,8 +12,7 @@ def get_change_note(request, default=None):
     value = _marker
     if IBrowserRequest.providedBy(request):
         annotations = IAnnotations(request)
-        value = annotations.get(
-            'plone.app.versioningbehavior-changeNote', _marker)
+        value = annotations.get("plone.app.versioningbehavior-changeNote", _marker)
 
     if not value or value == _marker:
         return default

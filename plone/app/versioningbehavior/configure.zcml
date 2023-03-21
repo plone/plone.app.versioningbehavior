@@ -4,65 +4,72 @@
     xmlns:five="http://namespaces.zope.org/five"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     xmlns:plone="http://namespaces.plone.org/plone"
-    i18n_domain="plone">
+    i18n_domain="plone"
+    >
 
-    <include package="plone.behavior" file="meta.zcml" />
+  <include
+      package="plone.behavior"
+      file="meta.zcml"
+      />
 
-    <include package="plone.rfc822" />
+  <include package="plone.rfc822" />
 
-    <five:registerPackage package="." initialize=".initialize" />
+  <five:registerPackage
+      package="."
+      initialize=".initialize"
+      />
 
-    <include package="plone.app.dexterity" />
+  <include package="plone.app.dexterity" />
 
-    <plone:behavior
-        name="plone.versioning"
-        title="Versioning"
-        description="Versioning support with CMFEditions"
-        provides=".behaviors.IVersionable"
-        factory=".behaviors.Versionable"
-        marker=".behaviors.IVersioningSupport"
-        for="plone.dexterity.interfaces.IDexterityContent"
-        />
+  <plone:behavior
+      name="plone.versioning"
+      title="Versioning"
+      description="Versioning support with CMFEditions"
+      factory=".behaviors.Versionable"
+      provides=".behaviors.IVersionable"
+      for="plone.dexterity.interfaces.IDexterityContent"
+      marker=".behaviors.IVersioningSupport"
+      />
 
-    <subscriber
-        for="plone.app.versioningbehavior.behaviors.IVersioningSupport
-             zope.lifecycleevent.interfaces.IObjectModifiedEvent"
-        handler=".subscribers.create_version_on_save"
-        />
+  <subscriber
+      for="plone.app.versioningbehavior.behaviors.IVersioningSupport
+           zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+      handler=".subscribers.create_version_on_save"
+      />
 
-    <subscriber
-        for="plone.app.versioningbehavior.behaviors.IVersioningSupport
-             zope.lifecycleevent.interfaces.IObjectAddedEvent"
-        handler=".subscribers.create_initial_version_after_adding"
-        />
+  <subscriber
+      for="plone.app.versioningbehavior.behaviors.IVersioningSupport
+           zope.lifecycleevent.interfaces.IObjectAddedEvent"
+      handler=".subscribers.create_initial_version_after_adding"
+      />
 
-    <browser:page
-          for="plone.dexterity.interfaces.IDexterityContent"
-          name="version-view"
-          permission="zope2.View"
-          class=".browser.VersionView"
-          />
+  <browser:page
+      name="version-view"
+      for="plone.dexterity.interfaces.IDexterityContent"
+      class=".browser.VersionView"
+      permission="zope2.View"
+      />
 
-    <browser:page
-          for="plone.dexterity.interfaces.IDexterityContent"
-          name="download-version"
-          permission="zope2.View"
-          class=".browser.DownloadVersion"
-          />
+  <browser:page
+      name="download-version"
+      for="plone.dexterity.interfaces.IDexterityContent"
+      class=".browser.DownloadVersion"
+      permission="zope2.View"
+      />
 
-    <genericsetup:registerProfile
-        name="default"
-        title="Dexterity versioning support"
-        directory="profiles/default"
-        description="Adds CMFEditions support for Dexterity."
-        provides="Products.GenericSetup.interfaces.EXTENSION"
-        />
+  <genericsetup:registerProfile
+      name="default"
+      title="Dexterity versioning support"
+      description="Adds CMFEditions support for Dexterity."
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      directory="profiles/default"
+      />
 
-    <genericsetup:importStep
-        name="plone.app.versioningbehavior"
-        title="plone.app.versioningbehavior custom import handlers"
-        description=""
-        handler="plone.app.versioningbehavior.setuphandlers.import_various"
-        />
+  <genericsetup:importStep
+      name="plone.app.versioningbehavior"
+      title="plone.app.versioningbehavior custom import handlers"
+      description=""
+      handler="plone.app.versioningbehavior.setuphandlers.import_various"
+      />
 
 </configure>
