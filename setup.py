@@ -4,7 +4,7 @@ from setuptools import setup
 import os
 
 
-version = "2.0.1"
+version = "2.0.2.dev0"
 
 tests_require = [
     "plone.app.contenttypes[test]",
