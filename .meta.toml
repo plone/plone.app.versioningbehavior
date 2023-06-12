@@ -1,5 +1,11 @@
 # Generated from:
 # https://github.com/plone/meta/tree/master/config/default
+# See the inline comments on how to expand/tweak this configuration file
 [meta]
 template = "default"
-commit-id = "b2d5d4a5"
+commit-id = "237ff4c8"
+
+[tox]
+test_extras = """
+    tests
+"""
