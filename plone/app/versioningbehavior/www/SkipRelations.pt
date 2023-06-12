@@ -1,58 +1,69 @@
-<p tal:replace="structure here/manage_page_header"
-   omit-tag=""
->Header</p>
-<p tal:replace="structure here/manage_tabs"
-   omit-tag=""
->tabs</p>
-
-
-<h2>Add Skip Relations</h2>
-
-<form action="manage_addSkipRelations"
-      method="post"
+<div xmlns="http://www.w3.org/1999/xhtml"
+     xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+     xmlns:tal="http://xml.zope.org/namespaces/tal"
+     lang="en"
+     xml:lang="en"
+     tal:omit-tag=""
+     i18n:domain="plone"
 >
 
-  <table border="0">
+  <p tal:replace="structure here/manage_page_header"
+     omit-tag=""
+  >Header</p>
+  <p tal:replace="structure here/manage_tabs"
+     omit-tag=""
+  >tabs</p>
 
-    <tr>
-      <th>
+
+  <h2 i18n:translate="">Add Skip Relations</h2>
+
+  <form action="manage_addSkipRelations"
+        method="post"
+  >
+
+    <table border="0">
+
+      <tr>
+        <th i18n:translate="">
         Id
-      </th>
-      <td>
-        <input name="id"
-               size="40"
-               type="text"
-               value=""
-        />
-      </td>
-    </tr>
+        </th>
+        <td>
+          <input name="id"
+                 size="40"
+                 type="text"
+                 value=""
+          />
+        </td>
+      </tr>
 
-    <tr>
-      <th>
+      <tr>
+        <th i18n:translate="">
         Title
-      </th>
-      <td>
-        <input name="title"
-               size="40"
-               type="text"
-               value=""
-        />
-      </td>
-    </tr>
+        </th>
+        <td>
+          <input name="title"
+                 size="40"
+                 type="text"
+                 value=""
+          />
+        </td>
+      </tr>
 
-    <tr>
-      <td colspan="2">
-        <input name="submit"
-               type="submit"
-               value="Add"
-        />
-      </td>
-    </tr>
+      <tr>
+        <td colspan="2">
+          <input name="submit"
+                 type="submit"
+                 value="Add"
+                 i18n:attributes="value"
+          />
+        </td>
+      </tr>
 
-  </table>
+    </table>
 
-</form>
+  </form>
 
-<p tal:replace="structure here/manage_page_footer"
-   omit-tag=""
->Footer</p>
+  <p tal:replace="structure here/manage_page_footer"
+     omit-tag=""
+  >Footer</p>
+</div>
