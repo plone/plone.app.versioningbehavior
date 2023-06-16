@@ -1,10 +1,13 @@
+from pathlib import Path
 from setuptools import find_packages
 from setuptools import setup
 
-import os
-
 
 version = "2.0.2.dev0"
+
+long_description = (
+    f"{Path('README.rst').read_text()}\n{Path('CHANGES.rst').read_text()}"
+)
 
 tests_require = [
     "plone.app.contenttypes[test]",
@@ -23,9 +26,8 @@ setup(
     description=(
         "Provides a behavior for using CMFEditions with " "dexterity content types"
     ),
-    long_description=(
-        open("README.rst").read() + "\n" + open(os.path.join("CHANGES.rst")).read()
-    ),
+    long_description=long_description,
+    long_description_content_type="text/x-rst",
     # Get more strings from
     # https://pypi.org/classifiers/
     classifiers=[
