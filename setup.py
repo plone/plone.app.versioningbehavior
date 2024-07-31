@@ -24,7 +24,7 @@ setup(
     name="plone.app.versioningbehavior",
     version=version,
     description=(
-        "Provides a behavior for using CMFEditions with " "dexterity content types"
+        "Provides a behavior for using CMFEditions with dexterity content types"
     ),
     long_description=long_description,
     long_description_content_type="text/x-rst",
@@ -35,6 +35,7 @@ setup(
         "Environment :: Web Environment",
         "Framework :: Plone",
         "Framework :: Plone :: 6.0",
+        "Framework :: Plone :: 6.1",
         "Framework :: Plone :: Core",
         "Framework :: Zope :: 5",
         "License :: OSI Approved :: GNU General Public License v2 (GPLv2)",
@@ -44,6 +45,7 @@ setup(
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
         "Topic :: Software Development :: Libraries :: Python Modules",
     ],
     keywords="plone dexterity behavior versioning CMFEditions",
@@ -72,7 +74,6 @@ setup(
         "z3c.relationfield",
         "Zope",
     ],
-    tests_require=tests_require,
     extras_require=dict(tests=tests_require),
     entry_points="""
     # -*- Entry points: -*-
