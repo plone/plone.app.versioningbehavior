@@ -31,6 +31,16 @@
       marker=".behaviors.IVersioningSupport"
       />
 
+  <plone:behavior
+      name="plone.versioning.portal"
+      title="Versioning Portal"
+      description="Versioning support with CMFEditions to Portal"
+      factory=".behaviors.Versionable"
+      provides=".behaviors.IVersionablePortal"
+      for="Products.CMFPlone.Portal.PloneSite"
+      marker=".behaviors.IVersioningSupport"
+      />
+
   <subscriber
       for="plone.app.versioningbehavior.behaviors.IVersioningSupport
            zope.lifecycleevent.interfaces.IObjectModifiedEvent"
