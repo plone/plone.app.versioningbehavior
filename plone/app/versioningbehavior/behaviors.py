@@ -47,7 +47,12 @@ class IVersionable(model.Schema):
     form.no_omit(IAddForm, "changeNote")
 
 
+class IVersionablePortal(IVersionable):
+    """Even IVersionable behavior for the Portal."""
+
+
 alsoProvides(IVersionable, IFormFieldProvider)
+alsoProvides(IVersionablePortal, IFormFieldProvider)
 
 
 class IVersioningSupport(Interface):
