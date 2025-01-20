@@ -6,7 +6,7 @@ from plone.app.testing import IntegrationTesting
 from plone.app.testing import PloneSandboxLayer
 from plone.dexterity.fti import DexterityFTI
 from plone.protect import auto as protect_auto
-from plone.testing import z2
+from plone.testing import zope
 from Products.CMFCore.utils import getToolByName
 from Products.CMFDiffTool.TextDiff import TextDiff
 
@@ -101,7 +101,7 @@ PLONE_APP_VERSIONINGBEHAVIOR_ACCEPTANCE_TESTING = FunctionalTesting(
     bases=(
         PLONE_APP_VERSIONINGBEHAVIOR_FIXTURE,
         REMOTE_LIBRARY_BUNDLE_FIXTURE,
-        z2.ZSERVER_FIXTURE,
+        zope.WSGI_SERVER_FIXTURE,
     ),
     name="PloneAppVersioningbehaviorLayer:AcceptanceTesting",
 )
