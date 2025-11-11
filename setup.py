@@ -63,7 +63,6 @@ setup(
         "plone.supermodel",
         "Products.CMFEditions>2.2.9",
         "Products.GenericSetup",
-        "setuptools",
         "z3c.form",
         "z3c.relationfield",
         "Zope",
