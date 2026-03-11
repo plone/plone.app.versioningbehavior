@@ -2,7 +2,6 @@ from plone.namedfile.interfaces import HAVE_BLOBS
 from Products.CMFCore.permissions import ManagePortal
 from zope.i18nmessageid import MessageFactory
 
-
 _ = MessageFactory("plone")
 
 
