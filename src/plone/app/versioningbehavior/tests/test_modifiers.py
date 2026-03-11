@@ -253,9 +253,7 @@ class TestModifiers(unittest.TestCase):
         self.assertTrue(repo_clone.multiple is source.multiple)
 
     def register_RelationsType(self):
-        xmlconfig.xmlconfig(
-            StringIO(
-                """
+        xmlconfig.xmlconfig(StringIO("""
             <configure
                  package="plone.behavior"
                  xmlns="http://namespaces.zope.org/zope"
@@ -270,9 +268,7 @@ class TestModifiers(unittest.TestCase):
                     provides="plone.app.versioningbehavior.tests.test_modifiers.IRelationsBehavior"
                     />
             </configure>
-            """
-            )
-        )
+            """))
         rel_fti = DexterityFTI(
             "RelationsType", behaviors=[IRelationsBehavior.__identifier__]
         )
