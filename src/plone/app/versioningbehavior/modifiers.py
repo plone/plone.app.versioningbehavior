@@ -19,7 +19,6 @@ from z3c.relationfield.interfaces import IRelationList
 from zope.interface import implementer
 from zope.schema import getFields
 
-
 manage_CloneNamedFileBlobsAddForm = PageTemplateFile(
     "www/CloneNamedFileBlobs.pt",
     globals(),
