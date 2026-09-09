@@ -4,7 +4,85 @@
 [build-system]
 requires = ["setuptools>=68.2,<83", "wheel"]
 
+# START-MARKER-MANUAL-CONFIG
+# Anything from here until END-MARKER-MANUAL-CONFIG
+# will be kept by plone.meta
 
+[project]
+name = "plone.app.versioningbehavior"
+version = "3.0.1.dev0"
+description = "Provides a behavior for using CMFEditions with dexterity content types"
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Web Environment",
+    "Framework :: Plone",
+    "Framework :: Plone :: 6.2",
+    "Framework :: Plone :: Core",
+    "Framework :: Zope :: 5",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+license = "GPL-2.0-only"
+dynamic = ["readme"]
+requires-python = ">=3.10"
+authors = [
+    {name = "Jonas Baumann, 4teamwork GmbH",email = "dexterity-development@googlegroups.com"},
+]
+maintainers = [
+    {name = "Plone Foundation and contributors",email = "plone-developers@lists.sourceforge.net"},
+]
+dependencies = [
+    "Products.CMFEditions",
+    "Products.GenericSetup",
+    "Zope",
+    "plone.app.dexterity[relations]",
+    "plone.autoform",
+    "plone.base",
+    "plone.behavior",
+    "plone.dexterity",
+    "plone.namedfile",
+    "plone.rfc822",
+    "plone.supermodel",
+    "z3c.form",
+    "z3c.relationfield",
+]
+keywords = [
+    "plone",
+    "dexterity",
+    "behavior",
+    "versioning",
+    "CMFEditions",
+]
+
+[project.entry-points."plone.autoinclude.plugin"]
+target = "plone"
+
+[project.optional-dependencies]
+tests = [
+    "Products.CMFDiffTool",
+    "Products.CMFEditions [test]",
+    "plone.app.contenttypes[test]",
+    "plone.app.robotframework",
+    "plone.app.testing",
+    "plone.protect",
+    "plone.testing",
+    "zope.intid",
+]
+
+[project.urls]
+Source = "https://github.com/plone/plone.app.versioningbehavior"
+Issues = "https://github.com/plone/Products.CMFPlone/issues"
+Changelog = "https://github.com/plone/plone.app.versioningbehavior/blob/master/CHANGES.rst"
+
+[tool.setuptools.dynamic]
+readme = {file = ["README.rst", "CHANGES.rst"]}
+# END-MARKER-MANUAL-CONFIG
 
 [tool.towncrier]
 directory = "news/"
