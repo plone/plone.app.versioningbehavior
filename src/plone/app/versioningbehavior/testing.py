@@ -10,8 +10,6 @@ from plone.testing import zope
 from Products.CMFCore.utils import getToolByName
 from Products.CMFDiffTool.TextDiff import TextDiff
 
-import plone.app.versioningbehavior
-
 TEST_CONTENT_TYPE_ID = "TestContentType"
 DEFAULT_POLICIES = (
     "at_edit_autoversion",
