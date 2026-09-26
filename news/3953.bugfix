@@ -1,0 +1,3 @@
+Install ``plone.app.layout`` in the test fixture, since it now provides the
+``versions_history_form`` view exercised by this package's own tests.
+[bsuttor]

@@ -68,6 +68,7 @@ tests = [
     "Products.CMFDiffTool",
     "Products.CMFEditions [test]",
     "plone.app.contenttypes[test]",
+    "plone.app.layout",
     "plone.app.robotframework",
     "plone.app.testing",
     "plone.protect",
