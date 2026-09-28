@@ -1,0 +1,4 @@
+Test that a version's change note is recorded via the versioning API
+directly, instead of via the Classic-UI-only ``versions_history_form``
+page, which moved to ``plone.app.layout``.
+[bsuttor]

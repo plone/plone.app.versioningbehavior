@@ -100,11 +100,11 @@ Now we should have at least one version::
     True
 
 
-And we should be able to list the versions::
+And the change note should be recorded on that version::
 
-    >>> browser.open('http://nohost/plone/testingtype/versions_history_form')
-    >>> 'just a test' in browser.contents
-    True
+    >>> last = history.retrieve(history.getLength(countPurged=False) - 1, countPurged=False)
+    >>> last['metadata']['sys_metadata']['comment']
+    'just a test'
 
 
 A freshly created object should have a initial version::
@@ -127,11 +127,11 @@ Now we should have one - and only one - version::
     1
 
 
-And we should see our comment on the versions listing later...
+And we should see our comment recorded on that version::
 
-    >>> browser.open('http://nohost/plone/testingtype-1/versions_history_form')
-    >>> 'initial change note' in browser.contents
-    True
+    >>> last = history.retrieve(0, countPurged=False)
+    >>> last['metadata']['sys_metadata']['comment']
+    'initial change note'
 
 
 It should also be possible to copy/paste an existing content::
@@ -205,9 +205,9 @@ So let's see the version history. There should be one version with the comment
     >>> history = pa.getHistoryMetadata(obj)
     >>> history.getLength(countPurged=False)
     1
-    >>> browser.open('http://nohost/plone/democontainer/testingtype/versions_history_form')
-    >>> 'created a object' in browser.contents
-    True
+    >>> last = history.retrieve(0, countPurged=False)
+    >>> last['metadata']['sys_metadata']['comment']
+    'created a object'
 
 
 Dexterity containers should also be versionable.
@@ -258,9 +258,9 @@ Do we have a initial version?
     >>> history = pa.getHistoryMetadata(obj)
     >>> history.getLength(countPurged=False)
     1
-    >>> browser.open('http://nohost/plone/versionedcontainer/versions_history_form')
-    >>> 'my change note' in browser.contents
-    True
+    >>> last = history.retrieve(0, countPurged=False)
+    >>> last['metadata']['sys_metadata']['comment']
+    'my change note'
 
 
 Another versioned container should be addable::
@@ -287,9 +287,9 @@ So, we should have the initial version::
     >>> history = pa.getHistoryMetadata(obj)
     >>> history.getLength(countPurged=False)
     1
-    >>> browser.open('http://nohost/plone/versionedcontainer/versionedcontainer/versions_history_form')
-    >>> 'another change note' in browser.contents
-    True
+    >>> last = history.retrieve(0, countPurged=False)
+    >>> last['metadata']['sys_metadata']['comment']
+    'another change note'
 
 Check that the parent does not get versioned inappropriately.
 
