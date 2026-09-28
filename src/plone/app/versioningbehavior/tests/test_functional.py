@@ -52,9 +52,11 @@ class FunctionalTestCase(unittest.TestCase):
         self.assertFalse(self.obj1.description in self.browser.contents)
         self.assertIn(self.obj1.text, self.browser.contents)
 
-    def test_versions_history_form_should_work_with_dexterity_content(self):
+    def test_edit_creates_a_new_version(self):
+        # The Classic-UI-only "versions_history_form" rendering is tested
+        # in plone.app.layout instead: here we only verify, via the
+        # versioning API, that editing created a new version.
         old_text = self.obj1.text
-        old_title = self.obj1.title
 
         new_text = "Some other text for object 1."
         new_title = "My special new title for object 1"
@@ -64,27 +66,13 @@ class FunctionalTestCase(unittest.TestCase):
         self.browser.getControl(label="Text").value = new_text
         self.browser.getControl(name="form.buttons.save").click()
 
-        self._assert_versions_history_form(0, self.obj1.getId(), old_title, old_text)
-        self._assert_versions_history_form(1, self.obj1.getId(), new_title, new_text)
+        portal_archivist = self.portal.portal_archivist
+        history = portal_archivist.getHistoryMetadata(self.obj1)
+        self.assertEqual(history.getLength(countPurged=False), 2)
 
-    def _assert_versions_history_form(self, version_id, obj_id, title, text):
-        self.browser.open(
-            "%s/%s/versions_history_form?version_id=%s"
-            % (self.portal_url, obj_id, version_id)
-        )
-        self.assertIn("Current revision", self.browser.contents)
+        portal_repository = self.portal.portal_repository
+        first_version = portal_repository.retrieve(self.obj1, 0).object
+        self.assertEqual(first_version.text, old_text)
 
-        if version_id == 0:
-            self.assertIn(
-                f"/{obj_id}/versions_history_form?version_id={version_id}",
-                self.browser.contents,
-            )
-        self.assertIn("Current revision", self.browser.contents)
-        self.assertIn("Revert to this revision", self.browser.contents)
-        self.assertIn("/%s/@@history?one" % obj_id, self.browser.contents)
-        self.assertIn("Preview of Revision %s" % version_id, self.browser.contents)
-        self.assertIn(
-            '<h1 class="documentFirstHeading">%s</h1>' % str(title),
-            self.browser.contents,
-        )
-        self.assertIn(str(text), self.browser.contents)
+        second_version = portal_repository.retrieve(self.obj1, 1).object
+        self.assertEqual(second_version.text, new_text)

@@ -10,6 +10,8 @@ from plone.testing import zope
 from Products.CMFCore.utils import getToolByName
 from Products.CMFDiffTool.TextDiff import TextDiff
 
+import plone.app.versioningbehavior
+
 TEST_CONTENT_TYPE_ID = "TestContentType"
 DEFAULT_POLICIES = (
     "at_edit_autoversion",
@@ -24,15 +26,9 @@ class PloneAppVersioningbehaviorLayer(PloneSandboxLayer):
         # Load any other ZCML that is required for your tests.
         # The z3c.autoinclude feature is disabled in the Plone fixture base
         # layer.
-        import plone.app.layout
-
-        self.loadZCML(package=plone.app.layout)
         self.loadZCML(package=plone.app.versioningbehavior)
 
     def setUpPloneSite(self, portal):
-        # plone.app.layout provides the Classic UI "versions_history_form"
-        # and related views used by the tests in this package.
-        applyProfile(portal, "plone.app.layout:default")
         applyProfile(portal, "plone.app.versioningbehavior:default")
         self.registerVersionedDocumentFTI(portal)
 
